@@ -2,7 +2,7 @@ import 'dart:html';
 import 'globals.dart';
 import 'coordinate.dart';
 
-class Graphics {
+class Character{
   
   Coordinate curPos;
   Coordinate desPos;
@@ -18,7 +18,8 @@ class Graphics {
   var acDelta = 0;
   var lastUpdateTime = 0;
   
-  Graphics(HtmlDocument _doc, CanvasRenderingContext2D _ctx, CanvasElement canvas) {
+  Character(HtmlDocument _doc, CanvasRenderingContext2D _ctx, CanvasElement canvas) {
+    
     this.curPos = new Coordinate(0,0);
     this._doc = _doc;
     this._ctx = _ctx;
@@ -105,7 +106,6 @@ class Graphics {
       }
       frame = 0;
     }
-    
     
     _ctx.clearRect(0, 0, canvas.width, canvas.height);
     _ctx.drawImageToRect(this.characterImage , new Rect(curPos.x, curPos.y, TILE_SIZE, TILE_SIZE), //Rect to paint the image
