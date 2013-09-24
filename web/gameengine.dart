@@ -13,6 +13,9 @@ Character char;
 Scene scene;
 //List<Graphic> elems;
 
+int lastUpdateTime = 0;
+int acDelta = 0;
+
 void main() {
   setupCanvas();
   Coordinate initCoor = new Coordinate(0,0);//((SCREEN_WIDTH/2).floor(), (SCREEN_HEIGHT/2).floor() );
@@ -24,6 +27,16 @@ void main() {
 
 //refresh method
 void update(num delta) {
+  /*DateTime thisInstant = new DateTime.now();
+  int delta = thisInstant.millisecondsSinceEpoch - lastUpdateTime;
+  if (acDelta > MS_PER_FRAME) {
+    acDelta = 0;
+    char.moveRandom();
+  } else {
+    acDelta += delta;
+  }
+  lastUpdateTime = thisInstant.millisecondsSinceEpoch;*/
+  
   _ctx.clearRect(0, 0, canvas.width, canvas.height);
   scene.update();
   char.update();
@@ -52,16 +65,16 @@ void setupKeys(){
 
 void reactKey(var evt) {
   if(evt.keyCode == 37 || evt.keyCode == 65 ) { //left
-    char.move(3);
+    char.move(2);
     //animate = true;
   }else if(evt.keyCode == 38 || evt.keyCode == 87 ){ //up
-    char.move(1);
+    char.move(0);
     //animate = true;
   }else if(evt.keyCode == 39 || evt.keyCode == 68 ){ //right
-    char.move(4);
+    char.move(3);
     //animate = true;
   }else if(evt.keyCode == 40 || evt.keyCode == 83 ){ //down
-    char.move(2);
+    char.move(1);
     //animate = true;
   }
   

@@ -32,34 +32,36 @@ class Character{
     loadImage("assets/characters.png");
   }
   
+  void moveRandom(){
+    var random = new Math.Random();
+    var number = random.nextInt(4);
+    move(number);
+  }
+  
   void move(int face){
     switch (face) {
-      case 1: //up
+      case 0: //up
         faceDir = 3;
         if(curPos.y > 0){
           curPos.y -= 1;
-          //desPos = new Coordinate(curPos.x, curPos.y - 1);
         }
         break;
-      case 2: //down
+      case 1: //down
         faceDir = 0;
         if((curPos.y *TILE_SIZE)  < (canvas.height - TILE_SIZE)){
           curPos.y += 1;
-          //desPos = new Coordinate(curPos.x, curPos.y + 1);
         }
         break;
-      case 3: //left
+      case 2: //left
         faceDir = 1;
         if(curPos.x > 0){
           curPos.x -= 1;
-          //desPos = new Coordinate(curPos.x - 1, curPos.y);
         }
         break;
-      case 4: //right
+      case 3: //right
         faceDir = 2;
         if((curPos.x* TILE_SIZE)< (canvas.width - 1)){
           curPos.x += 1;
-          //desPos = new Coordinate(curPos.x + 1, curPos.y);
         }
         break;
     }
