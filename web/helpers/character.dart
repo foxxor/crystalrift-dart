@@ -1,11 +1,12 @@
 import 'dart:html';
 import 'globals.dart';
 import 'coordinate.dart';
+import 'dart:math' as Math;
 
 class Character{
   
   Coordinate curPos;
-  Coordinate desPos;
+  Coordinate curPosPx;
   
   HtmlDocument _doc;
   CanvasRenderingContext2D _ctx;
@@ -19,10 +20,12 @@ class Character{
   var lastUpdateTime = 0;
   
   Character(HtmlDocument _doc, CanvasRenderingContext2D _ctx, CanvasElement canvas, Coordinate curPos) {
-    this.curPos = curPos;
     this._doc = _doc;
     this._ctx = _ctx;
     this.canvas = canvas;
+    
+    this.curPos = curPos;
+    this.curPosPx = new Coordinate(curPos.x *TILE_SIZE, curPos.y *TILE_SIZE);
     this.moving = false;
     this.frame = INITIAL_FRAME;
     this.faceDir = INITIAL_FACE;
@@ -34,29 +37,29 @@ class Character{
       case 1: //up
         faceDir = 3;
         if(curPos.y > 0){
-          //curPos.y -= TILE_SIZE;
-          desPos = new Coordinate(curPos.x, curPos.y - 1);
+          curPos.y -= 1;
+          //desPos = new Coordinate(curPos.x, curPos.y - 1);
         }
         break;
       case 2: //down
         faceDir = 0;
         if((curPos.y *TILE_SIZE)  < (canvas.height - TILE_SIZE)){
-          //curPos.y += TILE_SIZE;
-          desPos = new Coordinate(curPos.x, curPos.y + 1);
+          curPos.y += 1;
+          //desPos = new Coordinate(curPos.x, curPos.y + 1);
         }
         break;
       case 3: //left
         faceDir = 1;
         if(curPos.x > 0){
-          //curPos.x -= TILE_SIZE;
-          desPos = new Coordinate(curPos.x - 1, curPos.y);
+          curPos.x -= 1;
+          //desPos = new Coordinate(curPos.x - 1, curPos.y);
         }
         break;
       case 4: //right
         faceDir = 2;
         if((curPos.x* TILE_SIZE)< (canvas.width - 1)){
-          //curPos.x += TILE_SIZE;
-          desPos = new Coordinate(curPos.x + 1, curPos.y);
+          curPos.x += 1;
+          //desPos = new Coordinate(curPos.x + 1, curPos.y);
         }
         break;
     }
@@ -68,46 +71,44 @@ class Character{
     this.characterImage.src = src;
     this.characterImage.onLoad.listen((value) => update());
   }
-
-  void update(){
-    var deltaY = 0;
-    var deltaX = 0;
-    if(desPos != null){
-      deltaY = desPos.y - curPos.y;
-      deltaX = desPos.x - curPos.x;
+  
+  
+  bool isMoving(){
+    return (curPosPx.x != curPos.x * TILE_SIZE || curPosPx.y != curPos.y * TILE_SIZE);
+  }
+  
+  void update_move(){
+    var distance = 2 * MOVE_SPEED;
+    if(curPos.y * TILE_SIZE > curPosPx.y){
+      curPosPx.y = Math.min(curPosPx.y + distance, curPos.y * TILE_SIZE);
     }
-    
-    if(moving){      
-      DateTime thisInstant = new DateTime.now();
-      var delta = thisInstant.millisecondsSinceEpoch - lastUpdateTime;
-      if (acDelta > MS_PER_FRAME) {
-        acDelta = 0;
-      } else {
-        acDelta += delta;
-      }
-      if(acDelta < MS_PER_FRAME / 2){
-        curPos.y += (deltaY/2).floor();
-        curPos.x += (deltaX/2).floor();
-        frame = 1;
-      }else if(acDelta > MS_PER_FRAME / 2 && acDelta < MS_PER_FRAME){
-        curPos.y += (deltaY/2).floor();
-        curPos.x += (deltaX/2).floor();
-        frame = 2;
-      }else{
-        frame = 0;
-        curPos.y = desPos.y;
-        curPos.x = desPos.x;
-      }
-      lastUpdateTime = thisInstant.millisecondsSinceEpoch;
-    }else{
-      if(desPos != null){
-        curPos.y = desPos.y;
-        curPos.x = desPos.x;
-      }
+    if(curPos.x * TILE_SIZE > curPosPx.x){
+      curPosPx.x = Math.min(curPosPx.x + distance, curPos.x * TILE_SIZE);  
+    }
+    if(curPos.y * TILE_SIZE < curPosPx.y){
+      curPosPx.y = Math.max(curPosPx.y - distance, curPos.y * TILE_SIZE);
+    }
+    if(curPos.x * TILE_SIZE < curPosPx.x){
+      curPosPx.x = Math.max(curPosPx.x - distance, curPos.x * TILE_SIZE);
+    }
+    frame ++;
+    if(frame>2){
       frame = 0;
     }
+  }
+  
+  void stop_move(){
+    frame = 0;
+  }
+
+  void update(){
+    if(isMoving()){
+      update_move();
+    }else{
+      stop_move();
+    }
     
-    _ctx.drawImageToRect(this.characterImage , new Rect(curPos.x *TILE_SIZE, curPos.y*TILE_SIZE, TILE_SIZE, TILE_SIZE), //Rect to paint the image
+    _ctx.drawImageToRect(this.characterImage , new Rect(curPosPx.x , curPosPx.y, TILE_SIZE, TILE_SIZE), //Rect to paint the image
         sourceRect: new Rect((SELECTED_CHAR + frame) * TILE_SIZE, TILE_SIZE * faceDir, TILE_SIZE, TILE_SIZE)); //Size of the image
   }
   
