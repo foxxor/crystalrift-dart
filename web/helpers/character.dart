@@ -5,25 +5,39 @@ import 'dart:math' as Math;
 
 class Character{
   
-  Coordinate curPos;
-  Coordinate curPosPx;
-  
+  //Graphical vars
   HtmlDocument _doc;
   CanvasRenderingContext2D _ctx;
   CanvasElement canvas;
   ImageElement characterImage;
+  
+  //Current position in tiles
+  Coordinate curPos;
+  //Current position in pixels
+  Coordinate curPosPx;
+  //Current animation frame
   int frame;
+  //Character is moving?
   bool moving;
+  //Facing direction
   int faceDir;
+  //Current selected chart
+  int selectedChar;
+  //Move this guy like crazy
+  bool randomMovement;
+  //Is this object pasable?
+  bool phasable;
   
   var acDelta = 0;
   var lastUpdateTime = 0;
   
-  Character(HtmlDocument _doc, CanvasRenderingContext2D _ctx, CanvasElement canvas, Coordinate curPos) {
+  Character(HtmlDocument _doc, CanvasRenderingContext2D _ctx, CanvasElement canvas, Coordinate curPos, int charSprite) {
     this._doc = _doc;
     this._ctx = _ctx;
     this.canvas = canvas;
-    
+    this.randomMovement = false;
+    this.phasable = false;
+    this.selectedChar = charSprite;
     this.curPos = curPos;
     this.curPosPx = new Coordinate(curPos.x *TILE_SIZE, curPos.y *TILE_SIZE);
     this.moving = false;
@@ -74,12 +88,11 @@ class Character{
     this.characterImage.onLoad.listen((value) => update());
   }
   
-  
   bool isMoving(){
     return (curPosPx.x != curPos.x * TILE_SIZE || curPosPx.y != curPos.y * TILE_SIZE);
   }
   
-  void update_move(){
+  void updateMove(){
     var distance = 2 * MOVE_SPEED;
     if(curPos.y * TILE_SIZE > curPosPx.y){
       curPosPx.y = Math.min(curPosPx.y + distance, curPos.y * TILE_SIZE);
@@ -99,19 +112,35 @@ class Character{
     }
   }
   
-  void stop_move(){
+  void stopMove(){
     frame = 0;
+  }
+  
+  void processMovements(){
+    if(randomMovement){
+      DateTime thisInstant = new DateTime.now();
+      int delta = thisInstant.millisecondsSinceEpoch - lastUpdateTime;
+      if (acDelta > MS_PER_FRAME) {
+        acDelta = 0;
+        moveRandom();
+      } else {
+        acDelta += delta;
+      }
+      lastUpdateTime = thisInstant.millisecondsSinceEpoch;
+    }
   }
 
   void update(){
+    processMovements();
+    
     if(isMoving()){
-      update_move();
+      updateMove();
     }else{
-      stop_move();
+      stopMove();
     }
     
     _ctx.drawImageToRect(this.characterImage , new Rect(curPosPx.x , curPosPx.y, TILE_SIZE, TILE_SIZE), //Rect to paint the image
-        sourceRect: new Rect((SELECTED_CHAR + frame) * TILE_SIZE, TILE_SIZE * faceDir, TILE_SIZE, TILE_SIZE)); //Size of the image
+        sourceRect: new Rect(((selectedChar *3) + frame) * TILE_SIZE, TILE_SIZE * faceDir, TILE_SIZE, TILE_SIZE)); //Size of the image
   }
   
 }
