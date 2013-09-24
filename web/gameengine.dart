@@ -1,23 +1,31 @@
 import 'dart:html';
 import 'helpers/globals.dart';
+import 'helpers/coordinate.dart';
 import 'helpers/character.dart';
+import 'helpers/scene.dart';
+
 
 //System vars
 HtmlDocument _doc;
 CanvasRenderingContext2D _ctx;
 CanvasElement canvas;
 Character char;
+Scene scene;
 //List<Graphic> elems;
 
 void main() {
   setupCanvas();
-  char = new Character(_doc, _ctx, canvas);
+  Coordinate initCoor = new Coordinate(0,0);//((SCREEN_WIDTH/2).floor(), (SCREEN_HEIGHT/2).floor() );
+  char = new Character(_doc, _ctx, canvas, initCoor);
+  scene = new Scene(_doc, _ctx, canvas);
   setupKeys();
   window.animationFrame.then(update);
 }
 
 //refresh method
 void update(num delta) {
+  _ctx.clearRect(0, 0, canvas.width, canvas.height);
+  scene.update();
   char.update();
   window.animationFrame.then(update);
 }
