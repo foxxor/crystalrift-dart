@@ -1,8 +1,12 @@
+/*
+  Copyright (C) 2013 Jorge Vargas <vargasjorgeluis@gmail.com>
+*/
+
 import 'dart:html';
-import 'helpers/globals.dart';
 import 'helpers/coordinate.dart';
-import 'helpers/character.dart';
-import 'helpers/scene.dart';
+import 'core/globals.dart';
+import 'core/character.dart';
+import 'core/scene.dart';
 
 //System vars
 HtmlDocument _doc;

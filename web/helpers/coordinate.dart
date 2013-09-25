@@ -1,4 +1,8 @@
-import 'globals.dart';
+/*
+  Copyright (C) 2013 Jorge Vargas <vargasjorgeluis@gmail.com>
+*/
+
+import '../core/globals.dart';
 
 class Coordinate {
   int x;

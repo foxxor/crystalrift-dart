@@ -1,6 +1,10 @@
+/*
+  Copyright (C) 2013 Jorge Vargas <vargasjorgeluis@gmail.com>
+*/
+
 import 'dart:html';
 import 'globals.dart';
-import 'coordinate.dart';
+import '../helpers/coordinate.dart';
 import 'dart:math' as Math;
 
 class Character{

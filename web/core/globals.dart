@@ -1,3 +1,7 @@
+/*
+  Copyright (C) 2013 Jorge Vargas <vargasjorgeluis@gmail.com>
+*/
+
 //Engine vars
 const int INITIAL_FRAME = 1;
 const int MS_PER_FRAME = 240;
