@@ -55,28 +55,45 @@ class Character{
   void move(int face){
     switch (face) {
       case 0: //up
-        faceDir = 3;
+        faceDirection(UP);
         if(curPos.y > 0){
           curPos.y -= 1;
         }
         break;
       case 1: //down
-        faceDir = 0;
+        faceDirection(DOWN);
         if((curPos.y *TILE_SIZE)  < (canvas.height - TILE_SIZE)){
           curPos.y += 1;
         }
         break;
       case 2: //left
-        faceDir = 1;
+        faceDirection(LEFT);
         if(curPos.x > 0){
           curPos.x -= 1;
         }
         break;
       case 3: //right
-        faceDir = 2;
+        faceDirection(RIGHT);
         if((curPos.x* TILE_SIZE)< (canvas.width - 1)){
           curPos.x += 1;
         }
+        break;
+    }
+  }
+  
+  void faceDirection(int direction){
+    switch (direction) {
+      case UP: //up
+        faceDir = 3;
+        break;
+      case DOWN: //down
+        faceDir = 0;
+        break;
+      case LEFT: //left
+        faceDir = 1;
+        break;
+      case RIGHT: //right
+        faceDir = 2;
         break;
     }
   }

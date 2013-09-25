@@ -74,18 +74,26 @@ void reactKey(var evt) {
   if(evt.keyCode == 37 || evt.keyCode == 65 ) { //left
     if(shallPass(LEFT,chars.first)){
       chars.first.move(LEFT);
+    }else{
+      chars.first.faceDirection(LEFT);
     }
   }else if(evt.keyCode == 38 || evt.keyCode == 87 ){ //up
     if(shallPass(UP,chars.first)){
       chars.first.move(UP);
+    }else{
+      chars.first.faceDirection(UP);
     }
   }else if(evt.keyCode == 39 || evt.keyCode == 68 ){ //right
     if(shallPass(RIGHT,chars.first)){
       chars.first.move(RIGHT);
+    }else{
+      chars.first.faceDirection(RIGHT);
     }
   }else if(evt.keyCode == 40 || evt.keyCode == 83 ){ //down
     if(shallPass(DOWN,chars.first)){
       chars.first.move(DOWN);
+    }else{
+      chars.first.faceDirection(DOWN);
     }
   }
   
