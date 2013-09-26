@@ -3,6 +3,7 @@
 */
 
 import 'dart:html';
+import 'lib/message.dart';
 import 'helpers/coordinate.dart';
 import 'core/globals.dart';
 import 'core/character.dart';
@@ -60,6 +61,9 @@ void update(num delta) {
     Item i = itemsIte.current;
     i.update();
   }
+  
+  wrapText(_ctx, 'Hola a todos!', chars.first.curPosPx.x, chars.first.curPosPx.y, 100, 10);
+  
   window.animationFrame.then(update);
 }
 
