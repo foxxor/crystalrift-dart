@@ -40,7 +40,7 @@ class Scene implements Graphic{
   void initValues(){
     for (var y = 0; y < ( SCREEN_HEIGHT/ TILE_SIZE); y++){
       for (var x = 0; x < (SCREEN_WIDTH / TILE_SIZE); x++){
-        Tile t = new Tile(17, 0);
+        Tile t = new Tile(17, 0, true);
         mapset.set(x, y, t);
         mapset2.set(x, y, 0);
       }
@@ -75,7 +75,9 @@ class Scene implements Graphic{
       var rX = random.nextInt(mapset2.cols);
       var rY = random.nextInt(mapset2.rows);
       Tile t = new Tile(1, 32);
-      mapset2.set(rX, rY, t);
+      if(mapset.get(rX, rY).soil){
+        mapset2.set(rX, rY, t);
+      }
     }
   }
   

@@ -57,33 +57,38 @@ class Character implements Graphic{
     move(number);
   }
   
-  void move(int face){
+  bool move(int face){
     switch (face) {
       case 0: //up
         faceDirection(UP);
         if(curPos.y > 0){
           curPos.y -= 1;
+          return true;
         }
         break;
       case 1: //down
         faceDirection(DOWN);
         if((curPos.y *TILE_SIZE)  < (canvas.height - TILE_SIZE)){
           curPos.y += 1;
+          return true;
         }
         break;
       case 2: //left
         faceDirection(LEFT);
         if(curPos.x > 0){
           curPos.x -= 1;
+          return true;
         }
         break;
       case 3: //right
         faceDirection(RIGHT);
         if((curPos.x* TILE_SIZE)< (canvas.width - TILE_SIZE)){
           curPos.x += 1;
+          return true;
         }
         break;
     }
+    return false;
   }
   
   void faceDirection(int direction){
@@ -116,6 +121,7 @@ class Character implements Graphic{
   
   void updateMove(){
     var distance = 2 * MOVE_SPEED;
+    
     if(curPos.y * TILE_SIZE > curPosPx.y){
       curPosPx.y = Math.min(curPosPx.y + distance, curPos.y * TILE_SIZE);
     }
@@ -128,6 +134,10 @@ class Character implements Graphic{
     if(curPos.x * TILE_SIZE < curPosPx.x){
       curPosPx.x = Math.max(curPosPx.x - distance, curPos.x * TILE_SIZE);
     }
+    animate();
+  }
+  
+  void animate(){
     frame ++;
     if(frame>2){
       frame = 0;
@@ -135,6 +145,23 @@ class Character implements Graphic{
   }
   
   void stopMove(){
+    if(curPos.y * TILE_SIZE > curPosPx.y){
+      num dy = (curPosPx.y + (TILE_SIZE - (curPosPx.y % TILE_SIZE))) / TILE_SIZE;
+      curPos.y = Math.min(dy.floor(), curPos.y);
+    }
+    if(curPos.x * TILE_SIZE > curPosPx.x){
+      num dx = (curPosPx.x + (TILE_SIZE - (curPosPx.x % TILE_SIZE))) / TILE_SIZE;
+      curPos.x = Math.min(dx.floor(), curPos.x);
+    }
+    if(curPos.y * TILE_SIZE < curPosPx.y){
+      num dy = (curPosPx.y + (TILE_SIZE - (curPosPx.y % TILE_SIZE))) / TILE_SIZE;
+      curPos.y = Math.max(dy.floor(), curPos.y) -1;
+    }
+    if(curPos.x * TILE_SIZE < curPosPx.x){
+      num dx = (curPosPx.x + (TILE_SIZE - (curPosPx.x % TILE_SIZE))) / TILE_SIZE;
+      curPos.x = Math.max(dx.floor(), curPos.x) -1;
+    }
+    
     frame = 1;
   }
   

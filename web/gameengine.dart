@@ -33,9 +33,10 @@ void main() {
   
   Coordinate initCoor3 = new Coordinate(5,8);
   Coordinate initCoor4 = new Coordinate(3,5);
-  Tile tile = new Tile(5, 31);
-  Item item1 = new Item(_doc, _ctx, canvas, initCoor3, tile, false);
-  Item item2 = new Item(_doc, _ctx, canvas, initCoor4, tile, true);
+  Tile tile = new Tile(20, 34);//(7, 32); //Rock
+  Tile tile2 = new Tile(5, 31);
+  Item item1 = new Item(_doc, _ctx, canvas, initCoor3, tile);
+  Item item2 = new Item(_doc, _ctx, canvas, initCoor4, tile2, true);
   items = new List<Item>();
   items.add(item1);
   items.add(item2);
@@ -59,7 +60,6 @@ void update(num delta) {
     Item i = itemsIte.current;
     i.update();
   }
-  //char.update();
   window.animationFrame.then(update);
 }
 
@@ -74,10 +74,9 @@ void setupCanvas(){
 void setupKeys(){
   canvas.onKeyDown.listen((e) {
     reactKey(e);
-    //draw(characterImage);
   });
   canvas.onKeyUp.listen((e) {
-    chars.first.frame = INITIAL_FRAME;
+    chars.first.stopMove();
   });
 }
 
@@ -96,7 +95,9 @@ bool shallPass(int face, Character c){
     if(!item.pushable && itemFace == face){
         return false;
     }else if(itemFace == face){
-      item.move(itemFace);
+      if(!item.move(itemFace)){
+        return false;
+      }
     }
   }
   

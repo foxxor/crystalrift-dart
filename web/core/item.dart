@@ -22,10 +22,12 @@ class Item implements Graphic{
   //Tile of the object
   Tile tile;
   
+  //Item is moving?
   bool moving;
+  //Item can be pushed?
   bool pushable;
   
-  Item(HtmlDocument _doc, CanvasRenderingContext2D _ctx, CanvasElement canvas, Coordinate curPos, Tile tile, bool pushable){
+  Item(HtmlDocument _doc, CanvasRenderingContext2D _ctx, CanvasElement canvas, Coordinate curPos, Tile tile, [bool pushable=false]){
     this._doc = _doc;
     this._ctx = _ctx;
     this.canvas = canvas;
@@ -44,28 +46,52 @@ class Item implements Graphic{
     this.itemImage.onLoad.listen((value) => update());
   }
   
-  void move(int face){
+  bool move(int face){
     switch (face) {
       case 0: //up
         if(curPos.y > 0){
           curPos.y -= 1;
+          return true;
         }
         break;
       case 1: //down
         if((curPos.y *TILE_SIZE)  < (canvas.height - TILE_SIZE)){
           curPos.y += 1;
+          return true;
         }
         break;
       case 2: //left
         if(curPos.x > 0){
           curPos.x -= 1;
+          return true;
         }
         break;
       case 3: //right
         if((curPos.x* TILE_SIZE)< (canvas.width - TILE_SIZE)){
           curPos.x += 1;
+          return true;
         }
         break;
+    }
+    return false;
+  }
+  
+  void stopMove(){
+    if(curPos.y * TILE_SIZE > curPosPx.y){
+      num dy = (curPosPx.y + (TILE_SIZE - (curPosPx.y % TILE_SIZE))) / TILE_SIZE;
+      curPos.y = Math.min(dy.floor(), curPos.y);
+    }
+    if(curPos.x * TILE_SIZE > curPosPx.x){
+      num dx = (curPosPx.x + (TILE_SIZE - (curPosPx.x % TILE_SIZE))) / TILE_SIZE;
+      curPos.x = Math.min(dx.floor(), curPos.x);
+    }
+    if(curPos.y * TILE_SIZE < curPosPx.y){
+      num dy = (curPosPx.y + (TILE_SIZE - (curPosPx.y % TILE_SIZE))) / TILE_SIZE;
+      curPos.y = Math.max(dy.floor(), curPos.y) -1;
+    }
+    if(curPos.x * TILE_SIZE < curPosPx.x){
+      num dx = (curPosPx.x + (TILE_SIZE - (curPosPx.x % TILE_SIZE))) / TILE_SIZE;
+      curPos.x = Math.max(dx.floor(), curPos.x) -1;
     }
   }
   
