@@ -78,7 +78,7 @@ class Character{
         break;
       case 3: //right
         faceDirection(RIGHT);
-        if((curPos.x* TILE_SIZE)< (canvas.width - 1)){
+        if((curPos.x* TILE_SIZE)< (canvas.width - TILE_SIZE)){
           curPos.x += 1;
         }
         break;
