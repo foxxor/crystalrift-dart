@@ -36,7 +36,7 @@ void main() {
   Coordinate initCoor4 = new Coordinate(3,5);
   Tile tile = new Tile(20, 34);//(7, 32); //Rock
   Tile tile2 = new Tile(5, 31);
-  Item item1 = new Item(_doc, _ctx, canvas, initCoor3, tile);
+  Item item1 = new Item(_doc, _ctx, canvas, initCoor3, tile, true);
   Item item2 = new Item(_doc, _ctx, canvas, initCoor4, tile2, true);
   items = new List<Item>();
   items.add(item1);
@@ -92,14 +92,14 @@ bool shallPass(int face, Character c){
   Iterator<Character> charas = chars.iterator;
   while(charas.moveNext()){
     Character char = charas.current;
-    if(!char.phasable && char.curPos.nextToThis(c.curPos) == face){
+    if(!char.phasable && char.curPosPx.nextToThis(c.curPosPx) == face){
         return false;
     }
   }
   Iterator<Item> itemsIte = items.iterator;
   while(itemsIte.moveNext()){
     Item item = itemsIte.current;
-    int itemFace = item.curPos.nextToThis(c.curPos);
+    int itemFace = item.curPosPx.nextToThis(c.curPosPx);
     if(!item.pushable && itemFace == face){
         return false;
     }else if(itemFace == face){

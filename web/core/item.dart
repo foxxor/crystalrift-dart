@@ -47,27 +47,30 @@ class Item implements Graphic{
   }
   
   bool move(int face){
+    int deltaY = (curPos.y * TILE_SIZE - curPosPx.y).abs();
+    int deltaX = (curPos.x * TILE_SIZE - curPosPx.x).abs();
+    
     switch (face) {
       case 0: //up
-        if(curPos.y > 0){
+        if(curPos.y > 0 && deltaY < TILE_SIZE){
           curPos.y -= 1;
           return true;
         }
         break;
       case 1: //down
-        if((curPos.y *TILE_SIZE)  < (canvas.height - TILE_SIZE)){
+        if((curPos.y *TILE_SIZE)  < (canvas.height - TILE_SIZE) && deltaY < TILE_SIZE ){
           curPos.y += 1;
           return true;
         }
         break;
       case 2: //left
-        if(curPos.x > 0){
+        if(curPos.x > 0 && deltaX < TILE_SIZE ){
           curPos.x -= 1;
           return true;
         }
         break;
       case 3: //right
-        if((curPos.x* TILE_SIZE)< (canvas.width - TILE_SIZE)){
+        if((curPos.x* TILE_SIZE)< (canvas.width - TILE_SIZE) && deltaX < TILE_SIZE){
           curPos.x += 1;
           return true;
         }

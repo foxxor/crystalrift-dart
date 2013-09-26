@@ -14,17 +14,26 @@ class Coordinate {
   }
   
   int nextToThis(Coordinate coor){
-    int deltaX = coor.x - x;
-    int deltaY = coor.y - y;
-    if( deltaX == 0 && deltaY == 1){
+    num deltaX = ((coor.x - x)/TILE_SIZE);
+    num deltaY = ((coor.y - y)/TILE_SIZE);
+    
+    if( deltaX == 0 && deltaY.ceil() == 1){
       return UP; //face down
-    }else if( deltaX == 0 && deltaY == -1){
+    }else if( deltaX == 0 && deltaY.floor() == -1){
       return DOWN; //face up
-    }else if( deltaX == 1 && deltaY == 0){
+    }else if( deltaX.ceil() == 1 && deltaY == 0){
       return LEFT; //face left
-    }else if( deltaX == -1 && deltaY == 0){
+    }else if( deltaX.floor() == -1 && deltaY == 0){
       return RIGHT; //face right
-    }
+    }/*else if(deltaX.ceil() == 1 && deltaY.ceil() == 1){
+      return UP;
+    }else if(deltaX.floor() == -1 && deltaY.floor() == -1){
+      return DOWN;
+    }else if(deltaX.ceil() == 1 && deltaY.floor() == -1){
+      return LEFT;
+    }else if(deltaX.floor() == -1 && deltaY.ceil() == 1){
+      return RIGHT;
+    }*/
     
     return -1;
   }
