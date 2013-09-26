@@ -4,16 +4,20 @@
 
 import 'dart:html';
 import 'globals.dart';
+import 'graphic.dart';
 import '../helpers/matrix.dart';
 import 'tile.dart';
 import 'dart:math' as Math;
 
-class Scene {
+class Scene implements Graphic{
   HtmlDocument _doc;
   CanvasRenderingContext2D _ctx;
   CanvasElement canvas;
   ImageElement sceneImage;
+  
+  //The map matrix that represent the first visual terrain layer 
   Matrix mapset;
+//The map matrix that represent the second visual terrain layer 
   Matrix mapset2;
   
   Scene(HtmlDocument _doc, CanvasRenderingContext2D _ctx, CanvasElement canvas) {
@@ -23,10 +27,10 @@ class Scene {
     mapset = new Matrix(( SCREEN_WIDTH / TILE_SIZE).floor(), ( SCREEN_HEIGHT / TILE_SIZE).floor());
     mapset2 = new Matrix(( SCREEN_WIDTH / TILE_SIZE).floor(), ( SCREEN_HEIGHT / TILE_SIZE).floor());
     initValues();
-    loadImage("assets/tileset.png");
+    loadGraphic("assets/tileset.png");
   }
   
-  void loadImage(String src){
+  void loadGraphic(String src){
     this.sceneImage = new Element.tag('img'); 
     this.sceneImage = _doc.createElement('img'); 
     this.sceneImage.src = src;
@@ -36,7 +40,7 @@ class Scene {
   void initValues(){
     for (var y = 0; y < ( SCREEN_HEIGHT/ TILE_SIZE); y++){
       for (var x = 0; x < (SCREEN_WIDTH / TILE_SIZE); x++){
-        Tile t = new Tile(17 * TILE_SIZE, 0);
+        Tile t = new Tile(17, 0);
         mapset.set(x, y, t);
         mapset2.set(x, y, 0);
       }
@@ -46,19 +50,19 @@ class Scene {
   }
   
   void addBuilding(int x, int y){
-    Tile t = new Tile(23 * TILE_SIZE, 20 * TILE_SIZE);
+    Tile t = new Tile(23, 20);
     mapset.set(x, y, t);
     mapset.set(x+1, y, t);
     mapset.set(x+2, y, t);
-    Tile t2 = new Tile(23 * TILE_SIZE, 21 * TILE_SIZE);
+    Tile t2 = new Tile(23, 21);
     mapset.set(x, y+1, t2);
     mapset.set(x+1, y+1, t2);
     mapset.set(x+2, y+1, t2);
-    Tile t3 = new Tile(23 * TILE_SIZE, 22 * TILE_SIZE);
+    Tile t3 = new Tile(23, 22);
     mapset.set(x, y+2, t3);
     mapset.set(x+1, y+2, t3);
     mapset.set(x+2, y+2, t3);
-    Tile t4 = new Tile(23 * TILE_SIZE, 23 * TILE_SIZE);
+    Tile t4 = new Tile(23, 23);
     mapset.set(x, y+3, t4);
     mapset.set(x+1, y+3, t4);
     mapset.set(x+2, y+3, t4);
@@ -70,7 +74,7 @@ class Scene {
     for(var i = 0; i< 5; i++){
       var rX = random.nextInt(mapset2.cols);
       var rY = random.nextInt(mapset2.rows);
-      Tile t = new Tile(1 * TILE_SIZE, 32 * TILE_SIZE);
+      Tile t = new Tile(1, 32);
       mapset2.set(rX, rY, t);
     }
   }

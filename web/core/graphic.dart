@@ -1,17 +1,13 @@
 import 'dart:html';
 import 'globals.dart';
 
-class Graphic {
+//Abstract class of a graphical element
+abstract class Graphic {
   
-  HtmlDocument _doc;
-  CanvasRenderingContext2D _ctx;
-  CanvasElement canvas;
-  ImageElement characterImage;
+  //This init the graphical element
+  void loadGraphic(String src);
   
-  void init(HtmlDocument _doc, CanvasRenderingContext2D _ctx, CanvasElement canvas){
-    this._doc = _doc;
-    this._ctx = _ctx;
-    this.canvas = canvas;
-  }
+  //Update class for the refresh of the element
+  void update();
   
 }

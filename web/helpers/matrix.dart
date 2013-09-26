@@ -5,6 +5,7 @@
 import 'dart:html';
 
 class Matrix {
+  //Main matrix object list of lists
   List<List> m;
   
   int rows;

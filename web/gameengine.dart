@@ -6,7 +6,9 @@ import 'dart:html';
 import 'helpers/coordinate.dart';
 import 'core/globals.dart';
 import 'core/character.dart';
+import 'core/item.dart';
 import 'core/scene.dart';
+import 'core/tile.dart';
 
 //System vars
 HtmlDocument _doc;
@@ -15,6 +17,7 @@ CanvasElement canvas;
 //Character char;
 Scene scene;
 List<Character> chars; //List of current characters
+List<Item> items;
 
 void main() {
   setupCanvas();
@@ -27,6 +30,15 @@ void main() {
   chars.add(char1);
   //char2.randomMovement = true;
   chars.add(char2);
+  
+  Coordinate initCoor3 = new Coordinate(5,8);
+  Coordinate initCoor4 = new Coordinate(3,5);
+  Tile tile = new Tile(5, 31);
+  Item item1 = new Item(_doc, _ctx, canvas, initCoor3, tile, false);
+  Item item2 = new Item(_doc, _ctx, canvas, initCoor4, tile, true);
+  items = new List<Item>();
+  items.add(item1);
+  items.add(item2);
   setupKeys();
   window.animationFrame.then(update);
 }
@@ -40,6 +52,12 @@ void update(num delta) {
   while(charas.moveNext()){
     Character c = charas.current;
     c.update();
+  }
+  
+  Iterator<Item> itemsIte = items.iterator;
+  while(itemsIte.moveNext()){
+    Item i = itemsIte.current;
+    i.update();
   }
   //char.update();
   window.animationFrame.then(update);
@@ -71,6 +89,17 @@ bool shallPass(int face, Character c){
         return false;
     }
   }
+  Iterator<Item> itemsIte = items.iterator;
+  while(itemsIte.moveNext()){
+    Item item = itemsIte.current;
+    int itemFace = item.curPos.nextToThis(c.curPos);
+    if(!item.pushable && itemFace == face){
+        return false;
+    }else if(itemFace == face){
+      item.move(itemFace);
+    }
+  }
+  
   return true;
 }
 

@@ -4,10 +4,11 @@
 
 import 'dart:html';
 import 'globals.dart';
+import 'graphic.dart';
 import '../helpers/coordinate.dart';
 import 'dart:math' as Math;
 
-class Character{
+class Character implements Graphic{
   
   //Graphical vars
   HtmlDocument _doc;
@@ -47,7 +48,7 @@ class Character{
     this.moving = false;
     this.frame = INITIAL_FRAME;
     this.faceDir = INITIAL_FACE;
-    loadImage("assets/characters.png");
+    loadGraphic("assets/characters.png");
   }
   
   void moveRandom(){
@@ -102,7 +103,7 @@ class Character{
     }
   }
   
-  void loadImage(String src){
+  void loadGraphic(String src){
     this.characterImage = new Element.tag('img'); 
     this.characterImage = _doc.createElement('img'); 
     this.characterImage.src = src;
@@ -134,7 +135,7 @@ class Character{
   }
   
   void stopMove(){
-    frame = 0;
+    frame = 1;
   }
   
   void processMovements(){
