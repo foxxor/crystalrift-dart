@@ -40,7 +40,7 @@ class Scene implements Graphic{
   void initValues(){
     for (var y = 0; y < ( SCREEN_HEIGHT/ TILE_SIZE); y++){
       for (var x = 0; x < (SCREEN_WIDTH / TILE_SIZE); x++){
-        Tile t = new Tile(17, 0, true);
+        Tile t = new Tile(17, 0, TILE_SOIL);
         mapset.set(x, y, t);
         mapset2.set(x, y, 0);
       }
@@ -50,19 +50,19 @@ class Scene implements Graphic{
   }
   
   void addBuilding(int x, int y){
-    Tile t = new Tile(23, 20);
+    Tile t = new Tile(23, 20, TILE_BUILDING_UNPASSABLE);
     mapset.set(x, y, t);
     mapset.set(x+1, y, t);
     mapset.set(x+2, y, t);
-    Tile t2 = new Tile(23, 21);
+    Tile t2 = new Tile(23, 21, TILE_BUILDING_UNPASSABLE);
     mapset.set(x, y+1, t2);
     mapset.set(x+1, y+1, t2);
     mapset.set(x+2, y+1, t2);
-    Tile t3 = new Tile(23, 22);
+    Tile t3 = new Tile(23, 22, TILE_BUILDING_UNPASSABLE);
     mapset.set(x, y+2, t3);
     mapset.set(x+1, y+2, t3);
     mapset.set(x+2, y+2, t3);
-    Tile t4 = new Tile(23, 23);
+    Tile t4 = new Tile(23, 23, TILE_BUILDING_PASSABLE);
     mapset.set(x, y+3, t4);
     mapset.set(x+1, y+3, t4);
     mapset.set(x+2, y+3, t4);
@@ -75,10 +75,39 @@ class Scene implements Graphic{
       var rX = random.nextInt(mapset2.cols);
       var rY = random.nextInt(mapset2.rows);
       Tile t = new Tile(1, 32);
-      if(mapset.get(rX, rY).soil){
+      if(mapset.get(rX, rY).type == TILE_SOIL){
         mapset2.set(rX, rY, t);
       }
     }
+  }
+  
+  bool nextToTile(int x, int y, int face){
+    if(x >= 1){
+      Tile t1 = mapset.get(x-1, y);
+      if( t1.type == TILE_BUILDING_UNPASSABLE && face == LEFT){
+        return true;
+      }
+    }
+    if(y >= 1){
+      Tile t2 = mapset.get(x, y-1);
+      if( t2.type == TILE_BUILDING_UNPASSABLE && face == UP){
+        return true;
+      }
+    }
+    if(x < mapset.cols -1){
+      Tile t3 = mapset.get(x+1, y);
+      if( t3.type == TILE_BUILDING_UNPASSABLE && face == RIGHT){
+        return true;
+      }
+    }
+    if(y < mapset.rows -1){
+      Tile t4 = mapset.get(x, y+1);
+      if( t4.type == TILE_BUILDING_UNPASSABLE && face == DOWN){
+        return true;
+      }
+    }
+    
+    return false;
   }
   
   void update(){

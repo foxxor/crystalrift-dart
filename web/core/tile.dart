@@ -8,11 +8,11 @@ import 'globals.dart';
 class Tile {
   int xImg;
   int yImg;
-  bool soil;
+  int type;
   
-  Tile(int x, int y, [bool soil=false]){
+  Tile(int x, int y, [int type=TILE_SOIL]){
     this.xImg = x * TILE_SIZE;
     this.yImg = y * TILE_SIZE;
-    this.soil = soil;
+    this.type = type;
   }
 }

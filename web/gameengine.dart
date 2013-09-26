@@ -85,6 +85,10 @@ void setupKeys(){
 }
 
 bool shallPass(int face, Character c){
+  if(scene.nextToTile(c.curPos.x, c.curPos.y, face)){
+    return false;
+  }
+  
   Iterator<Character> charas = chars.iterator;
   while(charas.moveNext()){
     Character char = charas.current;

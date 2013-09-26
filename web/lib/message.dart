@@ -25,10 +25,14 @@ wrapText(context, String text, x, y, maxWidth, lineHeight) {
   context.save();
   context.font = '12pt Verdana';
   context.fillStyle = "white";
-  context.shadowOffsetX = 0;
-  context.shadowOffsetY = 0;
-  context.shadowBlur    = 5;
-  context.shadowColor = 'rgba(0, 0, 0, 1)';
+  //context.shadowOffsetX = 0;
+  //context.shadowOffsetY = 0;
+  //context.shadowBlur    = 5;
+  //context.shadowColor = 'rgba(0, 0, 0, 1)';
+  
+  context.lineWidth = 3;
+  context.strokeStyle = "black";
+  context.strokeText(line, x, y);
   context.fillText(line, x, y);
   context.restore();
   //context.stroke();

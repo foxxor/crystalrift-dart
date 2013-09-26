@@ -17,3 +17,8 @@ const int LEFT = 2;
 const int RIGHT = 3;
 const int UP = 0;
 const int DOWN = 1;
+
+const int TILE_SOIL = 0;
+const int TILE_ITEM = 1;
+const int TILE_BUILDING_PASSABLE = 2;
+const int TILE_BUILDING_UNPASSABLE = 3;
