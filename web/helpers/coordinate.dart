@@ -19,21 +19,13 @@ class Coordinate {
     
     if( deltaX == 0 && deltaY.ceil() == 1){
       return UP; //face down
-    }else if( deltaX == 0 && deltaY.floor() == -1){
+    }else if( deltaX == 0 && deltaY.round() == -1){
       return DOWN; //face up
     }else if( deltaX.ceil() == 1 && deltaY == 0){
       return LEFT; //face left
-    }else if( deltaX.floor() == -1 && deltaY == 0){
+    }else if( deltaX.round() == -1 && deltaY == 0){
       return RIGHT; //face right
-    }/*else if(deltaX.ceil() == 1 && deltaY.ceil() == 1){
-      return UP;
-    }else if(deltaX.floor() == -1 && deltaY.floor() == -1){
-      return DOWN;
-    }else if(deltaX.ceil() == 1 && deltaY.floor() == -1){
-      return LEFT;
-    }else if(deltaX.floor() == -1 && deltaY.ceil() == 1){
-      return RIGHT;
-    }*/
+    }
     
     return -1;
   }

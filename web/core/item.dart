@@ -14,6 +14,7 @@ class Item implements Graphic{
   CanvasRenderingContext2D _ctx;
   CanvasElement canvas;
   ImageElement itemImage;
+  int speed;
   
   //Current position in tiles
   Coordinate curPos;
@@ -27,12 +28,13 @@ class Item implements Graphic{
   //Item can be pushed?
   bool pushable;
   
-  Item(HtmlDocument _doc, CanvasRenderingContext2D _ctx, CanvasElement canvas, Coordinate curPos, Tile tile, [bool pushable=false]){
+  Item(HtmlDocument _doc, CanvasRenderingContext2D _ctx, CanvasElement canvas, Coordinate curPos, Tile tile, [bool pushable=false, int speed = 1]){
     this._doc = _doc;
     this._ctx = _ctx;
     this.canvas = canvas;
     this.curPos = curPos;
     this.tile = tile;
+    this.speed = speed;
     this.curPosPx = new Coordinate(curPos.x *TILE_SIZE, curPos.y *TILE_SIZE);
     this.moving = false;
     this.pushable = pushable;
@@ -103,7 +105,7 @@ class Item implements Graphic{
   }
   
   void updateMove(){
-    var distance = 2 * MOVE_SPEED;
+    var distance = 2 * speed;
     if(curPos.y * TILE_SIZE > curPosPx.y){
       curPosPx.y = Math.min(curPosPx.y + distance, curPos.y * TILE_SIZE);
     }

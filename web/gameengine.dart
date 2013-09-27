@@ -19,6 +19,7 @@ CanvasElement canvas;
 //Character char;
 Scene scene;
 List<Character> chars; //List of current characters
+Character mainCharacter;
 List<Item> items;
 List<Message> activeMessages;
 
@@ -27,10 +28,9 @@ void main() {
   scene = new Scene(_doc, _ctx, canvas);
   Coordinate initCoor1 = new Coordinate(0,0);
   Coordinate initCoor2 = new Coordinate(2,2);
-  Character char1 = new Character(_doc, _ctx, canvas, initCoor1, 0); //Main Player
+  mainCharacter = new Character(_doc, _ctx, canvas, initCoor1, 0); //Main Player
   Character char2 = new Character(_doc, _ctx, canvas, initCoor2, 2);
   chars = new List<Character>();
-  chars.add(char1);
   //char2.randomMovement = true;
   chars.add(char2);
   
@@ -71,11 +71,13 @@ void update(num delta) {
     i.update();
   }
   
+  mainCharacter.update();
+  
   Iterator<Message> msgIte = activeMessages.iterator;
   while(msgIte.moveNext()){
     Message msg = msgIte.current;
-    msg.x = chars.first.curPosPx.x;
-    msg.y = chars.first.curPosPx.y;
+    msg.x = mainCharacter.curPosPx.x;
+    msg.y = mainCharacter.curPosPx.y;
     msg.update();
   }
   
@@ -94,15 +96,6 @@ void setupCanvas(){
   _ctx = canvas.getContext("2d");
 }
 
-void setupKeys(){
-  canvas.onKeyDown.listen((e) {
-    reactKey(e);
-  });
-  canvas.onKeyUp.listen((e) {
-    chars.first.stopMove();
-  });
-}
-
 bool shallPass(int face, Character c){
   if(scene.nextToTile(c.curPos.x, c.curPos.y, face)){
     return false;
@@ -111,7 +104,8 @@ bool shallPass(int face, Character c){
   Iterator<Character> charas = chars.iterator;
   while(charas.moveNext()){
     Character char = charas.current;
-    if(!char.phasable && char.curPosPx.nextToThis(c.curPosPx) == face){
+    int nextTo = char.curPosPx.nextToThis(c.curPosPx);
+    if(!char.phasable && nextTo == face){
         return false;
     }
   }
@@ -131,30 +125,41 @@ bool shallPass(int face, Character c){
   return true;
 }
 
+//Keyboard and keybinding
+
+void setupKeys(){
+  canvas.onKeyDown.listen((e) {
+    reactKey(e);
+  });
+  canvas.onKeyUp.listen((e) {
+    mainCharacter.stopMove();
+  });
+}
+
 void reactKey(var evt) {
   if(evt.keyCode == 37 || evt.keyCode == 65 ) { //left
-    if(shallPass(LEFT,chars.first)){
-      chars.first.move(LEFT);
+    if(shallPass(LEFT,mainCharacter)){
+      mainCharacter.move(LEFT);
     }else{
-      chars.first.faceDirection(LEFT);
+      mainCharacter.faceDirection(LEFT);
     }
   }else if(evt.keyCode == 38 || evt.keyCode == 87 ){ //up
-    if(shallPass(UP,chars.first)){
-      chars.first.move(UP);
+    if(shallPass(UP,mainCharacter)){
+      mainCharacter.move(UP);
     }else{
-      chars.first.faceDirection(UP);
+      mainCharacter.faceDirection(UP);
     }
   }else if(evt.keyCode == 39 || evt.keyCode == 68 ){ //right
-    if(shallPass(RIGHT,chars.first)){
-      chars.first.move(RIGHT);
+    if(shallPass(RIGHT,mainCharacter)){
+      mainCharacter.move(RIGHT);
     }else{
-      chars.first.faceDirection(RIGHT);
+      mainCharacter.faceDirection(RIGHT);
     }
   }else if(evt.keyCode == 40 || evt.keyCode == 83 ){ //down
-    if(shallPass(DOWN,chars.first)){
-      chars.first.move(DOWN);
+    if(shallPass(DOWN,mainCharacter)){
+      mainCharacter.move(DOWN);
     }else{
-      chars.first.faceDirection(DOWN);
+      mainCharacter.faceDirection(DOWN);
     }
   }
   

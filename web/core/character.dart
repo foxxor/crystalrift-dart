@@ -33,21 +33,27 @@ class Character implements Graphic{
   //Is this object pasable?
   bool phasable;
   
+  int speed;
+  
+  bool trigger;
+  
   var acDelta = 0;
   var lastUpdateTime = 0;
   
-  Character(HtmlDocument _doc, CanvasRenderingContext2D _ctx, CanvasElement canvas, Coordinate curPos, int charSprite) {
+  Character(HtmlDocument _doc, CanvasRenderingContext2D _ctx, CanvasElement canvas, Coordinate curPos, int charSprite, [int speed = 1]) {
     this._doc = _doc;
     this._ctx = _ctx;
     this.canvas = canvas;
     this.randomMovement = false;
     this.phasable = false;
     this.selectedChar = charSprite;
+    this.speed = speed;
     this.curPos = curPos;
     this.curPosPx = new Coordinate(curPos.x *TILE_SIZE, curPos.y *TILE_SIZE);
     this.moving = false;
     this.frame = INITIAL_FRAME;
     this.faceDir = INITIAL_FACE;
+    this.trigger = false;
     loadGraphic("assets/characters.png");
   }
   
@@ -58,6 +64,7 @@ class Character implements Graphic{
   }
   
   bool move(int face){
+    
     switch (face) {
       case 0: //up
         faceDirection(UP);
@@ -120,7 +127,7 @@ class Character implements Graphic{
   }
   
   void updateMove(){
-    var distance = 2 * MOVE_SPEED;
+    var distance = 2 * speed;
     
     if(curPos.y * TILE_SIZE > curPosPx.y){
       curPosPx.y = Math.min(curPosPx.y + distance, curPos.y * TILE_SIZE);
