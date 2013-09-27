@@ -3,6 +3,7 @@
 */
 
 import 'dart:html';
+import 'dart:async';
 import 'lib/message.dart';
 import 'helpers/coordinate.dart';
 import 'core/globals.dart';
@@ -19,6 +20,7 @@ CanvasElement canvas;
 Scene scene;
 List<Character> chars; //List of current characters
 List<Item> items;
+List<Message> activeMessages;
 
 void main() {
   setupCanvas();
@@ -41,6 +43,13 @@ void main() {
   items = new List<Item>();
   items.add(item1);
   items.add(item2);
+  
+  activeMessages = new List<Message>();
+  Message msg = new Message(_ctx, 'Hola a todos!', chars.first.curPosPx.x, chars.first.curPosPx.y, 100, 10);
+  const ms = const Duration(milliseconds: 10000);
+  Timer t = new Timer( ms, removeMessage);
+  activeMessages.add(msg);
+  
   setupKeys();
   window.animationFrame.then(update);
 }
@@ -62,9 +71,19 @@ void update(num delta) {
     i.update();
   }
   
-  wrapText(_ctx, 'Hola a todos!', chars.first.curPosPx.x, chars.first.curPosPx.y, 100, 10);
+  Iterator<Message> msgIte = activeMessages.iterator;
+  while(msgIte.moveNext()){
+    Message msg = msgIte.current;
+    msg.x = chars.first.curPosPx.x;
+    msg.y = chars.first.curPosPx.y;
+    msg.update();
+  }
   
   window.animationFrame.then(update);
+}
+
+void removeMessage(){
+  activeMessages.removeAt(0);
 }
 
 void setupCanvas(){
