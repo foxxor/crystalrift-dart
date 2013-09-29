@@ -1,6 +1,7 @@
 /*
   Copyright (C) 2013 Jorge Vargas <vargasjorgeluis@gmail.com>
 */
+library scene;
 
 import 'dart:html';
 import 'globals.dart';
@@ -40,7 +41,7 @@ class Scene implements Graphic{
   void initValues(){
     for (var y = 0; y < ( SCREEN_HEIGHT/ TILE_SIZE); y++){
       for (var x = 0; x < (SCREEN_WIDTH / TILE_SIZE); x++){
-        Tile t = new Tile(17, 0, TILE_SOIL);
+        Tile t = new Tile(5, 2, TILE_SOIL);
         mapset.set(x, y, t);
         mapset2.set(x, y, 0);
       }
@@ -50,7 +51,7 @@ class Scene implements Graphic{
   }
   
   void addBuilding(int x, int y){
-    Tile t = new Tile(23, 20, TILE_BUILDING_UNPASSABLE);
+    Tile t = new Tile(22, 20, TILE_BUILDING_UNPASSABLE);
     mapset.set(x, y, t);
     mapset.set(x+1, y, t);
     mapset.set(x+2, y, t);
@@ -74,7 +75,7 @@ class Scene implements Graphic{
     for(var i = 0; i< 5; i++){
       var rX = random.nextInt(mapset2.cols);
       var rY = random.nextInt(mapset2.rows);
-      Tile t = new Tile(1, 32);
+      Tile t = new Tile(5, 10);
       if(mapset.get(rX, rY).type == TILE_SOIL){
         mapset2.set(rX, rY, t);
       }

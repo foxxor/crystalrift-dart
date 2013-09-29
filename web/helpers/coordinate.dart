@@ -2,6 +2,8 @@
   Copyright (C) 2013 Jorge Vargas <vargasjorgeluis@gmail.com>
 */
 
+library coordinate;
+
 import '../core/globals.dart';
 
 class Coordinate {

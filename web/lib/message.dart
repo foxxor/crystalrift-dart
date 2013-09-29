@@ -2,10 +2,11 @@
   Copyright (C) 2013 Jorge Vargas <vargasjorgeluis@gmail.com>
 */
 
+library message;
+
 import 'dart:html';
 
 class Message{
-  
   CanvasRenderingContext2D _ctx; 
   String text;
   num x;

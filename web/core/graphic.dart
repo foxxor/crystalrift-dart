@@ -1,5 +1,8 @@
-import 'dart:html';
-import 'globals.dart';
+/*
+  Copyright (C) 2013 Jorge Vargas <vargasjorgeluis@gmail.com>
+*/
+
+library graphic;
 
 //Abstract class of a graphical element
 abstract class Graphic {

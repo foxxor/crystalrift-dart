@@ -1,6 +1,7 @@
 /*
   Copyright (C) 2013 Jorge Vargas <vargasjorgeluis@gmail.com>
 */
+library globals;
 
 //Engine vars
 const int INITIAL_FRAME = 1;

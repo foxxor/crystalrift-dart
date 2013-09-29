@@ -2,7 +2,7 @@
   Copyright (C) 2013 Jorge Vargas <vargasjorgeluis@gmail.com>
 */
 
-import 'dart:html';
+library matrix;
 
 class Matrix {
   //Main matrix object list of lists

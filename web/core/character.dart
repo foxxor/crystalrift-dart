@@ -2,6 +2,8 @@
   Copyright (C) 2013 Jorge Vargas <vargasjorgeluis@gmail.com>
 */
 
+library character;
+
 import 'dart:html';
 import 'globals.dart';
 import 'graphic.dart';

@@ -1,6 +1,7 @@
 /*
   Copyright (C) 2013 Jorge Vargas <vargasjorgeluis@gmail.com>
 */
+library tile;
 
 import 'dart:html';
 import 'globals.dart';
