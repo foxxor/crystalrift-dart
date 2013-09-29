@@ -67,14 +67,13 @@ void update(num delta) {
     Item i = itemsIte.current;
     i.update();
   }
+  mainCharacter.update();  
   
   Iterator<Action> eventIte = activeEvents.iterator;
   while(eventIte.moveNext()){
     Action e = eventIte.current;
     e.update();
   }
-  
-  mainCharacter.update();
   
   window.animationFrame.then(update);
 }
@@ -138,8 +137,10 @@ Character getCharacterInFront(){
   Iterator<Character> charas = chars.iterator;
   while(charas.moveNext()){
     Character char = charas.current;
-    if(char.curPosPx.facingThis(mainCharacter.getCurrentDirection(), mainCharacter.curPosPx)){
-        return char;
+    int charFace = char.curPosPx.facingThis(mainCharacter.getCurrentDirection(), mainCharacter.curPosPx);
+    if(charFace >= 0){
+      char.faceDirection(charFace);
+      return char;
     }
   }
   return null;
