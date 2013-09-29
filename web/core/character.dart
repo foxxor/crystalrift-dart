@@ -18,25 +18,25 @@ class Character implements Graphic{
   CanvasElement canvas;
   ImageElement characterImage;
   
-  //Current position in tiles
+  // Current position in tiles
   Coordinate curPos;
-  //Current position in pixels
+  // Current position in pixels
   Coordinate curPosPx;
-  //Current animation frame
+  // Current animation frame
   int frame;
-  //Character is moving?
+  // Character is moving?
   bool moving;
-  //Facing direction
+  // Facing direction
   int faceDir;
-  //Current selected chart
+  // Current selected chart
   int selectedChar;
-  //Move this guy like crazy
+  // Move this guy like crazy
   bool randomMovement;
-  //Is this object pasable?
+  // Is this object pasable?
   bool phasable;
-  
+  // Character movement speed
   int speed;
-  
+  // Event is executing?
   bool trigger;
   
   var acDelta = 0;
@@ -66,7 +66,6 @@ class Character implements Graphic{
   }
   
   bool move(int face){
-    
     switch (face) {
       case 0: //up
         faceDirection(UP);
@@ -113,6 +112,23 @@ class Character implements Graphic{
         break;
       case RIGHT: //right
         faceDir = 2;
+        break;
+    }
+  }
+  
+  int getCurrentDirection(){
+    switch (faceDir) {
+      case 3: //up
+        return UP;
+        break;
+      case 0: //down
+        return DOWN;
+        break;
+      case 1: //left
+        return LEFT;
+        break;
+      case 2: //right
+        return RIGHT;
         break;
     }
   }
@@ -190,7 +206,6 @@ class Character implements Graphic{
 
   void update(){
     processMovements();
-    
     if(isMoving()){
       updateMove();
     }else{
@@ -200,5 +215,4 @@ class Character implements Graphic{
     _ctx.drawImageToRect(this.characterImage , new Rect(curPosPx.x , curPosPx.y, TILE_SIZE, TILE_SIZE), //Rect to paint the image
         sourceRect: new Rect(((selectedChar *3) + frame) * TILE_SIZE, TILE_SIZE * faceDir, TILE_SIZE, TILE_SIZE)); //Size of the image
   }
-  
 }

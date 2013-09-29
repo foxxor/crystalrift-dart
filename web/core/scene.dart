@@ -16,10 +16,12 @@ class Scene implements Graphic{
   CanvasElement canvas;
   ImageElement sceneImage;
   
-  //The map matrix that represent the first visual terrain layer 
+  // The map matrix that represent the first visual terrain layer 
   Matrix mapset;
-//The map matrix that represent the second visual terrain layer 
+  // The map matrix that represent the second visual terrain layer 
   Matrix mapset2;
+// The map matrix that represent the third visual terrain layer 
+  Matrix mapset3;
   
   Scene(HtmlDocument _doc, CanvasRenderingContext2D _ctx, CanvasElement canvas) {
     this._doc = _doc;

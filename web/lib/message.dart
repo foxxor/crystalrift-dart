@@ -42,18 +42,19 @@ class Message{
       }
       else { line = testLine; }
     }
-    _ctx.save();
-    _ctx.font = '12pt Verdana';
-    _ctx.fillStyle = "white";
+    _ctx..save()
+        ..font = '12pt Verdana'
+        ..fillStyle = "white"
+        ..lineWidth = 3
+        ..strokeStyle = "black";
     
     //Shadow Text
-    //context.shadowOffsetX = 0;
-    //context.shadowOffsetY = 0;
-    //context.shadowBlur    = 5;
-    //context.shadowColor = 'rgba(0, 0, 0, 1)';
+    //_ctx..shadowOffsetX = 0
+    //    ..shadowOffsetY = 0
+    //    ..shadowBlur    = 5
+    //    ..shadowColor = 'rgba(0, 0, 0, 1)';
     
-    _ctx.lineWidth = 3;
-    _ctx.strokeStyle = "black";
+    //Stroke
     _ctx.strokeText(line, x, y);
     _ctx.fillText(line, x, y);
     _ctx.restore();

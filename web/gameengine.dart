@@ -11,6 +11,7 @@ import 'core/character.dart';
 import 'core/item.dart';
 import 'core/scene.dart';
 import 'core/tile.dart';
+import 'core/event.dart';
 
 //System vars
 HtmlDocument _doc;
@@ -21,7 +22,7 @@ Scene scene;
 List<Character> chars; //List of current characters
 Character mainCharacter;
 List<Item> items;
-List<Message> activeMessages;
+List<Event> activeEvents;
 
 void main() {
   setupCanvas();
@@ -44,11 +45,7 @@ void main() {
   items.add(item1);
   items.add(item2);
   
-  activeMessages = new List<Message>();
-  Message msg = new Message(_ctx, 'Hola a todos!', chars.first.curPosPx.x, chars.first.curPosPx.y, 100, 10);
-  const ms = const Duration(milliseconds: 10000);
-  Timer t = new Timer( ms, removeMessage);
-  activeMessages.add(msg);
+  activeEvents = new List<Event>();
   
   setupKeys();
   window.animationFrame.then(update);
@@ -71,21 +68,33 @@ void update(num delta) {
     i.update();
   }
   
-  mainCharacter.update();
-  
-  Iterator<Message> msgIte = activeMessages.iterator;
-  while(msgIte.moveNext()){
-    Message msg = msgIte.current;
-    msg.x = mainCharacter.curPosPx.x;
-    msg.y = mainCharacter.curPosPx.y;
-    msg.update();
+  Iterator<Event> eventIte = activeEvents.iterator;
+  while(eventIte.moveNext()){
+    Event e = eventIte.current;
+    e.update();
   }
+  
+  mainCharacter.update();
   
   window.animationFrame.then(update);
 }
 
-void removeMessage(){
-  activeMessages.removeAt(0);
+void createMessage(Character char){
+  Message msg = new Message(_ctx, 'ola k ase', char.curPosPx.x, char.curPosPx.y, 100, 10);
+  const ms = const Duration(milliseconds: 5000);
+  Timer t = new Timer( ms, removeEvent);
+  Event event = new Event(char, msg, EVENT_TYPE_MESSAGE);
+  activeEvents.add(event);
+}
+
+void removeEvent(){
+  Event event = activeEvents.elementAt(0);
+  if(event.type == EVENT_TYPE_MESSAGE){
+    Character char = event.object;
+    char.trigger = false;
+  }
+  
+  activeEvents.removeAt(0);
 }
 
 void setupCanvas(){
@@ -125,6 +134,17 @@ bool shallPass(int face, Character c){
   return true;
 }
 
+Character getCharacterInFront(){
+  Iterator<Character> charas = chars.iterator;
+  while(charas.moveNext()){
+    Character char = charas.current;
+    if(char.curPosPx.facingThis(mainCharacter.getCurrentDirection(), mainCharacter.curPosPx)){
+        return char;
+    }
+  }
+  return null;
+}
+
 //Keyboard and keybinding
 
 void setupKeys(){
@@ -160,6 +180,14 @@ void reactKey(var evt) {
       mainCharacter.move(DOWN);
     }else{
       mainCharacter.faceDirection(DOWN);
+    }
+  }else if(evt.keyCode == 13 ){ //Action
+    Character c = getCharacterInFront();
+    if(c != null){
+      if(!c.trigger){
+        c.trigger = true;
+        createMessage(c);
+      }
     }
   }
   
