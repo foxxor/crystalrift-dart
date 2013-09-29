@@ -4,6 +4,8 @@
 library scene;
 
 import 'dart:html';
+import 'dart:async';
+import 'dart:json';
 import 'globals.dart';
 import 'graphic.dart';
 import '../helpers/matrix.dart';
@@ -15,6 +17,7 @@ class Scene implements Graphic{
   CanvasRenderingContext2D _ctx;
   CanvasElement canvas;
   ImageElement sceneImage;
+  Map structuresData;
   
   // The map matrix that represent the first visual terrain layer 
   Matrix mapset;
@@ -29,6 +32,7 @@ class Scene implements Graphic{
     this.canvas = canvas;
     mapset = new Matrix(( SCREEN_WIDTH / TILE_SIZE).floor(), ( SCREEN_HEIGHT / TILE_SIZE).floor());
     mapset2 = new Matrix(( SCREEN_WIDTH / TILE_SIZE).floor(), ( SCREEN_HEIGHT / TILE_SIZE).floor());
+    mapset3 = new Matrix(( SCREEN_WIDTH / TILE_SIZE).floor(), ( SCREEN_HEIGHT / TILE_SIZE).floor());
     initValues();
     loadGraphic("assets/tileset.png");
   }
@@ -46,35 +50,53 @@ class Scene implements Graphic{
         Tile t = new Tile(5, 2, TILE_SOIL);
         mapset.set(x, y, t);
         mapset2.set(x, y, 0);
+        mapset3.set(x, y, 0);
       }
     }
-    addBuilding(5,3);
-    addDecoration();
+    loadFile();
   }
   
-  void addBuilding(int x, int y){
-    Tile t = new Tile(22, 20, TILE_BUILDING_UNPASSABLE);
-    mapset.set(x, y, t);
-    mapset.set(x+1, y, t);
-    mapset.set(x+2, y, t);
-    Tile t2 = new Tile(23, 21, TILE_BUILDING_UNPASSABLE);
-    mapset.set(x, y+1, t2);
-    mapset.set(x+1, y+1, t2);
-    mapset.set(x+2, y+1, t2);
-    Tile t3 = new Tile(23, 22, TILE_BUILDING_UNPASSABLE);
-    mapset.set(x, y+2, t3);
-    mapset.set(x+1, y+2, t3);
-    mapset.set(x+2, y+2, t3);
-    Tile t4 = new Tile(23, 23, TILE_BUILDING_PASSABLE);
-    mapset.set(x, y+3, t4);
-    mapset.set(x+1, y+3, t4);
-    mapset.set(x+2, y+3, t4);
+  void loadFile(){
+    String url = "data/structures.json";
+    var request = HttpRequest.getString(url).then(loadStructures);
   }
   
-  void addDecoration(){
-    var random = new Math.Random();
+  void loadStructures(String responseText) {
+    structuresData = parse(responseText);
+    addBuilding(0, 6,5);
+    addRandomDetails();
+  }
+  
+  void addBuilding(int index, int x, int y){
+    Map structure = structuresData['buildings'].elementAt(index);
+    //Load the first layer
+    Iterator<Map> tilesMapset1 = structure['mapset1']['tiles'].iterator;
+    while(tilesMapset1.moveNext()){
+      Map m = tilesMapset1.current;
+      Tile t = new Tile(m['xTile'], m['yTile'], m['type']);
+      Iterator<Map> blocks = m['blocks'].iterator;
+      while(blocks.moveNext()){
+        Map block = blocks.current;
+        mapset.set(x +block['x'].toInt() , y + block['y'].toInt(), t);
+      }
+    }
     
-    for(var i = 0; i< 5; i++){
+    //Load the second layer
+    Iterator<Map> tilesMapset2 = structure['mapset2']['tiles'].iterator;
+    while(tilesMapset2.moveNext()){
+      Map m = tilesMapset2.current;
+      Tile t = new Tile(m['xTile'], m['yTile'], m['type']);
+      Iterator<Map> blocks = m['blocks'].iterator;
+      while(blocks.moveNext()){
+        Map block = blocks.current;
+        mapset2.set(x +block['x'].toInt() , y + block['y'].toInt(), t);
+      }
+    }
+  }
+  
+  void addRandomDetails(){
+    var random = new Math.Random();
+    for(var i = 0; i< 7; i++){
       var rX = random.nextInt(mapset2.cols);
       var rY = random.nextInt(mapset2.rows);
       Tile t = new Tile(5, 10);
