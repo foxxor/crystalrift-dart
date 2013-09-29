@@ -2,15 +2,17 @@
 
 An HTML5 game engine using dart and canvas. I'm planning to convert this into a Zelda style game.
 
+[Live demo here](http://foxxor.github.io/crystalrift-dart/gameengine.html)
+
 ## What is working?
 
 * Character movement in 4 directions. (W,A,S,D)
 * Character collission detection. (Buggy when the movement is fast)
 * Pushable elements.
-* Buildings and load them dinamically using a json.
+* Buildings and decorations are loaded dinamically using a json.
 * Map tilesets, each tile can have a different graphic and collision rule.
 * Character to character interaction. (Enter)
-* Event handling. (Only messages at the moment)
+* Actions handling. (Only text on screen at the moment)
 
 ## Additional Utils in the repository
 
