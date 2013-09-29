@@ -3,7 +3,6 @@
 */
 library tile;
 
-import 'dart:html';
 import 'globals.dart';
 
 class Tile {
