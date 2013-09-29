@@ -11,7 +11,7 @@ import 'core/character.dart';
 import 'core/item.dart';
 import 'core/scene.dart';
 import 'core/tile.dart';
-import 'core/event.dart';
+import 'core/action.dart';
 
 //System vars
 HtmlDocument _doc;
@@ -22,7 +22,7 @@ Scene scene;
 List<Character> chars; //List of current characters
 Character mainCharacter;
 List<Item> items;
-List<Event> activeEvents;
+List<Action> activeEvents;
 
 void main() {
   setupCanvas();
@@ -45,7 +45,7 @@ void main() {
   items.add(item1);
   items.add(item2);
   
-  activeEvents = new List<Event>();
+  activeEvents = new List<Action>();
   
   setupKeys();
   window.animationFrame.then(update);
@@ -68,9 +68,9 @@ void update(num delta) {
     i.update();
   }
   
-  Iterator<Event> eventIte = activeEvents.iterator;
+  Iterator<Action> eventIte = activeEvents.iterator;
   while(eventIte.moveNext()){
-    Event e = eventIte.current;
+    Action e = eventIte.current;
     e.update();
   }
   
@@ -83,12 +83,12 @@ void createMessage(Character char){
   Message msg = new Message(_ctx, 'ola k ase', char.curPosPx.x, char.curPosPx.y, 100, 10);
   const ms = const Duration(milliseconds: 5000);
   Timer t = new Timer( ms, removeEvent);
-  Event event = new Event(char, msg, EVENT_TYPE_MESSAGE);
+  Action event = new Action(char, msg, EVENT_TYPE_MESSAGE);
   activeEvents.add(event);
 }
 
 void removeEvent(){
-  Event event = activeEvents.elementAt(0);
+  Action event = activeEvents.elementAt(0);
   if(event.type == EVENT_TYPE_MESSAGE){
     Character char = event.object;
     char.trigger = false;

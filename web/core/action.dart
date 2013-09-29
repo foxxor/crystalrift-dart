@@ -8,12 +8,12 @@ import '../core/globals.dart';
 import '../core/character.dart';
 import '../lib/message.dart';
 
-class Event {
+class Action {
   var object;
   var event;
   int type;
   
-  Event(var object, var event, int type){
+  Action(var object, var event, int type){
     this.object = object;
     this.event = event;
     this.type = type;
