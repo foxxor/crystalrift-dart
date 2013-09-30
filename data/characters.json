@@ -1,0 +1,24 @@
+{"characters":[
+    {
+      "x":3,
+      "y": 3,
+      "characterId":2,
+      "moveRandom" : true,
+      "message": "Estoy de guardia"
+    },
+    {
+      "x":6,
+      "y": 8,
+      "characterId":1,
+      "moveRandom" : true,
+      "message": "Muevete!"
+    },
+    {
+      "x":12,
+      "y": 8,
+      "characterId":3,
+      "moveRandom" : false,
+      "message": "Por el rey!"
+    }
+  ]
+}

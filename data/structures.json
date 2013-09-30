@@ -2,7 +2,7 @@
   [{
     "mapset1":{
       "tiles":[
-        {"xTile":22,
+        {"xTile":26,
         "yTile":20,
         "type":3,
         "blocks":[
@@ -11,7 +11,7 @@
             {"x":2, "y":0}
           ]
         },
-        {"xTile":23,
+        {"xTile":26,
         "yTile":21,
         "type":3,
         "blocks":[
