@@ -116,11 +116,12 @@ file:///Users/foxxor/Development/dart/dart-sdk/lib/typed_data/dart2js/typed_data
 file:///Users/foxxor/Development/dart/dart-sdk/lib/web_audio/dart2js/web_audio_dart2js.dart
 file:///Users/foxxor/Development/dart/dart-sdk/lib/web_gl/dart2js/web_gl_dart2js.dart
 file:///Users/foxxor/Development/dart/dart-sdk/lib/web_sql/dart2js/web_sql_dart2js.dart
+file:///Users/foxxor/dart/GameEngine/web/core/action.dart
 file:///Users/foxxor/dart/GameEngine/web/core/character.dart
-file:///Users/foxxor/dart/GameEngine/web/core/event.dart
 file:///Users/foxxor/dart/GameEngine/web/core/globals.dart
 file:///Users/foxxor/dart/GameEngine/web/core/graphic.dart
 file:///Users/foxxor/dart/GameEngine/web/core/item.dart
+file:///Users/foxxor/dart/GameEngine/web/core/mapset.dart
 file:///Users/foxxor/dart/GameEngine/web/core/scene.dart
 file:///Users/foxxor/dart/GameEngine/web/core/tile.dart
 file:///Users/foxxor/dart/GameEngine/web/gameengine.dart

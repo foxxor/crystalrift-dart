@@ -65,24 +65,24 @@ var $$ = {};
 
 // Native classes
 // Bound closures
-$$.Bound__completeError__Future = [P, {"": "BoundClosure;_self,_liblib5$_target,_receiver",
+$$.BoundClosure$0 = [Z, {"": "BoundClosure;_self,_liblib3$_target,_receiver",
+  call$0: function() {
+    return this._self[this._liblib3$_target]();
+  }
+}];
+
+$$.Bound__completeError__Future = [P, {"": "BoundClosure;_self,_liblib3$_target,_receiver",
   call$2: function(p0, p1) {
-    return this._self[this._liblib5$_target](p0, p1);
+    return this._self[this._liblib3$_target](p0, p1);
   },
   call$1: function(error) {
     return this.call$2(error, null);
   }
 }];
 
-$$.BoundClosure$0 = [P, {"": "BoundClosure;_self,_liblib5$_target,_receiver",
-  call$0: function() {
-    return this._self[this._liblib5$_target]();
-  }
-}];
-
-$$.BoundClosure$1 = [P, {"": "BoundClosure;_self,_liblib5$_target,_receiver",
+$$.BoundClosure$1 = [P, {"": "BoundClosure;_self,_liblib3$_target,_receiver",
   call$1: function(p0) {
-    return this._self[this._liblib5$_target](p0);
+    return this._self[this._liblib3$_target](p0);
   }
 }];
 
@@ -123,8 +123,6 @@ $$.Closure$identical = [P, {"": "Closure;call$2,$name"}];
 $$.Closure$main = [B, {"": "Closure;call$0,$name"}];
 
 $$.Closure$update = [B, {"": "Closure;call$1,$name"}];
-
-$$.Closure$removeEvent = [B, {"": "Closure;call$0,$name"}];
 
 (function (reflectionData) {
   function map(x){x={x:x};delete x.x;return x}
@@ -354,6 +352,9 @@ JSNumber: {"": "num/Interceptor;",
   get$isNegative: function(receiver) {
     return receiver === 0 ? 1 / receiver < 0 : receiver < 0;
   },
+  get$isNaN: function(receiver) {
+    return isNaN(receiver);
+  },
   remainder$1: function(receiver, b) {
     return receiver % b;
   },
@@ -383,6 +384,16 @@ JSNumber: {"": "num/Interceptor;",
   },
   get$hashCode: function(receiver) {
     return receiver & 0x1FFFFFFF;
+  },
+  $add: function(receiver, other) {
+    if (typeof other !== "number")
+      throw H.wrapException(new P.ArgumentError(other));
+    return receiver + other;
+  },
+  $sub: function(receiver, other) {
+    if (typeof other !== "number")
+      throw H.wrapException(new P.ArgumentError(other));
+    return receiver - other;
   },
   $mul: function(receiver, other) {
     if (typeof other !== "number")
@@ -444,6 +455,14 @@ JSString: {"": "String/Interceptor;",
     if (index >= receiver.length)
       throw H.wrapException(new P.RangeError("value " + H.S(index)));
     return receiver.charCodeAt(index);
+  },
+  $add: function(receiver, other) {
+    if (typeof other !== "string")
+      throw H.wrapException(new P.ArgumentError(other));
+    return receiver + other;
+  },
+  split$1: function(receiver, pattern) {
+    return receiver.split(pattern);
   },
   substring$2: function(receiver, startIndex, endIndex) {
     if (endIndex == null)
@@ -749,7 +768,7 @@ _IsolateContext: {"": "Object;id,ports,isolateStatics<",
   unregister$1: function(portId) {
     var t1 = this.ports;
     t1.remove$1(t1, portId);
-    if (this.ports._liblib4$_length === 0) {
+    if (this.ports._liblib2$_length === 0) {
       t1 = $globalState.isolates;
       t1.remove$1(t1, this.id);
     }
@@ -780,7 +799,7 @@ _EventLoop: {"": "Object;events,activeTimerCount",
     return t1.removeFirst$0();
   },
   checkOpenReceivePortsFromCommandLine$0: function() {
-    if ($globalState.rootContext != null && $globalState.isolates.containsKey$1($globalState.rootContext.id) && $globalState.fromCommandLine === true && $globalState.rootContext.ports._liblib4$_length === 0)
+    if ($globalState.rootContext != null && $globalState.isolates.containsKey$1($globalState.rootContext.id) && $globalState.fromCommandLine === true && $globalState.rootContext.ports._liblib2$_length === 0)
       throw H.wrapException(new P._ExceptionImplementation("Program exited with open ReceivePorts."));
   },
   runIteration$0: function() {
@@ -792,7 +811,7 @@ _EventLoop: {"": "Object;events,activeTimerCount",
       if (t1.isWorker === true) {
         t2 = t1.isolates;
         t2.get$isEmpty;
-        t2 = t2._liblib4$_length === 0 && t1.topEventLoop.activeTimerCount === 0;
+        t2 = t2._liblib2$_length === 0 && t1.topEventLoop.activeTimerCount === 0;
       } else
         t2 = false;
       if (t2) {
@@ -877,7 +896,7 @@ _BaseSendPort: {"": "Object;_isolateId<",
     H.setRuntimeTypeInfo(completer, [t1]);
     port = H.ReceivePortImpl$();
     this.send$2(this, message, new H._NativeJsSendPort(port, $globalState.currentContext.id));
-    port._liblib7$_callback = new H._BaseSendPort_call_closure(completer, port);
+    port._liblib6$_callback = new H._BaseSendPort_call_closure(completer, port);
     return completer.future;
   },
   $isSendPort: true
@@ -887,7 +906,7 @@ _BaseSendPort_call_closure: {"": "Closure;completer_0,port_1",
   call$2: function(value, ignoreReplyTo) {
     var t1, t2;
     t1 = this.port_1;
-    t1._liblib7$_callback = null;
+    t1._liblib6$_callback = null;
     $globalState.currentContext.unregister$1(t1._id);
     t1 = J.getInterceptor(value);
     t2 = this.completer_0;
@@ -934,7 +953,7 @@ _NativeJsSendPort_send_closure: {"": "Closure;this_1,message_2,replyTo_3",
     isolate = t4.$index(t4, t2.get$_isolateId());
     if (isolate == null)
       return;
-    if (t2.get$_receivePort().get$_liblib7$_callback() == null)
+    if (t2.get$_receivePort().get$_liblib6$_callback() == null)
       return;
     shouldSerialize = $globalState.currentContext != null && $globalState.currentContext.id !== t2.get$_isolateId();
     msg = this.message_2;
@@ -955,14 +974,14 @@ _NativeJsSendPort_send__closure: {"": "Closure;box_0,this_4,shouldSerialize_5",
   call$0: function() {
     var t1, t2;
     t1 = this.this_4;
-    if (t1.get$_receivePort().get$_liblib7$_callback() != null) {
+    if (t1.get$_receivePort().get$_liblib6$_callback() != null) {
       if (this.shouldSerialize_5) {
         t2 = this.box_0;
         t2.msg_0 = H._deserializeMessage(t2.msg_0);
         t2.reply_1 = H._deserializeMessage(t2.reply_1);
       }
       t2 = this.box_0;
-      t1.get$_receivePort()._liblib7$_callback$2(t2.msg_0, t2.reply_1);
+      t1.get$_receivePort()._liblib6$_callback$2(t2.msg_0, t2.reply_1);
     }
   }
 },
@@ -1018,9 +1037,9 @@ _WorkerSendPort_send_closure: {"": "Closure;this_0,message_1,replyTo_2",
   }
 },
 
-ReceivePortImpl: {"": "Object;_id<,_liblib7$_callback<",
-  _liblib7$_callback$2: function(arg0, arg1) {
-    return this._liblib7$_callback.call$2(arg0, arg1);
+ReceivePortImpl: {"": "Object;_id<,_liblib6$_callback<",
+  _liblib6$_callback$2: function(arg0, arg1) {
+    return this._liblib6$_callback.call$2(arg0, arg1);
   },
   ReceivePortImpl$0: function() {
     var t1 = $globalState.currentContext;
@@ -1676,40 +1695,6 @@ Primitives_stringFromCharCodes: function(charCodes) {
   return H.Primitives__fromCharCodeApply(charCodes);
 },
 
-Primitives_lazyAsJsDate: function(receiver) {
-  if (receiver.date === void 0)
-    receiver.date = new Date(receiver.millisecondsSinceEpoch);
-  return receiver.date;
-},
-
-Primitives_getYear: function(receiver) {
-  return receiver.isUtc ? H.Primitives_lazyAsJsDate(receiver).getUTCFullYear() + 0 : H.Primitives_lazyAsJsDate(receiver).getFullYear() + 0;
-},
-
-Primitives_getMonth: function(receiver) {
-  return receiver.isUtc ? H.Primitives_lazyAsJsDate(receiver).getUTCMonth() + 1 : H.Primitives_lazyAsJsDate(receiver).getMonth() + 1;
-},
-
-Primitives_getDay: function(receiver) {
-  return receiver.isUtc ? H.Primitives_lazyAsJsDate(receiver).getUTCDate() + 0 : H.Primitives_lazyAsJsDate(receiver).getDate() + 0;
-},
-
-Primitives_getHours: function(receiver) {
-  return receiver.isUtc ? H.Primitives_lazyAsJsDate(receiver).getUTCHours() + 0 : H.Primitives_lazyAsJsDate(receiver).getHours() + 0;
-},
-
-Primitives_getMinutes: function(receiver) {
-  return receiver.isUtc ? H.Primitives_lazyAsJsDate(receiver).getUTCMinutes() + 0 : H.Primitives_lazyAsJsDate(receiver).getMinutes() + 0;
-},
-
-Primitives_getSeconds: function(receiver) {
-  return receiver.isUtc ? H.Primitives_lazyAsJsDate(receiver).getUTCSeconds() + 0 : H.Primitives_lazyAsJsDate(receiver).getSeconds() + 0;
-},
-
-Primitives_getMilliseconds: function(receiver) {
-  return receiver.isUtc ? H.Primitives_lazyAsJsDate(receiver).getUTCMilliseconds() + 0 : H.Primitives_lazyAsJsDate(receiver).getMilliseconds() + 0;
-},
-
 Primitives_getProperty: function(object, key) {
   if (object == null || typeof object === "boolean" || typeof object === "number" || typeof object === "string")
     throw H.wrapException(new P.ArgumentError(object));
@@ -2225,9 +2210,9 @@ ConstantProtoMap: {"": "ConstantMap;_protoValue,length,_jsObject,_keys",
   }
 },
 
-_ConstantMapKeyIterable: {"": "IterableBase;_liblib5$_map",
+_ConstantMapKeyIterable: {"": "IterableBase;_liblib3$_map",
   get$iterator: function(_) {
-    return J.get$iterator$ax(this._liblib5$_map._keys);
+    return J.get$iterator$ax(this._liblib3$_map._keys);
   }
 },
 
@@ -2424,7 +2409,7 @@ Closure: {"": "Object;",
   }
 },
 
-BoundClosure: {"": "Closure;_self,_liblib5$_target,_receiver",
+BoundClosure: {"": "Closure;_self,_liblib3$_target,_receiver",
   $eq: function(_, other) {
     var t1;
     if (other == null)
@@ -2434,10 +2419,10 @@ BoundClosure: {"": "Closure;_self,_liblib5$_target,_receiver",
     t1 = J.getInterceptor(other);
     if (typeof other !== "object" || other === null || !t1.$isBoundClosure)
       return false;
-    return this._self === other._self && this._liblib5$_target === other._liblib5$_target && this._receiver === other._receiver;
+    return this._self === other._self && this._liblib3$_target === other._liblib3$_target && this._receiver === other._receiver;
   },
   get$hashCode: function(_) {
-    return J.get$hashCode$(this._self) + J.get$hashCode$(this._liblib5$_target) + J.get$hashCode$(this._receiver) & 0x3ffffff;
+    return J.get$hashCode$(this._self) + J.get$hashCode$(this._liblib3$_target) + J.get$hashCode$(this._receiver) & 0x3ffffff;
   },
   $isBoundClosure: true
 },
@@ -2501,66 +2486,81 @@ applyExperimentalFixup_newGetTagDartFunction: {"": "Closure;newGetTagJSFunction_
 
 StringMatch: {"": "Object;start,input,pattern",
   $index: function(_, g) {
+    if (typeof g !== "number")
+      return this.$$index$bailout(1, g);
     if (g !== 0)
+      H.throwExpression(new P.RangeError("value " + H.S(g)));
+    return this.pattern;
+  },
+  $$index$bailout: function(state0, g) {
+    if (!J.$eq(g, 0))
       H.throwExpression(new P.RangeError("value " + H.S(g)));
     return this.pattern;
   }
 }}],
 ["character", "core/character.dart", , Z, {
-Character: {"": "Object;_liblib9$_doc,_ctx,canvas,characterImage,curPos,curPosPx<,frame,moving,faceDir,selectedChar,randomMovement,phasable<,speed,trigger@,acDelta,lastUpdateTime",
+Character: {"": "Object;_liblib8$_doc,_liblib8$_ctx,canvas,characterImage,curPos<,curPosPx<,frame,faceDir,selectedChar,randomMovement,phasable<,speed,trigger,scene,message,offsetX',offsetY',acDelta,lastUpdateTime",
   moveRandom$0: function() {
+    var t1, t, milliseconds;
+    t1 = this.get$doMoveRandom();
+    t = new P._ZoneTimer($.get$_Zone__current(), t1, null);
+    t1 = t._zone;
+    t1._openCallbacks = t1._openCallbacks + 1;
+    t1 = t.get$_run();
+    milliseconds = C.JSNumber_methods.$tdiv(C.Duration_3000000._duration, 1000);
+    t._timer = H.TimerImpl$(milliseconds < 0 ? 0 : milliseconds, t1);
+  },
+  doMoveRandom$0: function() {
     this.move$1(C.C__Random.nextInt$1(4));
+    this.moveRandom$0();
+  },
+  get$doMoveRandom: function() {
+    return new Z.BoundClosure$0(this, "doMoveRandom$0", null);
   },
   move$1: function(face) {
-    var t1, t2, t3;
+    var t1, t2;
+    if (!this.scene.shallPass$2(face, this)) {
+      this.faceDirection$1(face);
+      return false;
+    }
     switch (face) {
       case 0:
         this.faceDirection$1(0);
-        t1 = this.curPos;
-        t2 = t1.y;
-        if (t2 == null)
-          throw t2.$gt();
-        if (t2 > 0) {
-          t1.y = t2 - 1;
+        if (J.$gt$n(this.curPos.y, 0)) {
+          t1 = this.curPos;
+          t1.y = J.$sub$n(t1.y, 1);
           return true;
         }
         break;
       case 1:
         this.faceDirection$1(1);
-        t1 = this.curPos;
-        t2 = t1.y;
-        if (t2 == null)
-          throw t2.$mul();
-        t3 = J.get$height$x(this.canvas);
-        if (typeof t3 !== "number")
-          throw t3.$sub();
-        if (t2 * 32 < t3 - 32) {
-          t1.y = t2 + 1;
+        t1 = J.$mul$n(this.curPos.y, 32);
+        t2 = J.get$height$x(this.canvas);
+        if (typeof t2 !== "number")
+          throw t2.$sub();
+        if (J.$lt$n(t1, t2 - 32)) {
+          t1 = this.curPos;
+          t1.y = J.$add$ns(t1.y, 1);
           return true;
         }
         break;
       case 2:
         this.faceDirection$1(2);
-        t1 = this.curPos;
-        t2 = t1.x;
-        if (t2 == null)
-          throw t2.$gt();
-        if (t2 > 0) {
-          t1.x = t2 - 1;
+        if (J.$gt$n(this.curPos.x, 0)) {
+          t1 = this.curPos;
+          t1.x = J.$sub$n(t1.x, 1);
           return true;
         }
         break;
       case 3:
         this.faceDirection$1(3);
-        t1 = this.curPos;
-        t2 = t1.x;
-        if (t2 == null)
-          throw t2.$mul();
-        t3 = J.get$width$x(this.canvas);
-        if (typeof t3 !== "number")
-          throw t3.$sub();
-        if (t2 * 32 < t3 - 32) {
-          t1.x = t2 + 1;
+        t1 = J.$mul$n(this.curPos.x, 32);
+        t2 = J.get$width$x(this.canvas);
+        if (typeof t2 !== "number")
+          throw t2.$sub();
+        if (J.$lt$n(t1, t2 - 32)) {
+          t1 = this.curPos;
+          t1.x = J.$add$ns(t1.x, 1);
           return true;
         }
         break;
@@ -2601,7 +2601,7 @@ Character: {"": "Object;_liblib9$_doc,_ctx,canvas,characterImage,curPos,curPosPx
   loadGraphic$1: function(src) {
     var t1, t2;
     this.characterImage = W._ElementFactoryProvider_createElement_tag("img", null);
-    this.characterImage = this._liblib9$_doc.createElement("img");
+    this.characterImage = this._liblib8$_doc.createElement("img");
     J.set$src$x(this.characterImage, src);
     t1 = J.get$onLoad$x(this.characterImage);
     t2 = new W._EventStreamSubscription(0, t1._target, t1._eventType, new Z.Character_loadGraphic_closure(this), t1._useCapture);
@@ -2609,51 +2609,27 @@ Character: {"": "Object;_liblib9$_doc,_ctx,canvas,characterImage,curPos,curPosPx
     t2._tryResume$0();
   },
   updateMove$0: function() {
-    var t1, distance, t2, t3;
+    var t1, distance;
     t1 = this.speed;
     if (t1 == null)
       throw H.iae(t1);
     distance = 2 * t1;
-    t1 = this.curPos.y;
-    if (t1 == null)
-      throw t1.$mul();
-    t1 *= 32;
-    t2 = this.curPosPx;
-    t3 = t2.y;
-    if (t3 == null)
-      throw H.iae(t3);
-    if (t1 > t3)
-      t2.y = P.min(t3 + distance, t1);
-    t1 = this.curPos.x;
-    if (t1 == null)
-      throw t1.$mul();
-    t1 *= 32;
-    t2 = this.curPosPx;
-    t3 = t2.x;
-    if (t3 == null)
-      throw H.iae(t3);
-    if (t1 > t3)
-      t2.x = P.min(t3 + distance, t1);
-    t1 = this.curPos.y;
-    if (t1 == null)
-      throw t1.$mul();
-    t1 *= 32;
-    t2 = this.curPosPx;
-    t3 = t2.y;
-    if (t3 == null)
-      throw H.iae(t3);
-    if (t1 < t3)
-      t2.y = P.max(t3 - distance, t1);
-    t1 = this.curPos.x;
-    if (t1 == null)
-      throw t1.$mul();
-    t1 *= 32;
-    t2 = this.curPosPx;
-    t3 = t2.x;
-    if (t3 == null)
-      throw H.iae(t3);
-    if (t1 < t3)
-      t2.x = P.max(t3 - distance, t1);
+    if (J.$gt$n(J.$mul$n(this.curPos.y, 32), this.curPosPx.y)) {
+      t1 = this.curPosPx;
+      t1.y = P.min(J.$add$ns(t1.y, distance), J.$mul$n(this.curPos.y, 32));
+    }
+    if (J.$gt$n(J.$mul$n(this.curPos.x, 32), this.curPosPx.x)) {
+      t1 = this.curPosPx;
+      t1.x = P.min(J.$add$ns(t1.x, distance), J.$mul$n(this.curPos.x, 32));
+    }
+    if (J.$lt$n(J.$mul$n(this.curPos.y, 32), this.curPosPx.y)) {
+      t1 = this.curPosPx;
+      t1.y = P.max(J.$sub$n(t1.y, distance), J.$mul$n(this.curPos.y, 32));
+    }
+    if (J.$lt$n(J.$mul$n(this.curPos.x, 32), this.curPosPx.x)) {
+      t1 = this.curPosPx;
+      t1.x = P.max(J.$sub$n(t1.x, distance), J.$mul$n(this.curPos.x, 32));
+    }
     this.animate$0();
   },
   animate$0: function() {
@@ -2668,179 +2644,157 @@ Character: {"": "Object;_liblib9$_doc,_ctx,canvas,characterImage,curPos,curPosPx
       this.frame = 0;
   },
   stopMove$0: function() {
-    var t1, t2, t3;
-    t1 = this.curPos;
-    t2 = t1.y;
-    if (t2 == null)
-      throw t2.$mul();
-    t3 = this.curPosPx.y;
-    if (t3 == null)
-      throw H.iae(t3);
-    if (t2 * 32 > t3)
-      t1.y = P.min(C.JSNumber_methods.toInt$0(Math.floor((t3 + (32 - C.JSNumber_methods.$mod(t3, 32))) / 32)), this.curPos.y);
-    t1 = this.curPos;
-    t2 = t1.x;
-    if (t2 == null)
-      throw t2.$mul();
-    t3 = this.curPosPx.x;
-    if (t3 == null)
-      throw H.iae(t3);
-    if (t2 * 32 > t3)
-      t1.x = P.min(C.JSNumber_methods.toInt$0(Math.floor((t3 + (32 - C.JSNumber_methods.$mod(t3, 32))) / 32)), this.curPos.x);
-    t1 = this.curPos;
-    t2 = t1.y;
-    if (t2 == null)
-      throw t2.$mul();
-    t3 = this.curPosPx.y;
-    if (t3 == null)
-      throw H.iae(t3);
-    if (t2 * 32 < t3) {
-      t2 = P.max(C.JSNumber_methods.toInt$0(Math.floor((t3 + (32 - C.JSNumber_methods.$mod(t3, 32))) / 32)), this.curPos.y);
-      if (t2 == null)
-        throw t2.$sub();
-      t1.y = t2 - 1;
+    var t1, t2;
+    if (J.$gt$n(J.$mul$n(this.curPos.y, 32), this.curPosPx.y)) {
+      t1 = this.curPosPx.y;
+      t2 = J.getInterceptor$n(t1);
+      if (typeof t1 !== "number")
+        throw t1.$mod();
+      t1 = t2.$add(t1, 32 - t2.$mod(t1, 32));
+      if (typeof t1 !== "number")
+        throw t1.$div();
+      this.curPos.y = P.min(C.JSNumber_methods.toInt$0(Math.floor(t1 / 32)), this.curPos.y);
     }
-    t1 = this.curPos;
-    t2 = t1.x;
-    if (t2 == null)
-      throw t2.$mul();
-    t3 = this.curPosPx.x;
-    if (t3 == null)
-      throw H.iae(t3);
-    if (t2 * 32 < t3) {
-      t2 = P.max(C.JSNumber_methods.toInt$0(Math.floor((t3 + (32 - C.JSNumber_methods.$mod(t3, 32))) / 32)), this.curPos.x);
-      if (t2 == null)
-        throw t2.$sub();
-      t1.x = t2 - 1;
+    if (J.$gt$n(J.$mul$n(this.curPos.x, 32), this.curPosPx.x)) {
+      t1 = this.curPosPx.x;
+      t2 = J.getInterceptor$n(t1);
+      if (typeof t1 !== "number")
+        throw t1.$mod();
+      t1 = t2.$add(t1, 32 - t2.$mod(t1, 32));
+      if (typeof t1 !== "number")
+        throw t1.$div();
+      this.curPos.x = P.min(C.JSNumber_methods.toInt$0(Math.floor(t1 / 32)), this.curPos.x);
+    }
+    if (J.$lt$n(J.$mul$n(this.curPos.y, 32), this.curPosPx.y)) {
+      t1 = this.curPosPx.y;
+      t2 = J.getInterceptor$n(t1);
+      if (typeof t1 !== "number")
+        throw t1.$mod();
+      t1 = t2.$add(t1, 32 - t2.$mod(t1, 32));
+      if (typeof t1 !== "number")
+        throw t1.$div();
+      this.curPos.y = J.$sub$n(P.max(C.JSNumber_methods.toInt$0(Math.floor(t1 / 32)), this.curPos.y), 1);
+    }
+    if (J.$lt$n(J.$mul$n(this.curPos.x, 32), this.curPosPx.x)) {
+      t1 = this.curPosPx.x;
+      t2 = J.getInterceptor$n(t1);
+      if (typeof t1 !== "number")
+        throw t1.$mod();
+      t1 = t2.$add(t1, 32 - t2.$mod(t1, 32));
+      if (typeof t1 !== "number")
+        throw t1.$div();
+      this.curPos.x = J.$sub$n(P.max(C.JSNumber_methods.toInt$0(Math.floor(t1 / 32)), this.curPos.x), 1);
     }
     this.frame = 1;
   },
-  processMovements$0: function() {
-    var t1, t2, t3;
-    if (this.randomMovement === true) {
-      t1 = P.DateTime$_now().millisecondsSinceEpoch;
-      t2 = this.lastUpdateTime;
-      t3 = this.acDelta;
-      if (t3 > 240) {
-        this.acDelta = 0;
-        this.moveRandom$0();
-      } else
-        this.acDelta = t3 + (t1 - t2);
-      this.lastUpdateTime = t1;
-    }
-  },
   update$0: function() {
     var t1, t2, t3, t4, t5;
-    this.processMovements$0();
-    t1 = this.curPosPx;
-    t2 = t1.x;
-    t3 = this.curPos;
-    t4 = t3.x;
-    if (t4 == null)
-      throw t4.$mul();
-    if (t2 === t4 * 32) {
-      t1 = t1.y;
-      t3 = t3.y;
-      if (t3 == null)
-        throw t3.$mul();
-      t3 = t1 !== t3 * 32;
-      t1 = t3;
+    t1 = this.curPosPx.x;
+    t2 = this.curPos.x;
+    if (typeof t2 !== "number")
+      return this.update$0$bailout(1, t1, t2);
+    if (J.$eq(t1, t2 * 32)) {
+      t1 = this.curPosPx.y;
+      t2 = this.curPos.y;
+      if (typeof t2 !== "number")
+        return this.update$0$bailout(2, t1, t2);
+      t2 = !J.$eq(t1, t2 * 32);
+      t1 = t2;
     } else
       t1 = true;
     if (t1)
       this.updateMove$0();
     else
       this.stopMove$0();
-    t1 = this._ctx;
+    t1 = this._liblib8$_ctx;
     t2 = this.characterImage;
     t3 = this.curPosPx;
     t3 = new W.Rect(t3.x, t3.y, 32, 32);
     t4 = this.selectedChar;
-    if (t4 == null)
-      return this.update$0$bailout(1, t4, t1, t2, t3);
+    if (typeof t4 !== "number")
+      return this.update$0$bailout(3, t1, t2, t3, t4);
     t5 = this.frame;
     if (t5 == null)
       throw H.iae(t5);
     t5 = (t4 * 3 + t5) * 32;
     t4 = this.faceDir;
     if (t4 == null)
-      return this.update$0$bailout(2, t4, t1, t2, t3, t5);
+      return this.update$0$bailout(4, t1, t2, t3, t4, t5);
     J.drawImageToRect$3$sourceRect$x(t1, t2, t3, new W.Rect(t5, 32 * t4, 32, 32));
   },
-  update$0$bailout: function(state0, t4, t1, t2, t3, t5) {
+  update$0$bailout: function(state0, t1, t2, t3, t4, t5) {
     switch (state0) {
       case 0:
-        this.processMovements$0();
-        t1 = this.curPosPx;
-        t2 = t1.x;
-        t3 = this.curPos;
-        t4 = t3.x;
-        if (t4 == null)
-          throw t4.$mul();
-        if (t2 === t4 * 32) {
-          t1 = t1.y;
-          t3 = t3.y;
-          if (t3 == null)
-            throw t3.$mul();
-          t3 = t1 !== t3 * 32;
-          t1 = t3;
-        } else
+        t1 = this.curPosPx.x;
+        t2 = this.curPos.x;
+      case 1:
+        state0 = 0;
+      case 2:
+        if (state0 === 2 || state0 === 0 && J.$eq(t1, J.$mul$n(t2, 32)))
+          switch (state0) {
+            case 0:
+              t1 = this.curPosPx.y;
+              t2 = this.curPos.y;
+            case 2:
+              state0 = 0;
+              t2 = !J.$eq(t1, J.$mul$n(t2, 32));
+              t1 = t2;
+          }
+        else
           t1 = true;
         if (t1)
           this.updateMove$0();
         else
           this.stopMove$0();
-        t1 = this._ctx;
+        t1 = this._liblib8$_ctx;
         t2 = this.characterImage;
         t3 = this.curPosPx;
         t3 = new W.Rect(t3.x, t3.y, 32, 32);
         t4 = this.selectedChar;
-      case 1:
+      case 3:
         state0 = 0;
-        if (t4 == null)
-          throw t4.$mul();
+        t4 = J.$mul$n(t4, 3);
         t5 = this.frame;
         if (t5 == null)
           throw H.iae(t5);
-        t5 = (t4 * 3 + t5) * 32;
+        t5 = J.$mul$n(J.$add$ns(t4, t5), 32);
         t4 = this.faceDir;
-      case 2:
+      case 4:
         state0 = 0;
         if (t4 == null)
           throw H.iae(t4);
         J.drawImageToRect$3$sourceRect$x(t1, t2, t3, new W.Rect(t5, 32 * t4, 32, 32));
     }
   },
-  Character$6: function(_doc, _ctx, canvas, curPos, charSprite, speed) {
+  Character$8: function(_doc, _ctx, canvas, curPos, charSprite, scene, message, speed) {
     var t1, t2, t3;
-    this._liblib9$_doc = _doc;
-    this._ctx = _ctx;
+    this._liblib8$_doc = _doc;
+    this._liblib8$_ctx = _ctx;
     this.canvas = canvas;
     this.randomMovement = false;
     this.phasable = false;
     this.selectedChar = charSprite;
     this.speed = speed;
     this.curPos = curPos;
-    t1 = curPos.x;
-    if (t1 == null)
-      throw t1.$mul();
-    t2 = curPos.y;
-    if (t2 == null)
-      throw t2.$mul();
+    t1 = J.$mul$n(curPos.x, 32);
+    t2 = J.$mul$n(curPos.y, 32);
     t3 = new L.Coordinate(null, null);
-    t3.x = t1 * 32;
-    t3.y = t2 * 32;
+    t3.x = t1;
+    t3.y = t2;
     this.curPosPx = t3;
-    this.moving = false;
     this.frame = 1;
     this.faceDir = 0;
     this.trigger = false;
+    this.scene = scene;
+    this.message = message;
+    this.offsetX = 0;
+    this.offsetY = 0;
     this.loadGraphic$1("assets/characters.png");
   },
   static: {
-Character$: function(_doc, _ctx, canvas, curPos, charSprite, speed) {
-  var t1 = new Z.Character(null, null, null, null, null, null, null, null, null, null, null, null, null, null, 0, 0);
-  t1.Character$6(_doc, _ctx, canvas, curPos, charSprite, speed);
+Character$: function(_doc, _ctx, canvas, curPos, charSprite, scene, message, speed) {
+  var t1 = new Z.Character(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 0, 0);
+  t1.Character$8(_doc, _ctx, canvas, curPos, charSprite, scene, message, speed);
   return t1;
 }}
 
@@ -2852,87 +2806,22 @@ Character_loadGraphic_closure: {"": "Closure;this_0",
   }
 }}],
 ["coordinate", "helpers/coordinate.dart", , L, {
-Coordinate: {"": "Object;x,y",
-  nextToThis$1: function(coor) {
+Coordinate: {"": "Object;x>,y>",
+  nextToThis$2: function(face, coor) {
     var t1, t2, deltaX, deltaY, truncated;
     t1 = coor.x;
+    if (typeof t1 !== "number")
+      return this.nextToThis$2$bailout(1, face, coor, t1);
     t2 = this.x;
-    if (t1 == null)
-      throw t1.$sub();
-    if (t2 == null)
-      throw H.iae(t2);
+    if (typeof t2 !== "number")
+      return this.nextToThis$2$bailout(2, face, coor, t1, t2);
     deltaX = (t1 - t2) / 32;
     t2 = coor.y;
+    if (typeof t2 !== "number")
+      return this.nextToThis$2$bailout(3, face, 0, 0, t2, deltaX);
     t1 = this.y;
-    if (t2 == null)
-      throw t2.$sub();
-    if (t1 == null)
-      throw H.iae(t1);
-    deltaY = (t2 - t1) / 32;
-    t1 = deltaX === 0;
-    if (t1) {
-      t2 = Math.ceil(deltaY);
-      if (isNaN(t2))
-        H.throwExpression(new P.UnsupportedError("NaN"));
-      if (t2 == Infinity || t2 == -Infinity)
-        H.throwExpression(new P.UnsupportedError("Infinity"));
-      truncated = t2 < 0 ? Math.ceil(t2) : Math.floor(t2);
-      t2 = (truncated == -0.0 ? 0 : truncated) === 1;
-    } else
-      t2 = false;
-    if (t2)
-      return 0;
-    else {
-      if (t1) {
-        t1 = C.JSNumber_methods.roundToDouble$0(deltaY);
-        if (isNaN(t1))
-          H.throwExpression(new P.UnsupportedError("NaN"));
-        if (t1 == Infinity || t1 == -Infinity)
-          H.throwExpression(new P.UnsupportedError("Infinity"));
-        truncated = t1 < 0 ? Math.ceil(t1) : Math.floor(t1);
-        t1 = (truncated == -0.0 ? 0 : truncated) === -1;
-      } else
-        t1 = false;
-      if (t1)
-        return 1;
-      else {
-        t1 = Math.ceil(deltaX);
-        if (isNaN(t1))
-          H.throwExpression(new P.UnsupportedError("NaN"));
-        if (t1 == Infinity || t1 == -Infinity)
-          H.throwExpression(new P.UnsupportedError("Infinity"));
-        truncated = t1 < 0 ? Math.ceil(t1) : Math.floor(t1);
-        if ((truncated == -0.0 ? 0 : truncated) === 1 && deltaY === 0)
-          return 2;
-        else {
-          t1 = C.JSNumber_methods.roundToDouble$0(deltaX);
-          if (isNaN(t1))
-            H.throwExpression(new P.UnsupportedError("NaN"));
-          if (t1 == Infinity || t1 == -Infinity)
-            H.throwExpression(new P.UnsupportedError("Infinity"));
-          truncated = t1 < 0 ? Math.ceil(t1) : Math.floor(t1);
-          if ((truncated == -0.0 ? 0 : truncated) === -1 && deltaY === 0)
-            return 3;
-        }
-      }
-    }
-    return -1;
-  },
-  facingThis$2: function(face, coor) {
-    var t1, t2, deltaX, deltaY, truncated;
-    t1 = coor.x;
-    t2 = this.x;
-    if (t1 == null)
-      throw t1.$sub();
-    if (t2 == null)
-      throw H.iae(t2);
-    deltaX = (t1 - t2) / 32;
-    t2 = coor.y;
-    t1 = this.y;
-    if (t2 == null)
-      throw t2.$sub();
-    if (t1 == null)
-      throw H.iae(t1);
+    if (typeof t1 !== "number")
+      return this.nextToThis$2$bailout(4, face, 0, t1, t2, deltaX);
     deltaY = (t2 - t1) / 32;
     t1 = deltaX === 0;
     if (t1) {
@@ -2982,6 +2871,219 @@ Coordinate: {"": "Object;x,y",
       }
     }
     return false;
+  },
+  nextToThis$2$bailout: function(state0, face, coor, t1, t2, deltaX) {
+    switch (state0) {
+      case 0:
+        t1 = coor.x;
+      case 1:
+        state0 = 0;
+        t2 = this.x;
+      case 2:
+        state0 = 0;
+        t2 = J.$sub$n(t1, t2);
+        if (typeof t2 !== "number")
+          throw t2.$div();
+        deltaX = t2 / 32;
+        t2 = coor.y;
+      case 3:
+        state0 = 0;
+        t1 = this.y;
+      case 4:
+        var deltaY, truncated;
+        state0 = 0;
+        t1 = J.$sub$n(t2, t1);
+        if (typeof t1 !== "number")
+          throw t1.$div();
+        deltaY = t1 / 32;
+        t1 = deltaX === 0;
+        if (t1) {
+          t2 = Math.ceil(deltaY);
+          if (isNaN(t2))
+            H.throwExpression(new P.UnsupportedError("NaN"));
+          if (t2 == Infinity || t2 == -Infinity)
+            H.throwExpression(new P.UnsupportedError("Infinity"));
+          truncated = t2 < 0 ? Math.ceil(t2) : Math.floor(t2);
+          t2 = (truncated == -0.0 ? 0 : truncated) === 1 && face === 0;
+        } else
+          t2 = false;
+        if (t2)
+          return true;
+        else {
+          if (t1) {
+            t1 = C.JSNumber_methods.roundToDouble$0(deltaY);
+            if (isNaN(t1))
+              H.throwExpression(new P.UnsupportedError("NaN"));
+            if (t1 == Infinity || t1 == -Infinity)
+              H.throwExpression(new P.UnsupportedError("Infinity"));
+            truncated = t1 < 0 ? Math.ceil(t1) : Math.floor(t1);
+            t1 = (truncated == -0.0 ? 0 : truncated) === -1 && face === 1;
+          } else
+            t1 = false;
+          if (t1)
+            return true;
+          else {
+            t1 = Math.ceil(deltaX);
+            if (isNaN(t1))
+              H.throwExpression(new P.UnsupportedError("NaN"));
+            if (t1 == Infinity || t1 == -Infinity)
+              H.throwExpression(new P.UnsupportedError("Infinity"));
+            truncated = t1 < 0 ? Math.ceil(t1) : Math.floor(t1);
+            if ((truncated == -0.0 ? 0 : truncated) === 1 && deltaY === 0 && face === 2)
+              return true;
+            else {
+              t1 = C.JSNumber_methods.roundToDouble$0(deltaX);
+              if (isNaN(t1))
+                H.throwExpression(new P.UnsupportedError("NaN"));
+              if (t1 == Infinity || t1 == -Infinity)
+                H.throwExpression(new P.UnsupportedError("Infinity"));
+              truncated = t1 < 0 ? Math.ceil(t1) : Math.floor(t1);
+              if ((truncated == -0.0 ? 0 : truncated) === -1 && deltaY === 0 && face === 3)
+                return true;
+            }
+          }
+        }
+        return false;
+    }
+  },
+  facingThis$2: function(face, coor) {
+    var t1, t2, deltaX, deltaY, truncated;
+    t1 = coor.x;
+    if (typeof t1 !== "number")
+      return this.facingThis$2$bailout(1, face, coor, t1);
+    t2 = this.x;
+    if (typeof t2 !== "number")
+      return this.facingThis$2$bailout(2, face, coor, t1, t2);
+    deltaX = (t1 - t2) / 32;
+    t2 = coor.y;
+    if (typeof t2 !== "number")
+      return this.facingThis$2$bailout(3, face, 0, 0, t2, deltaX);
+    t1 = this.y;
+    if (typeof t1 !== "number")
+      return this.facingThis$2$bailout(4, face, 0, t1, t2, deltaX);
+    deltaY = (t2 - t1) / 32;
+    t1 = deltaX === 0;
+    if (t1) {
+      t2 = Math.ceil(deltaY);
+      if (isNaN(t2))
+        H.throwExpression(new P.UnsupportedError("NaN"));
+      if (t2 == Infinity || t2 == -Infinity)
+        H.throwExpression(new P.UnsupportedError("Infinity"));
+      truncated = t2 < 0 ? Math.ceil(t2) : Math.floor(t2);
+      t2 = (truncated == -0.0 ? 0 : truncated) === 1 && face === 0;
+    } else
+      t2 = false;
+    if (t2)
+      return 1;
+    else {
+      if (t1) {
+        t1 = C.JSNumber_methods.roundToDouble$0(deltaY);
+        if (isNaN(t1))
+          H.throwExpression(new P.UnsupportedError("NaN"));
+        if (t1 == Infinity || t1 == -Infinity)
+          H.throwExpression(new P.UnsupportedError("Infinity"));
+        truncated = t1 < 0 ? Math.ceil(t1) : Math.floor(t1);
+        t1 = (truncated == -0.0 ? 0 : truncated) === -1 && face === 1;
+      } else
+        t1 = false;
+      if (t1)
+        return 0;
+      else {
+        t1 = Math.ceil(deltaX);
+        if (isNaN(t1))
+          H.throwExpression(new P.UnsupportedError("NaN"));
+        if (t1 == Infinity || t1 == -Infinity)
+          H.throwExpression(new P.UnsupportedError("Infinity"));
+        truncated = t1 < 0 ? Math.ceil(t1) : Math.floor(t1);
+        if ((truncated == -0.0 ? 0 : truncated) === 1 && deltaY === 0 && face === 2)
+          return 3;
+        else {
+          t1 = C.JSNumber_methods.roundToDouble$0(deltaX);
+          if (isNaN(t1))
+            H.throwExpression(new P.UnsupportedError("NaN"));
+          if (t1 == Infinity || t1 == -Infinity)
+            H.throwExpression(new P.UnsupportedError("Infinity"));
+          truncated = t1 < 0 ? Math.ceil(t1) : Math.floor(t1);
+          if ((truncated == -0.0 ? 0 : truncated) === -1 && deltaY === 0 && face === 3)
+            return 2;
+        }
+      }
+    }
+    return -1;
+  },
+  facingThis$2$bailout: function(state0, face, coor, t1, t2, deltaX) {
+    switch (state0) {
+      case 0:
+        t1 = coor.x;
+      case 1:
+        state0 = 0;
+        t2 = this.x;
+      case 2:
+        state0 = 0;
+        t2 = J.$sub$n(t1, t2);
+        if (typeof t2 !== "number")
+          throw t2.$div();
+        deltaX = t2 / 32;
+        t2 = coor.y;
+      case 3:
+        state0 = 0;
+        t1 = this.y;
+      case 4:
+        var deltaY, truncated;
+        state0 = 0;
+        t1 = J.$sub$n(t2, t1);
+        if (typeof t1 !== "number")
+          throw t1.$div();
+        deltaY = t1 / 32;
+        t1 = deltaX === 0;
+        if (t1) {
+          t2 = Math.ceil(deltaY);
+          if (isNaN(t2))
+            H.throwExpression(new P.UnsupportedError("NaN"));
+          if (t2 == Infinity || t2 == -Infinity)
+            H.throwExpression(new P.UnsupportedError("Infinity"));
+          truncated = t2 < 0 ? Math.ceil(t2) : Math.floor(t2);
+          t2 = (truncated == -0.0 ? 0 : truncated) === 1 && face === 0;
+        } else
+          t2 = false;
+        if (t2)
+          return 1;
+        else {
+          if (t1) {
+            t1 = C.JSNumber_methods.roundToDouble$0(deltaY);
+            if (isNaN(t1))
+              H.throwExpression(new P.UnsupportedError("NaN"));
+            if (t1 == Infinity || t1 == -Infinity)
+              H.throwExpression(new P.UnsupportedError("Infinity"));
+            truncated = t1 < 0 ? Math.ceil(t1) : Math.floor(t1);
+            t1 = (truncated == -0.0 ? 0 : truncated) === -1 && face === 1;
+          } else
+            t1 = false;
+          if (t1)
+            return 0;
+          else {
+            t1 = Math.ceil(deltaX);
+            if (isNaN(t1))
+              H.throwExpression(new P.UnsupportedError("NaN"));
+            if (t1 == Infinity || t1 == -Infinity)
+              H.throwExpression(new P.UnsupportedError("Infinity"));
+            truncated = t1 < 0 ? Math.ceil(t1) : Math.floor(t1);
+            if ((truncated == -0.0 ? 0 : truncated) === 1 && deltaY === 0 && face === 2)
+              return 3;
+            else {
+              t1 = C.JSNumber_methods.roundToDouble$0(deltaX);
+              if (isNaN(t1))
+                H.throwExpression(new P.UnsupportedError("NaN"));
+              if (t1 == Infinity || t1 == -Infinity)
+                H.throwExpression(new P.UnsupportedError("Infinity"));
+              truncated = t1 < 0 ? Math.ceil(t1) : Math.floor(t1);
+              if ((truncated == -0.0 ? 0 : truncated) === -1 && deltaY === 0 && face === 3)
+                return 2;
+            }
+          }
+        }
+        return -1;
+    }
   }
 }}],
 ["dart._collection.dev", "dart:_collection-dev", , H, {
@@ -3162,7 +3264,7 @@ SubListIterable: {"": "ListIterable;_iterable,_start,_endOrLength",
   $asListIterable: null
 },
 
-ListIterator: {"": "Object;_iterable,_liblib1$_length,_index,_current",
+ListIterator: {"": "Object;_iterable,_liblib0$_length,_index,_current",
   get$current: function() {
     return this._current;
   },
@@ -3171,7 +3273,7 @@ ListIterator: {"": "Object;_iterable,_liblib1$_length,_index,_current",
     t1 = this._iterable;
     t2 = J.getInterceptor$asx(t1);
     $length = t2.get$length(t1);
-    if (this._liblib1$_length !== $length)
+    if (this._liblib0$_length !== $length)
       throw H.wrapException(new P.ConcurrentModificationError(t1));
     t3 = this._index;
     if (t3 >= $length) {
@@ -3213,12 +3315,12 @@ MappedIterable: {"": "IterableBase;_iterable,_f",
   }
 },
 
-MappedIterator: {"": "Iterator;_current,_liblib1$_iterator,_f",
+MappedIterator: {"": "Iterator;_current,_liblib0$_iterator,_f",
   _f$1: function(arg0) {
     return this._f.call$1(arg0);
   },
   moveNext$0: function() {
-    var t1 = this._liblib1$_iterator;
+    var t1 = this._liblib0$_iterator;
     if (t1.moveNext$0()) {
       this._current = this._f$1(t1.get$current());
       return true;
@@ -3234,15 +3336,15 @@ MappedIterator: {"": "Iterator;_current,_liblib1$_iterator,_f",
   }
 },
 
-MappedListIterable: {"": "ListIterable;_liblib1$_source,_f",
+MappedListIterable: {"": "ListIterable;_liblib0$_source,_f",
   _f$1: function(arg0) {
     return this._f.call$1(arg0);
   },
   get$length: function(_) {
-    return J.get$length$asx(this._liblib1$_source);
+    return J.get$length$asx(this._liblib0$_source);
   },
   elementAt$1: function(_, index) {
-    return this._f$1(J.elementAt$1$ax(this._liblib1$_source, index));
+    return this._f$1(J.elementAt$1$ax(this._liblib0$_source, index));
   },
   $asListIterable: function($S, $T) {
     return [$T];
@@ -3263,10 +3365,10 @@ SkipIterable: {"": "IterableBase;_iterable,_skipCount",
   $asIterableBase: null
 },
 
-SkipIterator: {"": "Iterator;_liblib1$_iterator,_skipCount",
+SkipIterator: {"": "Iterator;_liblib0$_iterator,_skipCount",
   moveNext$0: function() {
     var t1, i, t2;
-    t1 = this._liblib1$_iterator;
+    t1 = this._liblib0$_iterator;
     i = 0;
     while (true) {
       t2 = this._skipCount;
@@ -3283,7 +3385,7 @@ SkipIterator: {"": "Iterator;_liblib1$_iterator,_skipCount",
   moveNext$0$bailout1: function(state0, t1, i, t2) {
     switch (state0) {
       case 0:
-        t1 = this._liblib1$_iterator;
+        t1 = this._liblib0$_iterator;
         i = 0;
       case 1:
         L0:
@@ -3305,7 +3407,7 @@ SkipIterator: {"": "Iterator;_liblib1$_iterator,_skipCount",
     }
   },
   get$current: function() {
-    return this._liblib1$_iterator.get$current();
+    return this._liblib0$_iterator.get$current();
   },
   $asIterator: null
 },
@@ -3704,7 +3806,7 @@ _Future__propagateToListeners: function(source, listeners) {
     t2.listenerValueOrError_2 = null;
     t2.isPropagationAborted_3 = false;
     t4._openCallbacks = t4._openCallbacks - 1;
-    t4._runInZone$2(new P._Future__propagateToListeners_closure0(t2, t1, hasError, listeners), false);
+    t4._runInZone$2(new P._Future__propagateToListeners_closure0(t1, t2, hasError, listeners), false);
     if (t2.isPropagationAborted_3 === true)
       return;
     t3 = t2.listenerHasValue_1 === true;
@@ -3780,7 +3882,7 @@ _Future__propagateToListeners_closure: {"": "Closure;box_2,listener_3",
   }
 },
 
-_Future__propagateToListeners_closure0: {"": "Closure;box_1,box_2,hasError_4,listener_5",
+_Future__propagateToListeners_closure0: {"": "Closure;box_2,box_1,hasError_4,listener_5",
   call$0: function() {
     var value, error, test, matchesTest, e, s, t1, t2, t3, exception;
     try {
@@ -3980,9 +4082,9 @@ StreamSubscription: {"": "Object;"},
 
 EventSink: {"": "Object;"},
 
-_BufferingStreamSubscription: {"": "Object;_liblib8$_onData,_onError,_onDone,_zone<,_state@,_pending",
-  _liblib8$_onData$1: function(arg0) {
-    return this._liblib8$_onData.call$1(arg0);
+_BufferingStreamSubscription: {"": "Object;_liblib7$_onData,_onError,_onDone,_zone<,_state@,_pending",
+  _liblib7$_onData$1: function(arg0) {
+    return this._liblib7$_onData.call$1(arg0);
   },
   _onError$1: function(arg0) {
     return this._onError.call$1(arg0);
@@ -4066,7 +4168,7 @@ _BufferingStreamSubscription: {"": "Object;_liblib8$_onData,_onError,_onDone,_zo
         t1._state = 3;
     }
   },
-  _liblib8$_add$1: function(data) {
+  _liblib7$_add$1: function(data) {
     var t1 = this._state;
     if ((t1 & 8) !== 0)
       return;
@@ -4097,12 +4199,12 @@ _BufferingStreamSubscription: {"": "Object;_liblib8$_onData,_onError,_onDone,_zo
   _onPause$0: function() {
   },
   get$_onPause: function() {
-    return new P.BoundClosure$0(this, "_onPause$0", null);
+    return new Z.BoundClosure$0(this, "_onPause$0", null);
   },
   _onResume$0: function() {
   },
   get$_onResume: function() {
-    return new P.BoundClosure$0(this, "_onResume$0", null);
+    return new Z.BoundClosure$0(this, "_onResume$0", null);
   },
   _onCancel$0: function() {
   },
@@ -4205,7 +4307,7 @@ _BufferingStreamSubscription: {"": "Object;_liblib8$_onData,_onError,_onDone,_zo
 
 _BufferingStreamSubscription__sendData_closure: {"": "Closure;this_0,data_1",
   call$0: function() {
-    return this.this_0._liblib8$_onData$1(this.data_1);
+    return this.this_0._liblib7$_onData$1(this.data_1);
   }
 },
 
@@ -4302,18 +4404,18 @@ _ForwardingStream: {"": "Stream;",
     return this.listen$4$cancelOnError$onDone$onError(onData, null, onDone, onError);
   },
   _handleData$2: function(data, sink) {
-    sink._liblib8$_add$1(data);
+    sink._liblib7$_add$1(data);
   },
   $asStream: function($S, $T) {
     return [$T];
   }
 },
 
-_ForwardingStreamSubscription: {"": "_BufferingStreamSubscription;_stream,_subscription,_liblib8$_onData,_onError,_onDone,_zone,_state,_pending",
-  _liblib8$_add$1: function(data) {
+_ForwardingStreamSubscription: {"": "_BufferingStreamSubscription;_stream,_subscription,_liblib7$_onData,_onError,_onDone,_zone,_state,_pending",
+  _liblib7$_add$1: function(data) {
     if ((this._state & 2) !== 0)
       return;
-    P._BufferingStreamSubscription.prototype._liblib8$_add$1.call(this, data);
+    P._BufferingStreamSubscription.prototype._liblib7$_add$1.call(this, data);
   },
   _addError$1: function(error) {
     if ((this._state & 2) !== 0)
@@ -4327,7 +4429,7 @@ _ForwardingStreamSubscription: {"": "_BufferingStreamSubscription;_stream,_subsc
     t1.pause$0(t1);
   },
   get$_onPause: function() {
-    return new P.BoundClosure$0(this, "_onPause$0", null);
+    return new Z.BoundClosure$0(this, "_onPause$0", null);
   },
   _onResume$0: function() {
     var t1 = this._subscription;
@@ -4336,7 +4438,7 @@ _ForwardingStreamSubscription: {"": "_BufferingStreamSubscription;_stream,_subsc
     t1.resume$0();
   },
   get$_onResume: function() {
-    return new P.BoundClosure$0(this, "_onResume$0", null);
+    return new Z.BoundClosure$0(this, "_onResume$0", null);
   },
   _onCancel$0: function() {
     var t1 = this._subscription;
@@ -4361,7 +4463,7 @@ _ForwardingStreamSubscription: {"": "_BufferingStreamSubscription;_stream,_subsc
     this._close$0();
   },
   get$_handleDone: function() {
-    return new P.BoundClosure$0(this, "_handleDone$0", null);
+    return new Z.BoundClosure$0(this, "_handleDone$0", null);
   },
   _ForwardingStreamSubscription$5: function(_stream, onData, onError, onDone, cancelOnError, $S, $T) {
     var t1, t2;
@@ -4403,7 +4505,7 @@ _MapStream: {"": "_ForwardingStream;_transform,_source",
       return;
     }
 
-    sink._liblib8$_add$1(outputEvent);
+    sink._liblib7$_add$1(outputEvent);
   },
   $as_ForwardingStream: null
 },
@@ -4411,7 +4513,7 @@ _MapStream: {"": "_ForwardingStream;_transform,_source",
 _SkipStream: {"": "_ForwardingStream;_remaining,_source",
   _handleData$2: function(inputEvent, sink) {
     J.$gt$n(this._remaining, 0);
-    return sink._liblib8$_add$1(inputEvent);
+    return sink._liblib7$_add$1(inputEvent);
   },
   $as_ForwardingStream: function($T) {
     return [$T, $T];
@@ -4513,7 +4615,7 @@ _ZoneTimer: {"": "Object;_zone<,_callback,_timer",
     t1._runInZone$2(this._callback, true);
   },
   get$_run: function() {
-    return new P.BoundClosure$0(this, "_run$0", null);
+    return new Z.BoundClosure$0(this, "_run$0", null);
   }
 }}],
 ["dart.collection", "dart:collection", , P, {
@@ -4563,9 +4665,9 @@ Maps_mapToString: function(m) {
   return result.get$_contents();
 },
 
-_HashMap: {"": "Object;_liblib4$_length,_strings,_nums,_rest,_liblib4$_keys",
+_HashMap: {"": "Object;_liblib2$_length,_strings,_nums,_rest,_liblib2$_keys",
   get$length: function(_) {
-    return this._liblib4$_length;
+    return this._liblib2$_length;
   },
   get$keys: function() {
     var t1 = new P.HashMapKeyIterable(this);
@@ -4624,8 +4726,8 @@ _HashMap: {"": "Object;_liblib4$_length,_strings,_nums,_rest,_liblib4$_keys",
         strings = table;
       }
       if (strings[key] == null) {
-        this._liblib4$_length = this._liblib4$_length + 1;
-        this._liblib4$_keys = null;
+        this._liblib2$_length = this._liblib2$_length + 1;
+        this._liblib2$_keys = null;
       }
       if (value == null)
         strings[key] = strings;
@@ -4644,8 +4746,8 @@ _HashMap: {"": "Object;_liblib4$_length,_strings,_nums,_rest,_liblib4$_keys",
         nums = table;
       }
       if (nums[key] == null) {
-        this._liblib4$_length = this._liblib4$_length + 1;
-        this._liblib4$_keys = null;
+        this._liblib2$_length = this._liblib2$_length + 1;
+        this._liblib2$_keys = null;
       }
       if (value == null)
         nums[key] = nums;
@@ -4671,16 +4773,16 @@ _HashMap: {"": "Object;_liblib4$_length,_strings,_nums,_rest,_liblib4$_keys",
           rest[hash] = rest;
         else
           rest[hash] = t1;
-        this._liblib4$_length = this._liblib4$_length + 1;
-        this._liblib4$_keys = null;
+        this._liblib2$_length = this._liblib2$_length + 1;
+        this._liblib2$_keys = null;
       } else {
         index = this._findBucketIndex$2(bucket, key);
         if (index >= 0)
           bucket[index + 1] = value;
         else {
           bucket.push(key, value);
-          this._liblib4$_length = this._liblib4$_length + 1;
-          this._liblib4$_keys = null;
+          this._liblib2$_length = this._liblib2$_length + 1;
+          this._liblib2$_keys = null;
         }
       }
     }
@@ -4691,16 +4793,16 @@ _HashMap: {"": "Object;_liblib4$_length,_strings,_nums,_rest,_liblib4$_keys",
     for ($length = keys.length, i = 0; i < $length; ++i) {
       key = keys[i];
       action.call$2(key, this.$index(this, key));
-      if (keys !== this._liblib4$_keys)
+      if (keys !== this._liblib2$_keys)
         throw H.wrapException(new P.ConcurrentModificationError(this));
     }
   },
   _computeKeys$0: function() {
     var t1, result, strings, names, entries, index, i, nums, rest, bucket, $length, i0;
-    t1 = this._liblib4$_keys;
+    t1 = this._liblib2$_keys;
     if (t1 != null)
       return t1;
-    result = P.List_List(this._liblib4$_length, null);
+    result = P.List_List(this._liblib2$_length, null);
     strings = this._strings;
     if (strings != null) {
       names = Object.getOwnPropertyNames(strings);
@@ -4733,7 +4835,7 @@ _HashMap: {"": "Object;_liblib4$_length,_strings,_nums,_rest,_liblib4$_keys",
         }
       }
     }
-    this._liblib4$_keys = result;
+    this._liblib2$_keys = result;
     return result;
   },
   _computeHashCode$1: function(key) {
@@ -4758,7 +4860,7 @@ _HashMap_values_closure: {"": "Closure;this_0",
   }
 },
 
-_IdentityHashMap: {"": "_HashMap;_liblib4$_length,_strings,_nums,_rest,_liblib4$_keys",
+_IdentityHashMap: {"": "_HashMap;_liblib2$_length,_strings,_nums,_rest,_liblib2$_keys",
   _findBucketIndex$2: function(bucket, key) {
     var $length, i, t1;
     if (bucket == null)
@@ -4775,7 +4877,7 @@ _IdentityHashMap: {"": "_HashMap;_liblib4$_length,_strings,_nums,_rest,_liblib4$
   $asMap: null
 },
 
-_CustomHashMap: {"": "_HashMap;_equals,_hashCode,_validKey,_liblib4$_length,_strings,_nums,_rest,_liblib4$_keys",
+_CustomHashMap: {"": "_HashMap;_equals,_hashCode,_validKey,_liblib2$_length,_strings,_nums,_rest,_liblib2$_keys",
   _equals$2: function(arg0, arg1) {
     return this._equals.call$2(arg0, arg1);
   },
@@ -4812,7 +4914,7 @@ _CustomHashMap: {"": "_HashMap;_equals,_hashCode,_validKey,_liblib4$_length,_str
 
 HashMapKeyIterable: {"": "IterableBase;_map",
   get$length: function(_) {
-    return this._map._liblib4$_length;
+    return this._map._liblib2$_length;
   },
   get$iterator: function(_) {
     var t1 = this._map;
@@ -4824,38 +4926,38 @@ HashMapKeyIterable: {"": "IterableBase;_map",
     keys = t1._computeKeys$0();
     for ($length = keys.length, i = 0; i < $length; ++i) {
       f.call$1(keys[i]);
-      if (keys !== t1._liblib4$_keys)
+      if (keys !== t1._liblib2$_keys)
         throw H.wrapException(new P.ConcurrentModificationError(t1));
     }
   },
   $asIterableBase: null
 },
 
-HashMapKeyIterator: {"": "Object;_map,_liblib4$_keys,_offset,_liblib4$_current",
+HashMapKeyIterator: {"": "Object;_map,_liblib2$_keys,_offset,_liblib2$_current",
   get$current: function() {
-    return this._liblib4$_current;
+    return this._liblib2$_current;
   },
   moveNext$0: function() {
     var keys, offset, t1;
-    keys = this._liblib4$_keys;
+    keys = this._liblib2$_keys;
     offset = this._offset;
     t1 = this._map;
-    if (keys !== t1._liblib4$_keys)
+    if (keys !== t1._liblib2$_keys)
       throw H.wrapException(new P.ConcurrentModificationError(t1));
     else if (offset >= keys.length) {
-      this._liblib4$_current = null;
+      this._liblib2$_current = null;
       return false;
     } else {
-      this._liblib4$_current = keys[offset];
+      this._liblib2$_current = keys[offset];
       this._offset = offset + 1;
       return true;
     }
   }
 },
 
-_LinkedHashMap: {"": "Object;_liblib4$_length,_strings,_nums,_rest,_first,_last,_modifications",
+_LinkedHashMap: {"": "Object;_liblib2$_length,_strings,_nums,_rest,_first,_last,_modifications",
   get$length: function(_) {
-    return this._liblib4$_length;
+    return this._liblib2$_length;
   },
   get$keys: function() {
     var t1 = new P.LinkedHashMapKeyIterable(this);
@@ -4891,13 +4993,13 @@ _LinkedHashMap: {"": "Object;_liblib4$_length,_strings,_nums,_rest,_first,_last,
       if (strings == null)
         return;
       cell = strings[key];
-      return cell == null ? null : cell.get$_liblib4$_value();
+      return cell == null ? null : cell.get$_liblib2$_value();
     } else if (typeof key === "number" && (key & 0x3ffffff) === key) {
       nums = this._nums;
       if (nums == null)
         return;
       cell = nums[key];
-      return cell == null ? null : cell.get$_liblib4$_value();
+      return cell == null ? null : cell.get$_liblib2$_value();
     } else {
       rest = this._rest;
       if (rest == null)
@@ -4906,7 +5008,7 @@ _LinkedHashMap: {"": "Object;_liblib4$_length,_strings,_nums,_rest,_first,_last,
       index = this._findBucketIndex$2(bucket, key);
       if (index < 0)
         return;
-      return bucket[index].get$_liblib4$_value();
+      return bucket[index].get$_liblib2$_value();
     }
   },
   $indexSet: function(_, key, value) {
@@ -4924,7 +5026,7 @@ _LinkedHashMap: {"": "Object;_liblib4$_length,_strings,_nums,_rest,_first,_last,
       if (cell == null)
         strings[key] = this._newLinkedCell$2(key, value);
       else
-        cell.set$_liblib4$_value(value);
+        cell.set$_liblib2$_value(value);
     } else if (typeof key === "number" && (key & 0x3ffffff) === key) {
       nums = this._nums;
       if (nums == null) {
@@ -4938,7 +5040,7 @@ _LinkedHashMap: {"": "Object;_liblib4$_length,_strings,_nums,_rest,_first,_last,
       if (cell == null)
         nums[key] = this._newLinkedCell$2(key, value);
       else
-        cell.set$_liblib4$_value(value);
+        cell.set$_liblib2$_value(value);
     } else {
       rest = this._rest;
       if (rest == null) {
@@ -4955,7 +5057,7 @@ _LinkedHashMap: {"": "Object;_liblib4$_length,_strings,_nums,_rest,_first,_last,
       else {
         index = this._findBucketIndex$2(bucket, key);
         if (index >= 0)
-          bucket[index].set$_liblib4$_value(value);
+          bucket[index].set$_liblib2$_value(value);
         else
           bucket.push(this._newLinkedCell$2(key, value));
       }
@@ -4977,7 +5079,7 @@ _LinkedHashMap: {"": "Object;_liblib4$_length,_strings,_nums,_rest,_first,_last,
         return;
       cell = bucket.splice(index, 1)[0];
       this._unlinkCell$1(cell);
-      return cell.get$_liblib4$_value();
+      return cell.get$_liblib2$_value();
     }
   },
   forEach$1: function(_, action) {
@@ -4985,7 +5087,7 @@ _LinkedHashMap: {"": "Object;_liblib4$_length,_strings,_nums,_rest,_first,_last,
     cell = this._first;
     modifications = this._modifications;
     for (; cell != null;) {
-      action.call$2(cell._key, cell._liblib4$_value);
+      action.call$2(cell._key, cell._liblib2$_value);
       if (modifications !== this._modifications)
         throw H.wrapException(new P.ConcurrentModificationError(this));
       cell = cell._next;
@@ -5000,7 +5102,7 @@ _LinkedHashMap: {"": "Object;_liblib4$_length,_strings,_nums,_rest,_first,_last,
       return;
     this._unlinkCell$1(cell);
     delete table[key];
-    return cell.get$_liblib4$_value();
+    return cell.get$_liblib2$_value();
   },
   _newLinkedCell$2: function(key, value) {
     var cell, last;
@@ -5014,7 +5116,7 @@ _LinkedHashMap: {"": "Object;_liblib4$_length,_strings,_nums,_rest,_first,_last,
       last._next = cell;
       this._last = cell;
     }
-    this._liblib4$_length = this._liblib4$_length + 1;
+    this._liblib2$_length = this._liblib2$_length + 1;
     this._modifications = this._modifications + 1 & 67108863;
     return cell;
   },
@@ -5030,7 +5132,7 @@ _LinkedHashMap: {"": "Object;_liblib4$_length,_strings,_nums,_rest,_first,_last,
       this._last = previous;
     else
       next._previous = previous;
-    this._liblib4$_length = this._liblib4$_length - 1;
+    this._liblib2$_length = this._liblib2$_length - 1;
     this._modifications = this._modifications + 1 & 67108863;
   },
   _computeHashCode$1: function(key) {
@@ -5058,7 +5160,7 @@ _LinkedHashMap_values_closure: {"": "Closure;this_0",
   }
 },
 
-_LinkedIdentityHashMap: {"": "_LinkedHashMap;_liblib4$_length,_strings,_nums,_rest,_first,_last,_modifications",
+_LinkedIdentityHashMap: {"": "_LinkedHashMap;_liblib2$_length,_strings,_nums,_rest,_first,_last,_modifications",
   _findBucketIndex$2: function(bucket, key) {
     var $length, i, t1;
     if (bucket == null)
@@ -5075,7 +5177,7 @@ _LinkedIdentityHashMap: {"": "_LinkedHashMap;_liblib4$_length,_strings,_nums,_re
   $asMap: null
 },
 
-_LinkedCustomHashMap: {"": "_LinkedHashMap;_equals,_hashCode,_validKey,_liblib4$_length,_strings,_nums,_rest,_first,_last,_modifications",
+_LinkedCustomHashMap: {"": "_LinkedHashMap;_equals,_hashCode,_validKey,_liblib2$_length,_strings,_nums,_rest,_first,_last,_modifications",
   _equals$2: function(arg0, arg1) {
     return this._equals.call$2(arg0, arg1);
   },
@@ -5117,11 +5219,11 @@ _LinkedCustomHashMap: {"": "_LinkedHashMap;_equals,_hashCode,_validKey,_liblib4$
   $asMap: null
 },
 
-LinkedHashMapCell: {"": "Object;_key<,_liblib4$_value@,_next<,_previous<"},
+LinkedHashMapCell: {"": "Object;_key<,_liblib2$_value@,_next<,_previous<"},
 
 LinkedHashMapKeyIterable: {"": "IterableBase;_map",
   get$length: function(_) {
-    return this._map._liblib4$_length;
+    return this._map._liblib2$_length;
   },
   get$iterator: function(_) {
     var t1 = this._map;
@@ -5144,9 +5246,9 @@ LinkedHashMapKeyIterable: {"": "IterableBase;_map",
   $asIterableBase: null
 },
 
-LinkedHashMapKeyIterator: {"": "Object;_map,_modifications,_cell,_liblib4$_current",
+LinkedHashMapKeyIterator: {"": "Object;_map,_modifications,_cell,_liblib2$_current",
   get$current: function() {
-    return this._liblib4$_current;
+    return this._liblib2$_current;
   },
   moveNext$0: function() {
     var t1 = this._map;
@@ -5155,10 +5257,10 @@ LinkedHashMapKeyIterator: {"": "Object;_map,_modifications,_cell,_liblib4$_curre
     else {
       t1 = this._cell;
       if (t1 == null) {
-        this._liblib4$_current = null;
+        this._liblib2$_current = null;
         return false;
       } else {
-        this._liblib4$_current = t1._key;
+        this._liblib2$_current = t1._key;
         this._cell = this._cell._next;
         return true;
       }
@@ -5374,25 +5476,25 @@ ListQueue$: function(initialCapacity, $E) {
 
 },
 
-_ListQueueIterator: {"": "Object;_queue,_end,_modificationCount,_liblib4$_position,_liblib4$_current",
+_ListQueueIterator: {"": "Object;_queue,_end,_modificationCount,_liblib2$_position,_liblib2$_current",
   get$current: function() {
-    return this._liblib4$_current;
+    return this._liblib2$_current;
   },
   moveNext$0: function() {
     var t1, t2, t3;
     t1 = this._queue;
     if (this._modificationCount !== t1._modificationCount)
       H.throwExpression(new P.ConcurrentModificationError(t1));
-    t2 = this._liblib4$_position;
+    t2 = this._liblib2$_position;
     if (t2 === this._end) {
-      this._liblib4$_current = null;
+      this._liblib2$_current = null;
       return false;
     }
     t3 = t1._table;
     if (t2 < 0 || t2 >= t3.length)
       throw H.ioore(t2);
-    this._liblib4$_current = t3[t2];
-    this._liblib4$_position = (this._liblib4$_position + 1 & t1._table.length - 1) >>> 0;
+    this._liblib2$_current = t3[t2];
+    this._liblib2$_position = (this._liblib2$_position + 1 & t1._table.length - 1) >>> 0;
     return true;
   }
 }}],
@@ -5517,85 +5619,16 @@ NoSuchMethodError_toString_closure: {"": "Closure;box_0",
   }
 },
 
-DateTime: {"": "Object;millisecondsSinceEpoch,isUtc",
-  $eq: function(_, other) {
-    var t1;
-    if (other == null)
-      return false;
-    t1 = J.getInterceptor(other);
-    if (typeof other !== "object" || other === null || !t1.$isDateTime)
-      return false;
-    return this.millisecondsSinceEpoch === other.millisecondsSinceEpoch && this.isUtc === other.isUtc;
+Duration: {"": "Object;_duration<",
+  $add: function(_, other) {
+    var t1 = other.get$_duration();
+    if (typeof t1 !== "number")
+      throw H.iae(t1);
+    return new P.Duration(0 + C.JSNumber_methods.$add(this._duration, t1));
   },
-  get$hashCode: function(_) {
-    return this.millisecondsSinceEpoch;
+  $sub: function(_, other) {
+    return new P.Duration(0 + (this._duration - other.get$_duration()));
   },
-  toString$0: function(_) {
-    var t1, y, m, d, h, min, sec, ms;
-    t1 = new P.DateTime_toString_twoDigits();
-    y = new P.DateTime_toString_fourDigits().call$1(H.Primitives_getYear(this));
-    m = t1.call$1(H.Primitives_getMonth(this));
-    d = t1.call$1(H.Primitives_getDay(this));
-    h = t1.call$1(H.Primitives_getHours(this));
-    min = t1.call$1(H.Primitives_getMinutes(this));
-    sec = t1.call$1(H.Primitives_getSeconds(this));
-    ms = new P.DateTime_toString_threeDigits().call$1(H.Primitives_getMilliseconds(this));
-    if (this.isUtc)
-      return H.S(y) + "-" + H.S(m) + "-" + H.S(d) + " " + H.S(h) + ":" + H.S(min) + ":" + H.S(sec) + "." + H.S(ms) + "Z";
-    else
-      return H.S(y) + "-" + H.S(m) + "-" + H.S(d) + " " + H.S(h) + ":" + H.S(min) + ":" + H.S(sec) + "." + H.S(ms);
-  },
-  DateTime$_now$0: function() {
-    H.Primitives_lazyAsJsDate(this);
-  },
-  $isDateTime: true,
-  static: {
-"": "DateTime_MONDAY,DateTime_TUESDAY,DateTime_WEDNESDAY,DateTime_THURSDAY,DateTime_FRIDAY,DateTime_SATURDAY,DateTime_SUNDAY,DateTime_DAYS_PER_WEEK,DateTime_JANUARY,DateTime_FEBRUARY,DateTime_MARCH,DateTime_APRIL,DateTime_MAY,DateTime_JUNE,DateTime_JULY,DateTime_AUGUST,DateTime_SEPTEMBER,DateTime_OCTOBER,DateTime_NOVEMBER,DateTime_DECEMBER,DateTime_MONTHS_PER_YEAR,DateTime__MAX_MILLISECONDS_SINCE_EPOCH",
-DateTime$_now: function() {
-  var t1 = new P.DateTime(Date.now(), false);
-  t1.DateTime$_now$0();
-  return t1;
-}}
-
-},
-
-DateTime_toString_fourDigits: {"": "Closure;",
-  call$1: function(n) {
-    var absN, sign;
-    absN = J.abs$0$n(n);
-    if (typeof n !== "number")
-      throw n.$lt();
-    sign = n < 0 ? "-" : "";
-    if (absN >= 1000)
-      return H.S(n);
-    if (absN >= 100)
-      return sign + "0" + H.S(absN);
-    if (absN >= 10)
-      return sign + "00" + H.S(absN);
-    return sign + "000" + H.S(absN);
-  }
-},
-
-DateTime_toString_threeDigits: {"": "Closure;",
-  call$1: function(n) {
-    var t1 = J.getInterceptor$n(n);
-    if (t1.$ge(n, 100))
-      return H.S(n);
-    if (t1.$ge(n, 10))
-      return "0" + H.S(n);
-    return "00" + H.S(n);
-  }
-},
-
-DateTime_toString_twoDigits: {"": "Closure;",
-  call$1: function(n) {
-    if (J.$ge$n(n, 10))
-      return H.S(n);
-    return "0" + H.S(n);
-  }
-},
-
-Duration: {"": "Object;_duration",
   $mul: function(_, factor) {
     var t1, truncated;
     t1 = C.JSNumber_methods.roundToDouble$0(this._duration * factor);
@@ -5607,16 +5640,10 @@ Duration: {"": "Object;_duration",
     return new P.Duration(0 + (truncated == -0.0 ? 0 : truncated));
   },
   $lt: function(_, other) {
-    var t1 = other.get$_duration();
-    if (typeof t1 !== "number")
-      throw H.iae(t1);
-    return C.JSNumber_methods.$lt(this._duration, t1);
+    return this._duration < other.get$_duration();
   },
   $gt: function(_, other) {
-    var t1 = other.get$_duration();
-    if (typeof t1 !== "number")
-      throw H.iae(t1);
-    return C.JSNumber_methods.$gt(this._duration, t1);
+    return this._duration > other.get$_duration();
   },
   $ge: function(_, other) {
     var t1 = other.get$_duration();
@@ -5765,13 +5792,13 @@ AbstractClassInstantiationError: {"": "Error;_className",
   }
 },
 
-NoSuchMethodError: {"": "Error;_liblib3$_receiver,_memberName,_liblib3$_arguments,_namedArguments,_existingArgumentNames",
+NoSuchMethodError: {"": "Error;_liblib1$_receiver,_memberName,_liblib1$_arguments,_namedArguments,_existingArgumentNames",
   toString$0: function(_) {
     var t1, t2, t3, t4, str, actualParameters, i, formalParameters;
     t1 = {};
     t1.sb_0 = P.StringBuffer$("");
     t1.i_1 = 0;
-    t2 = this._liblib3$_arguments;
+    t2 = this._liblib1$_arguments;
     if (typeof t2 !== "string" && (typeof t2 !== "object" || t2 === null || t2.constructor !== Array && !H.isJsIndexable(t2, t2[init.dispatchPropertyName])))
       return this.toString$0$bailout1(1, t1, t2);
     for (; t3 = t1.i_1, t3 < t2.length; t1.i_1 = t1.i_1 + 1) {
@@ -5808,7 +5835,7 @@ NoSuchMethodError: {"": "Error;_liblib3$_receiver,_memberName,_liblib3$_argument
     }
     formalParameters = t1.sb_0._contents;
     t1 = this._memberName;
-    return "NoSuchMethodError: incorrect number of arguments passed to method named '" + H.S(t1) + "'\nReceiver: " + H.S(P.Error_safeToString(this._liblib3$_receiver)) + "\nTried calling: " + H.S(t1) + "(" + actualParameters + ")\nFound: " + H.S(t1) + "(" + formalParameters + ")";
+    return "NoSuchMethodError: incorrect number of arguments passed to method named '" + H.S(t1) + "'\nReceiver: " + H.S(P.Error_safeToString(this._liblib1$_receiver)) + "\nTried calling: " + H.S(t1) + "(" + actualParameters + ")\nFound: " + H.S(t1) + "(" + formalParameters + ")";
   },
   toString$0$bailout1: function(state0, t1, t2) {
     switch (state0) {
@@ -5816,7 +5843,7 @@ NoSuchMethodError: {"": "Error;_liblib3$_receiver,_memberName,_liblib3$_argument
         t1 = {};
         t1.sb_0 = P.StringBuffer$("");
         t1.i_1 = 0;
-        t2 = this._liblib3$_arguments;
+        t2 = this._liblib1$_arguments;
       case 1:
         state0 = 0;
         if (t2 != null) {
@@ -5846,7 +5873,7 @@ NoSuchMethodError: {"": "Error;_liblib3$_receiver,_memberName,_liblib3$_argument
         var t3, t4, t5, str, actualParameters, i, formalParameters;
         state0 = 0;
         if (t2 == null)
-          return "NoSuchMethodError : method not found: '" + H.S(this._memberName) + "'\nReceiver: " + H.S(P.Error_safeToString(this._liblib3$_receiver)) + "\nArguments: [" + H.S(t1.sb_0) + "]";
+          return "NoSuchMethodError : method not found: '" + H.S(this._memberName) + "'\nReceiver: " + H.S(P.Error_safeToString(this._liblib1$_receiver)) + "\nArguments: [" + H.S(t1.sb_0) + "]";
         else {
           actualParameters = t1.sb_0._contents;
           t1.sb_0 = P.StringBuffer$("");
@@ -5870,7 +5897,7 @@ NoSuchMethodError: {"": "Error;_liblib3$_receiver,_memberName,_liblib3$_argument
           }
           formalParameters = t1.sb_0._contents;
           t1 = this._memberName;
-          return "NoSuchMethodError: incorrect number of arguments passed to method named '" + H.S(t1) + "'\nReceiver: " + H.S(P.Error_safeToString(this._liblib3$_receiver)) + "\nTried calling: " + H.S(t1) + "(" + actualParameters + ")\nFound: " + H.S(t1) + "(" + formalParameters + ")";
+          return "NoSuchMethodError: incorrect number of arguments passed to method named '" + H.S(t1) + "'\nReceiver: " + H.S(P.Error_safeToString(this._liblib1$_receiver)) + "\nTried calling: " + H.S(t1) + "(" + actualParameters + ")\nFound: " + H.S(t1) + "(" + formalParameters + ")";
         }
     }
   }
@@ -6187,50 +6214,160 @@ ImmutableListMixin: {"": "Object;",
   $asList: null
 },
 
-RectBase: {"": "Object;",
+Point: {"": "Object;x>,y>",
   toString$0: function(_) {
-    return "(" + H.S(this.get$left()) + ", " + H.S(this.get$top(this)) + ", " + H.S(this.get$width(this)) + ", " + H.S(this.get$height(this)) + ")";
+    return "(" + H.S(this.x) + ", " + H.S(this.y) + ")";
   },
   $eq: function(_, other) {
     var t1;
     if (other == null)
       return false;
     t1 = J.getInterceptor(other);
+    if (typeof other !== "object" || other === null || !t1.$isPoint)
+      return false;
+    return J.$eq(this.x, other.x) && J.$eq(this.y, other.y);
+  },
+  get$hashCode: function(_) {
+    var t1, t2;
+    t1 = J.get$hashCode$(this.x);
+    t2 = J.get$hashCode$(this.y);
+    return P.JenkinsSmiHash_finish(P.JenkinsSmiHash_combine(P.JenkinsSmiHash_combine(0, t1), t2));
+  },
+  $add: function(_, other) {
+    var t1, t2, t3;
+    t1 = this.x;
+    if (typeof t1 !== "number")
+      return this.$$add$bailout(1, other, t1);
+    t2 = J.getInterceptor$x(other);
+    t1 = C.JSNumber_methods.$add(t1, t2.get$x(other));
+    t3 = this.y;
+    if (typeof t3 !== "number")
+      return this.$$add$bailout(2, other, t1, t3, t2);
+    return new W.Point(t1, C.JSNumber_methods.$add(t3, t2.get$y(other)));
+  },
+  $$add$bailout: function(state0, other, t1, t3, t2) {
+    switch (state0) {
+      case 0:
+        t1 = this.x;
+      case 1:
+        state0 = 0;
+        t2 = J.getInterceptor$x(other);
+        t1 = J.$add$ns(t1, t2.get$x(other));
+        t3 = this.y;
+      case 2:
+        state0 = 0;
+        return new W.Point(t1, J.$add$ns(t3, t2.get$y(other)));
+    }
+  },
+  $sub: function(_, other) {
+    var t1, t2, t3;
+    t1 = this.x;
+    if (typeof t1 !== "number")
+      return this.$$sub$bailout(1, other, t1);
+    t2 = J.getInterceptor$x(other);
+    t3 = t2.get$x(other);
+    if (typeof t3 !== "number")
+      return this.$$sub$bailout(2, other, t1, t2, t3);
+    t3 = t1 - t3;
+    t1 = this.y;
+    if (typeof t1 !== "number")
+      return this.$$sub$bailout(3, other, t1, t2, t3);
+    t2 = t2.get$y(other);
+    if (typeof t2 !== "number")
+      return this.$$sub$bailout(4, 0, t1, t2, t3);
+    return new W.Point(t3, t1 - t2);
+  },
+  $$sub$bailout: function(state0, other, t1, t2, t3) {
+    switch (state0) {
+      case 0:
+        t1 = this.x;
+      case 1:
+        state0 = 0;
+        t2 = J.getInterceptor$x(other);
+        t3 = t2.get$x(other);
+      case 2:
+        state0 = 0;
+        t3 = J.$sub$n(t1, t3);
+        t1 = this.y;
+      case 3:
+        state0 = 0;
+        t2 = t2.get$y(other);
+      case 4:
+        state0 = 0;
+        return new W.Point(t3, J.$sub$n(t1, t2));
+    }
+  },
+  $mul: function(_, factor) {
+    var t1, t2;
+    t1 = this.x;
+    if (typeof t1 !== "number")
+      return this.$$mul$bailout(1, factor, t1);
+    t1 *= factor;
+    t2 = this.y;
+    if (typeof t2 !== "number")
+      return this.$$mul$bailout(2, factor, t1, t2);
+    return new W.Point(t1, t2 * factor);
+  },
+  $$mul$bailout: function(state0, factor, t1, t2) {
+    switch (state0) {
+      case 0:
+        t1 = this.x;
+      case 1:
+        state0 = 0;
+        t1 = J.$mul$n(t1, factor);
+        t2 = this.y;
+      case 2:
+        state0 = 0;
+        return new W.Point(t1, J.$mul$n(t2, factor));
+    }
+  },
+  toInt$0: function(_) {
+    return new W.Point(J.toInt$0$nx(this.x), J.toInt$0$nx(this.y));
+  },
+  $isPoint: true
+},
+
+RectBase: {"": "Object;",
+  toString$0: function(_) {
+    return "(" + H.S(this.get$left(this)) + ", " + H.S(this.get$top(this)) + ", " + H.S(this.get$width(this)) + ", " + H.S(this.get$height(this)) + ")";
+  },
+  $eq: function(_, other) {
+    var t1, t2, t3;
+    if (other == null)
+      return false;
+    t1 = J.getInterceptor$x(other);
     if (typeof other !== "object" || other === null || !t1.$isRect)
       return false;
-    return J.$eq(this.get$left(), other.left) && J.$eq(this.get$top(this), other.top) && this.get$width(this) === other.width && this.get$height(this) === other.height;
+    if (J.$eq(this.get$left(this), t1.get$left(other)))
+      if (J.$eq(this.get$top(this), t1.get$top(other))) {
+        t2 = this.get$width(this);
+        t3 = t1.get$width(other);
+        if (t2 == null ? t3 == null : t2 === t3) {
+          t2 = this.get$height(this);
+          t1 = t1.get$height(other);
+          t1 = t2 == null ? t1 == null : t2 === t1;
+        } else
+          t1 = false;
+      } else
+        t1 = false;
+    else
+      t1 = false;
+    return t1;
   },
   get$hashCode: function(_) {
     var t1, t2, t3, t4;
-    t1 = J.get$hashCode$(this.get$left());
+    t1 = J.get$hashCode$(this.get$left(this));
     t2 = J.get$hashCode$(this.get$top(this));
-    t3 = this.get$width(this) & 0x1FFFFFFF;
-    t4 = this.get$height(this) & 0x1FFFFFFF;
+    t3 = J.get$hashCode$(this.get$width(this));
+    t4 = J.get$hashCode$(this.get$height(this));
     return P.JenkinsSmiHash_finish(P.JenkinsSmiHash_combine(P.JenkinsSmiHash_combine(P.JenkinsSmiHash_combine(P.JenkinsSmiHash_combine(0, t1), t2), t3), t4));
   },
   toInt$0: function(_) {
-    var t1, t2, t3, truncated, t4;
-    t1 = J.toInt$0$n(this.get$left());
-    t2 = J.toInt$0$n(this.get$top(this));
-    t3 = this.get$width(this);
-    if (isNaN(t3))
-      H.throwExpression(new P.UnsupportedError("NaN"));
-    if (t3 == Infinity || t3 == -Infinity)
-      H.throwExpression(new P.UnsupportedError("Infinity"));
-    truncated = t3 < 0 ? Math.ceil(t3) : Math.floor(t3);
-    t3 = truncated == -0.0 ? 0 : truncated;
-    t4 = this.get$height(this);
-    if (isNaN(t4))
-      H.throwExpression(new P.UnsupportedError("NaN"));
-    if (t4 == Infinity || t4 == -Infinity)
-      H.throwExpression(new P.UnsupportedError("Infinity"));
-    truncated = t4 < 0 ? Math.ceil(t4) : Math.floor(t4);
-    t4 = truncated == -0.0 ? 0 : truncated;
-    return new W.Rect(t1, t2, t3, t4);
+    return new W.Rect(J.toInt$0$nx(this.get$left(this)), J.toInt$0$nx(this.get$top(this)), J.toInt$0$nx(this.get$width(this)), J.toInt$0$nx(this.get$height(this)));
   }
 },
 
-Rect: {"": "RectBase;left<,top>,width>,height>", $isRect: true},
+Rect: {"": "RectBase;left>,top>,width>,height>", $isRect: true, $asRect: null},
 
 _WrappedList: {"": "ListBase;_list",
   get$iterator: function(_) {
@@ -6457,7 +6594,7 @@ HttpRequest: {"": "XmlHttpRequestEventTarget;responseText=",
 
 IFrameElement: {"": "HtmlElement;height%,src},width%"},
 
-ImageElement: {"": "HtmlElement;height%,src},width%"},
+ImageElement: {"": "HtmlElement;height%,src},width%,x=,y="},
 
 InputElement: {"": "HtmlElement;height%,src},type=,width%"},
 
@@ -6557,53 +6694,103 @@ XmlHttpRequestEventTarget: {"": "EventTarget;",
     H.setRuntimeTypeInfo(t1, [null]);
     return t1;
   }
+},
+
+_ClientRect: {"": "Interceptor;height=,left=,top=,width=",
+  toString$0: function(receiver) {
+    return "(" + H.S(receiver.left) + ", " + H.S(receiver.top) + ", " + H.S(receiver.width) + ", " + H.S(receiver.height) + ")";
+  },
+  $eq: function(receiver, other) {
+    var t1, t2, t3;
+    if (other == null)
+      return false;
+    t1 = J.getInterceptor$x(other);
+    if (typeof other !== "object" || other === null || !t1.$isRect)
+      return false;
+    t2 = receiver.left;
+    t3 = t1.get$left(other);
+    if (t2 == null ? t3 == null : t2 === t3) {
+      t2 = receiver.top;
+      t3 = t1.get$top(other);
+      if (t2 == null ? t3 == null : t2 === t3) {
+        t2 = receiver.width;
+        t3 = t1.get$width(other);
+        if (t2 == null ? t3 == null : t2 === t3) {
+          t2 = receiver.height;
+          t1 = t1.get$height(other);
+          t1 = t2 == null ? t1 == null : t2 === t1;
+        } else
+          t1 = false;
+      } else
+        t1 = false;
+    } else
+      t1 = false;
+    return t1;
+  },
+  get$hashCode: function(receiver) {
+    var t1, t2, t3, t4;
+    t1 = J.get$hashCode$(receiver.left);
+    t2 = J.get$hashCode$(receiver.top);
+    t3 = J.get$hashCode$(receiver.width);
+    t4 = J.get$hashCode$(receiver.height);
+    return P.JenkinsSmiHash_finish(P.JenkinsSmiHash_combine(P.JenkinsSmiHash_combine(P.JenkinsSmiHash_combine(P.JenkinsSmiHash_combine(0, t1), t2), t3), t4));
+  },
+  toInt$0: function(receiver) {
+    return new W.Rect(J.toInt$0$nx(receiver.left), J.toInt$0$nx(receiver.top), J.toInt$0$nx(receiver.width), J.toInt$0$nx(receiver.height));
+  },
+  $isRect: true,
+  $asRect: null
 }}],
 ["dart.dom.svg", "dart:svg", , P, {
-FEBlendElement: {"": "SvgElement;height=,width="},
+FEBlendElement: {"": "SvgElement;height=,width=,x=,y="},
 
-FEColorMatrixElement: {"": "SvgElement;type=,height=,width="},
+FEColorMatrixElement: {"": "SvgElement;type=,height=,width=,x=,y="},
 
-FEComponentTransferElement: {"": "SvgElement;height=,width="},
+FEComponentTransferElement: {"": "SvgElement;height=,width=,x=,y="},
 
-FECompositeElement: {"": "SvgElement;height=,width="},
+FECompositeElement: {"": "SvgElement;height=,width=,x=,y="},
 
-FEConvolveMatrixElement: {"": "SvgElement;height=,width="},
+FEConvolveMatrixElement: {"": "SvgElement;height=,width=,x=,y="},
 
-FEDiffuseLightingElement: {"": "SvgElement;height=,width="},
+FEDiffuseLightingElement: {"": "SvgElement;height=,width=,x=,y="},
 
-FEDisplacementMapElement: {"": "SvgElement;height=,width="},
+FEDisplacementMapElement: {"": "SvgElement;height=,width=,x=,y="},
 
-FEFloodElement: {"": "SvgElement;height=,width="},
+FEFloodElement: {"": "SvgElement;height=,width=,x=,y="},
 
-FEGaussianBlurElement: {"": "SvgElement;height=,width="},
+FEGaussianBlurElement: {"": "SvgElement;height=,width=,x=,y="},
 
-FEImageElement: {"": "SvgElement;height=,width="},
+FEImageElement: {"": "SvgElement;height=,width=,x=,y="},
 
-FEMergeElement: {"": "SvgElement;height=,width="},
+FEMergeElement: {"": "SvgElement;height=,width=,x=,y="},
 
-FEMorphologyElement: {"": "SvgElement;height=,width="},
+FEMorphologyElement: {"": "SvgElement;height=,width=,x=,y="},
 
-FEOffsetElement: {"": "SvgElement;height=,width="},
+FEOffsetElement: {"": "SvgElement;height=,width=,x=,y="},
 
-FESpecularLightingElement: {"": "SvgElement;height=,width="},
+FEPointLightElement: {"": "SvgElement;x=,y="},
 
-FETileElement: {"": "SvgElement;height=,width="},
+FESpecularLightingElement: {"": "SvgElement;height=,width=,x=,y="},
 
-FETurbulenceElement: {"": "SvgElement;type=,height=,width="},
+FESpotLightElement: {"": "SvgElement;x=,y="},
 
-FilterElement: {"": "SvgElement;height=,width="},
+FETileElement: {"": "SvgElement;height=,width=,x=,y="},
 
-ForeignObjectElement: {"": "GraphicsElement;height=,width="},
+FETurbulenceElement: {"": "SvgElement;type=,height=,width=,x=,y="},
+
+FilterElement: {"": "SvgElement;height=,width=,x=,y="},
+
+ForeignObjectElement: {"": "GraphicsElement;height=,width=,x=,y="},
 
 GraphicsElement: {"": "SvgElement;"},
 
-ImageElement0: {"": "GraphicsElement;height=,width="},
+ImageElement0: {"": "GraphicsElement;height=,width=,x=,y="},
 
-MaskElement: {"": "SvgElement;height=,width="},
+MaskElement: {"": "SvgElement;height=,width=,x=,y="},
 
-PatternElement: {"": "SvgElement;height=,width="},
+PatternElement: {"": "SvgElement;height=,width=,x=,y="},
 
-RectElement: {"": "GraphicsElement;height=,width="},
+RectElement: {"": "GraphicsElement;height=,width=,x=,y="},
 
 ScriptElement0: {"": "SvgElement;type="},
 
@@ -6611,9 +6798,13 @@ StyleElement0: {"": "SvgElement;type="},
 
 SvgElement: {"": "Element;"},
 
-SvgSvgElement: {"": "GraphicsElement;height=,width="},
+SvgSvgElement: {"": "GraphicsElement;height=,width=,x=,y="},
 
-UseElement: {"": "GraphicsElement;height=,width="}}],
+TextContentElement: {"": "GraphicsElement;"},
+
+TextPositioningElement: {"": "TextContentElement;x=,y="},
+
+UseElement: {"": "GraphicsElement;height=,width=,x=,y="}}],
 ["dart.isolate", "dart:isolate", , P, {
 _Isolate_port: function() {
   if ($.lazyPort == null)
@@ -6635,17 +6826,16 @@ parse_closure: {"": "Closure;original_0",
 }}],
 ["dart.math", "dart:math", , P, {
 min: function(a, b) {
-  if (b == null)
-    throw H.iae(b);
-  if (a > b)
+  var t1 = J.getInterceptor$n(a);
+  if (t1.$gt(a, b))
     return b;
-  if (a < b)
+  if (t1.$lt(a, b))
     return a;
   if (typeof b === "number") {
     if (typeof a === "number")
       if (a === 0)
         return (a + b) * a * b;
-    if (a === 0 && C.JSDouble_methods.get$isNegative(b) || isNaN(b))
+    if (t1.$eq(a, 0) && C.JSDouble_methods.get$isNegative(b) || C.JSDouble_methods.get$isNaN(b))
       return b;
     return a;
   }
@@ -6653,21 +6843,20 @@ min: function(a, b) {
 },
 
 max: function(a, b) {
-  if (b == null)
-    throw H.iae(b);
-  if (a > b)
+  var t1 = J.getInterceptor$n(a);
+  if (t1.$gt(a, b))
     return a;
-  if (a < b)
+  if (t1.$lt(a, b))
     return b;
   if (typeof b === "number") {
     if (typeof a === "number")
       if (a === 0)
         return a + b;
-    if (isNaN(b))
+    if (C.JSDouble_methods.get$isNaN(b))
       return b;
     return a;
   }
-  if (b === 0 && C.JSNumber_methods.get$isNegative(a))
+  if (J.$eq(b, 0) && t1.get$isNegative(a))
     return b;
   return a;
 },
@@ -6675,9 +6864,18 @@ max: function(a, b) {
 _Random: {"": "Object;",
   nextInt$1: function(max) {
     if (max == null)
+      return this.nextInt$1$bailout(1, max);
+    if (max < 0)
+      throw H.wrapException(new P.ArgumentError("negative max: " + max));
+    if (max > 4294967295)
+      max = 4294967295;
+    return Math.random() * max >>> 0;
+  },
+  nextInt$1$bailout: function(state0, max) {
+    if (max == null)
       throw max.$lt();
     if (max < 0)
-      throw H.wrapException(new P.ArgumentError("negative max: " + H.S(max)));
+      throw H.wrapException(new P.ArgumentError("negative max: " + max));
     if (max > 4294967295)
       max = 4294967295;
     return Math.random() * max >>> 0;
@@ -6739,7 +6937,7 @@ Uint8List: {"": "TypedData_ListMixin_FixedLengthListMixin;",
   $isList: true,
   $isJavaScriptIndexingBehavior: true
 }}],
-["event", "core/event.dart", , O, {
+["event", "core/action.dart", , O, {
 Action: {"": "Object;object,event,type>",
   update$0: function() {
     var c, m;
@@ -6754,148 +6952,28 @@ Action: {"": "Object;object,event,type>",
 }}],
 ["gameengine.dart", "gameengine.dart", , B, {
 main: function() {
-  var initCoor1, initCoor2, char2, t1, initCoor3, initCoor4, tile, tile2, item1, item2;
   B.setupCanvas();
   $.scene = A.Scene$($._doc, $._ctx, $.canvas);
-  initCoor1 = new L.Coordinate(null, null);
-  initCoor1.x = 0;
-  initCoor1.y = 0;
-  initCoor2 = new L.Coordinate(null, null);
-  initCoor2.x = 2;
-  initCoor2.y = 2;
-  $.mainCharacter = Z.Character$($._doc, $._ctx, $.canvas, initCoor1, 0, 1);
-  char2 = Z.Character$($._doc, $._ctx, $.canvas, initCoor2, 2, 1);
-  t1 = P.List_List(null, Z.Character);
-  H.setRuntimeTypeInfo(t1, [Z.Character]);
-  $.chars = t1;
-  $.chars.push(char2);
-  initCoor3 = new L.Coordinate(null, null);
-  initCoor3.x = 5;
-  initCoor3.y = 8;
-  initCoor4 = new L.Coordinate(null, null);
-  initCoor4.x = 3;
-  initCoor4.y = 5;
-  tile = K.Tile$(20, 34, 0);
-  tile2 = K.Tile$(5, 31, 0);
-  item1 = A.Item$($._doc, $._ctx, $.canvas, initCoor3, tile, true, 1);
-  item2 = A.Item$($._doc, $._ctx, $.canvas, initCoor4, tile2, true, 1);
-  t1 = P.List_List(null, A.Item);
-  H.setRuntimeTypeInfo(t1, [A.Item]);
-  $.items = t1;
-  $.items.push(item1);
-  $.items.push(item2);
-  t1 = P.List_List(null, O.Action);
-  H.setRuntimeTypeInfo(t1, [O.Action]);
-  $.activeEvents = t1;
   B.setupKeys();
   C.Window_methods.get$animationFrame(window).then$1(B.update$closure);
 },
 
 update: function(delta) {
-  var t1, t2, t3, charas, itemsIte, eventIte;
+  var t1, t2, t3;
   t1 = $._ctx;
   t2 = $.canvas;
   t3 = J.getInterceptor$x(t2);
   J.clearRect$4$x(t1, 0, 0, t3.get$width(t2), t3.get$height(t2));
   $.scene.update$0();
-  t2 = $.chars;
-  t2.get$iterator;
-  charas = new H.ListIterator(t2, t2.length, 0, null);
-  for (; charas.moveNext$0();)
-    charas._current.update$0();
-  t1 = $.items;
-  t1.get$iterator;
-  itemsIte = new H.ListIterator(t1, t1.length, 0, null);
-  for (; itemsIte.moveNext$0();)
-    itemsIte._current.update$0();
-  t1 = $.activeEvents;
-  t1.get$iterator;
-  eventIte = new H.ListIterator(t1, t1.length, 0, null);
-  for (; eventIte.moveNext$0();)
-    eventIte._current.update$0();
-  $.mainCharacter.update$0();
   C.Window_methods.get$animationFrame(window).then$1(B.update$closure);
-},
-
-createMessage: function($char) {
-  var t1, t2, msg, t, $event;
-  t1 = $._ctx;
-  t2 = $char.curPosPx;
-  msg = E.Message$(t1, "ola k ase", t2.x, t2.y, 100, 10, 10);
-  t = new P._ZoneTimer($.get$_Zone__current(), B.removeEvent$closure, null);
-  t2 = t._zone;
-  t2._openCallbacks = t2._openCallbacks + 1;
-  t._timer = P._createTimer(C.Duration_5000000, t.get$_run());
-  $event = new O.Action(null, null, null);
-  $event.object = $char;
-  $event.event = msg;
-  $event.type = 0;
-  $.activeEvents.push($event);
-},
-
-removeEvent: function() {
-  var t1, $event;
-  t1 = $.activeEvents;
-  t1.elementAt$1;
-  if (0 >= t1.length)
-    throw H.ioore(0);
-  $event = t1[0];
-  if ($event.type === 0)
-    $event.object.trigger = false;
-  J.removeAt$1$ax(t1, 0);
 },
 
 setupCanvas: function() {
   $._doc = window.document;
   $.canvas = $._doc.querySelector("#canvas");
-  J.set$width$x($.canvas, 640);
-  J.set$height$x($.canvas, 480);
+  J.set$width$x($.canvas, 672);
+  J.set$height$x($.canvas, 512);
   $._ctx = J.getContext$1$x($.canvas, "2d");
-},
-
-shallPass: function(face, c) {
-  var t1, t2, charas, $char, nextTo, itemsIte, item, itemFace;
-  t1 = $.scene;
-  t2 = c.curPos;
-  if (t1.nextToTile$3(t2.x, t2.y, face))
-    return false;
-  t1 = $.chars;
-  t1.get$iterator;
-  charas = new H.ListIterator(t1, t1.length, 0, null);
-  for (; charas.moveNext$0();) {
-    $char = charas._current;
-    nextTo = $char.get$curPosPx().nextToThis$1(c.curPosPx);
-    if ($char.get$phasable() !== true && nextTo === face)
-      return false;
-  }
-  t1 = $.items;
-  t1.get$iterator;
-  itemsIte = new H.ListIterator(t1, t1.length, 0, null);
-  for (; itemsIte.moveNext$0();) {
-    item = itemsIte._current;
-    itemFace = item.get$curPosPx().nextToThis$1(c.curPosPx);
-    if (item.get$pushable() !== true && itemFace === face)
-      return false;
-    else if (itemFace === face)
-      if (!item.move$1(itemFace))
-        return false;
-  }
-  return true;
-},
-
-getCharacterInFront: function() {
-  var t1, charas, $char, t2;
-  t1 = $.chars;
-  t1.get$iterator;
-  charas = new H.ListIterator(t1, t1.length, 0, null);
-  for (; charas.moveNext$0();) {
-    $char = charas._current;
-    t1 = $char.get$curPosPx();
-    t2 = $.mainCharacter;
-    if (t1.facingThis$2(t2.getCurrentDirection$0(), t2.curPosPx))
-      return $char;
-  }
-  return;
 },
 
 setupKeys: function() {
@@ -6919,44 +6997,24 @@ setupKeys: function() {
 },
 
 reactKey: function(evt) {
-  var t1, t2, c;
+  var t1, c;
   t1 = J.getInterceptor$x(evt);
-  if (t1.get$keyCode(evt) === 37 || t1.get$_keyCode(evt) === 65) {
-    t1 = B.shallPass(2, $.mainCharacter);
-    t2 = $.mainCharacter;
-    if (t1)
-      t2.move$1(2);
-    else
-      t2.faceDirection$1(2);
-  } else {
+  if (t1.get$keyCode(evt) === 37 || t1.get$_keyCode(evt) === 65)
+    $.scene.mainCharacter.move$1(2);
+  else {
     t1 = t1.get$_keyCode(evt);
-    if (t1 === 38 || t1 === 87) {
-      t1 = B.shallPass(0, $.mainCharacter);
-      t2 = $.mainCharacter;
-      if (t1)
-        t2.move$1(0);
-      else
-        t2.faceDirection$1(0);
-    } else if (t1 === 39 || t1 === 68) {
-      t1 = B.shallPass(3, $.mainCharacter);
-      t2 = $.mainCharacter;
-      if (t1)
-        t2.move$1(3);
-      else
-        t2.faceDirection$1(3);
-    } else if (t1 === 40 || t1 === 83) {
-      t1 = B.shallPass(1, $.mainCharacter);
-      t2 = $.mainCharacter;
-      if (t1)
-        t2.move$1(1);
-      else
-        t2.faceDirection$1(1);
-    } else if (t1 === 13) {
-      c = B.getCharacterInFront();
+    if (t1 === 38 || t1 === 87)
+      $.scene.mainCharacter.move$1(0);
+    else if (t1 === 39 || t1 === 68)
+      $.scene.mainCharacter.move$1(3);
+    else if (t1 === 40 || t1 === 83)
+      $.scene.mainCharacter.move$1(1);
+    else if (t1 === 13) {
+      c = $.scene.getCharacterInFront$0();
       if (c != null)
-        if (c.get$trigger() !== true) {
-          c.set$trigger(true);
-          B.createMessage(c);
+        if (c.trigger !== true) {
+          c.trigger = true;
+          $.scene.createMessage$1(c);
         }
     }
   }
@@ -6970,7 +7028,7 @@ setupKeys_closure: {"": "Closure;",
 
 setupKeys_closure0: {"": "Closure;",
   call$1: function(e) {
-    $.mainCharacter.stopMove$0();
+    $.scene.mainCharacter.stopMove$0();
   }
 }},
 1],
@@ -6987,11 +7045,11 @@ JenkinsSmiHash_finish: function(hash) {
   return 536870911 & hash + ((16383 & hash) << 15 >>> 0);
 }}],
 ["item", "core/item.dart", , A, {
-Item: {"": "Object;_doc,_liblib0$_ctx,canvas,itemImage,speed,curPos,curPosPx<,tile,moving,pushable<",
+Item: {"": "Object;_liblib5$_doc,_liblib5$_ctx,canvas,itemImage,speed,curPos<,curPosPx<,tile,moving,pushable<,scene",
   loadGraphic$1: function(src) {
     var t1, t2;
     this.itemImage = W._ElementFactoryProvider_createElement_tag("img", null);
-    this.itemImage = this._doc.createElement("img");
+    this.itemImage = this._liblib5$_doc.createElement("img");
     J.set$src$x(this.itemImage, src);
     t1 = J.get$onLoad$x(this.itemImage);
     t2 = new W._EventStreamSubscription(0, t1._target, t1._eventType, new A.Item_loadGraphic_closure(this), t1._useCapture);
@@ -6999,65 +7057,45 @@ Item: {"": "Object;_doc,_liblib0$_ctx,canvas,itemImage,speed,curPos,curPosPx<,ti
     t2._tryResume$0();
   },
   move$1: function(face) {
-    var t1, t2, deltaY, deltaX, t3;
-    t1 = this.curPos.y;
-    if (t1 == null)
-      throw t1.$mul();
-    t2 = this.curPosPx.y;
-    if (t2 == null)
-      throw H.iae(t2);
-    deltaY = Math.abs(t1 * 32 - t2);
-    t2 = this.curPos.x;
-    if (t2 == null)
-      throw t2.$mul();
-    t1 = this.curPosPx.x;
-    if (t1 == null)
-      throw H.iae(t1);
-    deltaX = Math.abs(t2 * 32 - t1);
+    var deltaY, deltaX, t1, t2;
+    if (!this.scene.shallPass$2(face, this))
+      return false;
+    deltaY = J.abs$0$n(J.$sub$n(J.$mul$n(this.curPos.y, 32), this.curPosPx.y));
+    deltaX = J.abs$0$n(J.$sub$n(J.$mul$n(this.curPos.x, 32), this.curPosPx.x));
     switch (face) {
       case 0:
-        t1 = this.curPos;
-        t2 = t1.y;
-        if (t2 == null)
-          throw t2.$gt();
-        if (t2 > 0 && deltaY < 32) {
-          t1.y = t2 - 1;
+        if (J.$gt$n(this.curPos.y, 0) && deltaY < 32) {
+          t1 = this.curPos;
+          t1.y = J.$sub$n(t1.y, 1);
           return true;
         }
         break;
       case 1:
-        t1 = this.curPos;
-        t2 = t1.y;
-        if (t2 == null)
-          throw t2.$mul();
-        t3 = J.get$height$x(this.canvas);
-        if (typeof t3 !== "number")
-          throw t3.$sub();
-        if (t2 * 32 < t3 - 32 && deltaY < 32) {
-          t1.y = t2 + 1;
+        t1 = J.$mul$n(this.curPos.y, 32);
+        t2 = J.get$height$x(this.canvas);
+        if (typeof t2 !== "number")
+          throw t2.$sub();
+        if (J.$lt$n(t1, t2 - 32) && deltaY < 32) {
+          t1 = this.curPos;
+          t1.y = J.$add$ns(t1.y, 1);
           return true;
         }
         break;
       case 2:
-        t1 = this.curPos;
-        t2 = t1.x;
-        if (t2 == null)
-          throw t2.$gt();
-        if (t2 > 0 && deltaX < 32) {
-          t1.x = t2 - 1;
+        if (J.$gt$n(this.curPos.x, 0) && deltaX < 32) {
+          t1 = this.curPos;
+          t1.x = J.$sub$n(t1.x, 1);
           return true;
         }
         break;
       case 3:
-        t1 = this.curPos;
-        t2 = t1.x;
-        if (t2 == null)
-          throw t2.$mul();
-        t3 = J.get$width$x(this.canvas);
-        if (typeof t3 !== "number")
-          throw t3.$sub();
-        if (t2 * 32 < t3 - 32 && deltaX < 32) {
-          t1.x = t2 + 1;
+        t1 = J.$mul$n(this.curPos.x, 32);
+        t2 = J.get$width$x(this.canvas);
+        if (typeof t2 !== "number")
+          throw t2.$sub();
+        if (J.$lt$n(t1, t2 - 32) && deltaX < 32) {
+          t1 = this.curPos;
+          t1.x = J.$add$ns(t1.x, 1);
           return true;
         }
         break;
@@ -7066,72 +7104,46 @@ Item: {"": "Object;_doc,_liblib0$_ctx,canvas,itemImage,speed,curPos,curPosPx<,ti
     return false;
   },
   updateMove$0: function() {
-    var t1, distance, t2, t3;
+    var t1, distance;
     t1 = this.speed;
     if (t1 == null)
       throw H.iae(t1);
     distance = 2 * t1;
-    t1 = this.curPos.y;
-    if (t1 == null)
-      throw t1.$mul();
-    t1 *= 32;
-    t2 = this.curPosPx;
-    t3 = t2.y;
-    if (t3 == null)
-      throw H.iae(t3);
-    if (t1 > t3)
-      t2.y = P.min(t3 + distance, t1);
-    t1 = this.curPos.x;
-    if (t1 == null)
-      throw t1.$mul();
-    t1 *= 32;
-    t2 = this.curPosPx;
-    t3 = t2.x;
-    if (t3 == null)
-      throw H.iae(t3);
-    if (t1 > t3)
-      t2.x = P.min(t3 + distance, t1);
-    t1 = this.curPos.y;
-    if (t1 == null)
-      throw t1.$mul();
-    t1 *= 32;
-    t2 = this.curPosPx;
-    t3 = t2.y;
-    if (t3 == null)
-      throw H.iae(t3);
-    if (t1 < t3)
-      t2.y = P.max(t3 - distance, t1);
-    t1 = this.curPos.x;
-    if (t1 == null)
-      throw t1.$mul();
-    t1 *= 32;
-    t2 = this.curPosPx;
-    t3 = t2.x;
-    if (t3 == null)
-      throw H.iae(t3);
-    if (t1 < t3)
-      t2.x = P.max(t3 - distance, t1);
+    if (J.$gt$n(J.$mul$n(this.curPos.y, 32), this.curPosPx.y)) {
+      t1 = this.curPosPx;
+      t1.y = P.min(J.$add$ns(t1.y, distance), J.$mul$n(this.curPos.y, 32));
+    }
+    if (J.$gt$n(J.$mul$n(this.curPos.x, 32), this.curPosPx.x)) {
+      t1 = this.curPosPx;
+      t1.x = P.min(J.$add$ns(t1.x, distance), J.$mul$n(this.curPos.x, 32));
+    }
+    if (J.$lt$n(J.$mul$n(this.curPos.y, 32), this.curPosPx.y)) {
+      t1 = this.curPosPx;
+      t1.y = P.max(J.$sub$n(t1.y, distance), J.$mul$n(this.curPos.y, 32));
+    }
+    if (J.$lt$n(J.$mul$n(this.curPos.x, 32), this.curPosPx.x)) {
+      t1 = this.curPosPx;
+      t1.x = P.max(J.$sub$n(t1.x, distance), J.$mul$n(this.curPos.x, 32));
+    }
   },
   update$0: function() {
     var t1, t2, t3, t4, t5;
-    t1 = this.curPosPx;
-    t2 = t1.x;
-    t3 = this.curPos;
-    t4 = t3.x;
-    if (t4 == null)
-      throw t4.$mul();
-    if (t2 === t4 * 32) {
-      t1 = t1.y;
-      t3 = t3.y;
-      if (t3 == null)
-        throw t3.$mul();
-      t3 = t1 !== t3 * 32;
-      t1 = t3;
+    t1 = this.curPosPx.x;
+    t2 = this.curPos.x;
+    if (typeof t2 !== "number")
+      return this.update$0$bailout(1, t2, t1);
+    if (J.$eq(t1, t2 * 32)) {
+      t1 = this.curPosPx.y;
+      t2 = this.curPos.y;
+      if (typeof t2 !== "number")
+        return this.update$0$bailout(2, t2, t1);
+      t2 = !J.$eq(t1, t2 * 32);
+      t1 = t2;
     } else
       t1 = true;
     if (t1)
       this.updateMove$0();
-    t1 = this._liblib0$_ctx;
+    t1 = this._liblib5$_ctx;
     t2 = this.itemImage;
     t3 = this.curPosPx;
     t4 = t3.x;
@@ -7139,38 +7151,517 @@ Item: {"": "Object;_doc,_liblib0$_ctx,canvas,itemImage,speed,curPos,curPosPx<,ti
     t5 = this.tile;
     J.drawImageToRect$3$sourceRect$x(t1, t2, new W.Rect(t4, t3, 32, 32), new W.Rect(t5.xImg, t5.yImg, 32, 32));
   },
-  Item$7: function(_doc, _ctx, canvas, curPos, tile, pushable, speed) {
+  update$0$bailout: function(state0, t2, t1) {
+    switch (state0) {
+      case 0:
+        t1 = this.curPosPx.x;
+        t2 = this.curPos.x;
+      case 1:
+        state0 = 0;
+      case 2:
+        var t3, t4, t5;
+        if (state0 === 2 || state0 === 0 && J.$eq(t1, J.$mul$n(t2, 32)))
+          switch (state0) {
+            case 0:
+              t1 = this.curPosPx.y;
+              t2 = this.curPos.y;
+            case 2:
+              state0 = 0;
+              t2 = !J.$eq(t1, J.$mul$n(t2, 32));
+              t1 = t2;
+          }
+        else
+          t1 = true;
+        if (t1)
+          this.updateMove$0();
+        t1 = this._liblib5$_ctx;
+        t2 = this.itemImage;
+        t3 = this.curPosPx;
+        t4 = t3.x;
+        t3 = t3.y;
+        t5 = this.tile;
+        J.drawImageToRect$3$sourceRect$x(t1, t2, new W.Rect(t4, t3, 32, 32), new W.Rect(t5.xImg, t5.yImg, 32, 32));
+    }
+  },
+  Item$8: function(_doc, _ctx, canvas, curPos, tile, scene, pushable, speed) {
     var t1, t2, t3;
-    this._doc = _doc;
-    this._liblib0$_ctx = _ctx;
+    this._liblib5$_doc = _doc;
+    this._liblib5$_ctx = _ctx;
     this.canvas = canvas;
     this.curPos = curPos;
     this.tile = tile;
     this.speed = speed;
-    t1 = curPos.x;
-    if (t1 == null)
-      throw t1.$mul();
-    t2 = curPos.y;
-    if (t2 == null)
-      throw t2.$mul();
+    t1 = J.$mul$n(curPos.x, 32);
+    t2 = J.$mul$n(curPos.y, 32);
     t3 = new L.Coordinate(null, null);
-    t3.x = t1 * 32;
-    t3.y = t2 * 32;
+    t3.x = t1;
+    t3.y = t2;
     this.curPosPx = t3;
     this.moving = false;
     this.pushable = pushable;
+    this.scene = scene;
     this.loadGraphic$1("assets/tileset.png");
   },
   static: {
-Item$: function(_doc, _ctx, canvas, curPos, tile, pushable, speed) {
-  var t1 = new A.Item(null, null, null, null, null, null, null, null, null, null);
-  t1.Item$7(_doc, _ctx, canvas, curPos, tile, pushable, speed);
+Item$: function(_doc, _ctx, canvas, curPos, tile, scene, pushable, speed) {
+  var t1 = new A.Item(null, null, null, null, null, null, null, null, null, null, null);
+  t1.Item$8(_doc, _ctx, canvas, curPos, tile, scene, pushable, speed);
   return t1;
 }}
 
 },
 
 Item_loadGraphic_closure: {"": "Closure;this_0",
+  call$1: function(value) {
+    return this.this_0.update$0();
+  }
+}}],
+["mapset", "core/mapset.dart", , M, {
+MapSet: {"": "Object;_liblib9$_doc,_liblib9$_ctx,canvas,mapsetImage,structuresData,offsetX',offsetY',mapset,mapset2,mapset3",
+  loadGraphic$1: function(src) {
+    var t1, t2;
+    this.mapsetImage = W._ElementFactoryProvider_createElement_tag("img", null);
+    this.mapsetImage = this._liblib9$_doc.createElement("img");
+    J.set$src$x(this.mapsetImage, src);
+    t1 = J.get$onLoad$x(this.mapsetImage);
+    t2 = new W._EventStreamSubscription(0, t1._target, t1._eventType, new M.MapSet_loadGraphic_closure(this), t1._useCapture);
+    H.setRuntimeTypeInfo(t2, [H.getRuntimeTypeArgument(t1, "_EventStream", 0)]);
+    t2._tryResume$0();
+  },
+  initValues$0: function() {
+    var y, x, t, t1;
+    for (y = 0; y < 32; ++y)
+      for (x = 0; x < 40; ++x) {
+        t = new K.Tile(null, null, null);
+        t.xImg = 256;
+        t.yImg = 64;
+        t.type = 0;
+        t1 = this.mapset.m;
+        if (x >= t1.length)
+          throw H.ioore(x);
+        t1 = t1[x];
+        if (y >= t1.length)
+          throw H.ioore(y);
+        t1[y] = t;
+        t1 = this.mapset2.m;
+        if (x >= t1.length)
+          throw H.ioore(x);
+        t1 = t1[x];
+        if (y >= t1.length)
+          throw H.ioore(y);
+        t1[y] = 0;
+        t1 = this.mapset3.m;
+        if (x >= t1.length)
+          throw H.ioore(x);
+        t1 = t1[x];
+        if (y >= t1.length)
+          throw H.ioore(y);
+        t1[y] = 0;
+      }
+  },
+  addBuilding$3: function(index, x, y) {
+    var structure, t1, tilesMapset1, m, t2, t3, t4, t5, t, blocks, block, tilesMapset2;
+    structure = J.elementAt$1$ax(J.$index$asx(this.structuresData, "buildings"), index);
+    t1 = J.getInterceptor$asx(structure);
+    tilesMapset1 = J.get$iterator$ax(J.$index$asx(t1.$index(structure, "mapset1"), "tiles"));
+    for (; tilesMapset1.moveNext$0();) {
+      m = tilesMapset1.get$current();
+      t2 = J.getInterceptor$asx(m);
+      t3 = t2.$index(m, "xTile");
+      t4 = t2.$index(m, "yTile");
+      t5 = t2.$index(m, "type");
+      t = new K.Tile(null, null, null);
+      t.xImg = J.$mul$n(t3, 32);
+      t.yImg = J.$mul$n(t4, 32);
+      t.type = t5;
+      blocks = J.get$iterator$ax(t2.$index(m, "blocks"));
+      for (; blocks.moveNext$0();) {
+        block = blocks.get$current();
+        t2 = this.mapset;
+        t3 = J.getInterceptor$asx(block);
+        t4 = J.toInt$0$nx(t3.$index(block, "x"));
+        if (typeof t4 !== "number")
+          throw H.iae(t4);
+        t4 = x + t4;
+        t3 = J.toInt$0$nx(t3.$index(block, "y"));
+        if (typeof t3 !== "number")
+          throw H.iae(t3);
+        t3 = y + t3;
+        t2 = t2.m;
+        if (t4 >>> 0 !== t4 || t4 >= t2.length)
+          throw H.ioore(t4);
+        t4 = t2[t4];
+        if (t3 >>> 0 !== t3 || t3 >= t4.length)
+          throw H.ioore(t3);
+        t4[t3] = t;
+      }
+    }
+    tilesMapset2 = J.get$iterator$ax(J.$index$asx(t1.$index(structure, "mapset2"), "tiles"));
+    for (; tilesMapset2.moveNext$0();) {
+      m = tilesMapset2.get$current();
+      t1 = J.getInterceptor$asx(m);
+      t2 = t1.$index(m, "xTile");
+      t3 = t1.$index(m, "yTile");
+      t4 = t1.$index(m, "type");
+      t = new K.Tile(null, null, null);
+      t.xImg = J.$mul$n(t2, 32);
+      t.yImg = J.$mul$n(t3, 32);
+      t.type = t4;
+      blocks = J.get$iterator$ax(t1.$index(m, "blocks"));
+      for (; blocks.moveNext$0();) {
+        block = blocks.get$current();
+        t1 = this.mapset2;
+        t2 = J.getInterceptor$asx(block);
+        t3 = J.toInt$0$nx(t2.$index(block, "x"));
+        if (typeof t3 !== "number")
+          throw H.iae(t3);
+        t3 = x + t3;
+        t2 = J.toInt$0$nx(t2.$index(block, "y"));
+        if (typeof t2 !== "number")
+          throw H.iae(t2);
+        t2 = y + t2;
+        t1 = t1.m;
+        if (t3 >>> 0 !== t3 || t3 >= t1.length)
+          throw H.ioore(t3);
+        t3 = t1[t3];
+        if (t2 >>> 0 !== t2 || t2 >= t3.length)
+          throw H.ioore(t2);
+        t3[t2] = t;
+      }
+    }
+  },
+  addRandomDetails$0: function() {
+    var i, t1, max, rX, rY, t;
+    for (i = 0; i < 10; ++i) {
+      t1 = this.mapset2.cols;
+      if (t1 == null)
+        throw t1.$lt();
+      if (t1 < 0)
+        H.throwExpression(new P.ArgumentError("negative max: " + t1));
+      if (t1 > 4294967295)
+        max = 4294967295;
+      else
+        max = t1;
+      rX = Math.random() * max >>> 0;
+      t1 = this.mapset2.rows;
+      if (t1 == null)
+        throw t1.$lt();
+      if (t1 < 0)
+        H.throwExpression(new P.ArgumentError("negative max: " + t1));
+      if (t1 > 4294967295)
+        max = 4294967295;
+      else
+        max = t1;
+      rY = Math.random() * max >>> 0;
+      t = new K.Tile(null, null, null);
+      t.xImg = 32;
+      t.yImg = 1024;
+      t.type = 0;
+      t1 = this.mapset.m;
+      if (rX < 0 || rX >= t1.length)
+        throw H.ioore(rX);
+      t1 = t1[rX];
+      if (rY < 0 || rY >= t1.length)
+        throw H.ioore(rY);
+      if (J.$eq(J.get$type$x(t1[rY]), 0)) {
+        t1 = this.mapset2.m;
+        if (rX >= t1.length)
+          throw H.ioore(rX);
+        t1 = t1[rX];
+        if (rY >= t1.length)
+          throw H.ioore(rY);
+        t1[rY] = t;
+      } else
+        --i;
+    }
+    for (i = 0; i < 12; ++i) {
+      t1 = this.mapset2.cols;
+      if (t1 == null)
+        throw t1.$lt();
+      if (t1 < 0)
+        H.throwExpression(new P.ArgumentError("negative max: " + t1));
+      if (t1 > 4294967295)
+        max = 4294967295;
+      else
+        max = t1;
+      rX = Math.random() * max >>> 0;
+      t1 = this.mapset2.rows;
+      if (t1 == null)
+        throw t1.$lt();
+      if (t1 < 0)
+        H.throwExpression(new P.ArgumentError("negative max: " + t1));
+      if (t1 > 4294967295)
+        max = 4294967295;
+      else
+        max = t1;
+      rY = Math.random() * max >>> 0;
+      t = new K.Tile(null, null, null);
+      t.xImg = 96;
+      t.yImg = 1024;
+      t.type = 0;
+      t1 = this.mapset.m;
+      if (rX < 0 || rX >= t1.length)
+        throw H.ioore(rX);
+      t1 = t1[rX];
+      if (rY < 0 || rY >= t1.length)
+        throw H.ioore(rY);
+      if (J.$eq(J.get$type$x(t1[rY]), 0)) {
+        t1 = this.mapset2.m;
+        if (rX >= t1.length)
+          throw H.ioore(rX);
+        t1 = t1[rX];
+        if (rY >= t1.length)
+          throw H.ioore(rY);
+        t1[rY] = t;
+      } else
+        --i;
+    }
+    for (i = 0; i < 8; ++i) {
+      t1 = this.mapset2.cols;
+      if (t1 == null)
+        throw t1.$lt();
+      if (t1 < 0)
+        H.throwExpression(new P.ArgumentError("negative max: " + t1));
+      if (t1 > 4294967295)
+        max = 4294967295;
+      else
+        max = t1;
+      rX = Math.random() * max >>> 0;
+      t1 = this.mapset2.rows;
+      if (t1 == null)
+        throw t1.$lt();
+      if (t1 < 0)
+        H.throwExpression(new P.ArgumentError("negative max: " + t1));
+      if (t1 > 4294967295)
+        max = 4294967295;
+      else
+        max = t1;
+      rY = Math.random() * max >>> 0;
+      t = new K.Tile(null, null, null);
+      t.xImg = 128;
+      t.yImg = 1024;
+      t.type = 0;
+      t1 = this.mapset.m;
+      if (rX < 0 || rX >= t1.length)
+        throw H.ioore(rX);
+      t1 = t1[rX];
+      if (rY < 0 || rY >= t1.length)
+        throw H.ioore(rY);
+      if (J.$eq(J.get$type$x(t1[rY]), 0)) {
+        t1 = this.mapset2.m;
+        if (rX >= t1.length)
+          throw H.ioore(rX);
+        t1 = t1[rX];
+        if (rY >= t1.length)
+          throw H.ioore(rY);
+        t1[rY] = t;
+      } else
+        --i;
+    }
+    for (i = 0; i < 8; ++i) {
+      t1 = this.mapset2.cols;
+      if (t1 == null)
+        throw t1.$lt();
+      if (t1 < 0)
+        H.throwExpression(new P.ArgumentError("negative max: " + t1));
+      if (t1 > 4294967295)
+        max = 4294967295;
+      else
+        max = t1;
+      rX = Math.random() * max >>> 0;
+      t1 = this.mapset2.rows;
+      if (t1 == null)
+        throw t1.$lt();
+      if (t1 < 0)
+        H.throwExpression(new P.ArgumentError("negative max: " + t1));
+      if (t1 > 4294967295)
+        max = 4294967295;
+      else
+        max = t1;
+      rY = Math.random() * max >>> 0;
+      t = new K.Tile(null, null, null);
+      t.xImg = 192;
+      t.yImg = 1056;
+      t.type = 0;
+      t1 = this.mapset.m;
+      if (rX < 0 || rX >= t1.length)
+        throw H.ioore(rX);
+      t1 = t1[rX];
+      if (rY < 0 || rY >= t1.length)
+        throw H.ioore(rY);
+      if (J.$eq(J.get$type$x(t1[rY]), 0)) {
+        t1 = this.mapset2.m;
+        if (rX >= t1.length)
+          throw H.ioore(rX);
+        t1 = t1[rX];
+        if (rY >= t1.length)
+          throw H.ioore(rY);
+        t1[rY] = t;
+      } else
+        --i;
+    }
+  },
+  nextToTile$3: function(x, y, face) {
+    var t1, t2, t3, t4;
+    t1 = J.getInterceptor$n(x);
+    if (t1.$ge(x, 1)) {
+      t2 = this.mapset;
+      t3 = t1.$sub(x, 1);
+      t2 = t2.m;
+      if (t3 >>> 0 !== t3 || t3 >= t2.length)
+        throw H.ioore(t3);
+      t3 = t2[t3];
+      if (y >>> 0 !== y || y >= t3.length)
+        throw H.ioore(y);
+      if (J.$eq(J.get$type$x(t3[y]), 3) && face === 2)
+        return true;
+    }
+    t2 = J.getInterceptor$n(y);
+    if (t2.$ge(y, 1)) {
+      t3 = this.mapset;
+      t4 = t2.$sub(y, 1);
+      t3 = t3.m;
+      if (x >>> 0 !== x || x >= t3.length)
+        throw H.ioore(x);
+      t3 = t3[x];
+      if (t4 >>> 0 !== t4 || t4 >= t3.length)
+        throw H.ioore(t4);
+      if (J.$eq(J.get$type$x(t3[t4]), 3) && face === 0)
+        return true;
+    }
+    t3 = this.mapset.cols;
+    if (t3 == null)
+      throw t3.$sub();
+    if (t1.$lt(x, t3 - 1)) {
+      t3 = this.mapset;
+      t1 = t1.$add(x, 1);
+      t3 = t3.m;
+      if (t1 >>> 0 !== t1 || t1 >= t3.length)
+        throw H.ioore(t1);
+      t1 = t3[t1];
+      if (y >>> 0 !== y || y >= t1.length)
+        throw H.ioore(y);
+      if (J.$eq(J.get$type$x(t1[y]), 3) && face === 3)
+        return true;
+    }
+    t1 = this.mapset.rows;
+    if (t1 == null)
+      throw t1.$sub();
+    if (t2.$lt(y, t1 - 1)) {
+      t1 = this.mapset;
+      t2 = t2.$add(y, 1);
+      t1 = t1.m;
+      if (x >>> 0 !== x || x >= t1.length)
+        throw H.ioore(x);
+      t1 = t1[x];
+      if (t2 >>> 0 !== t2 || t2 >= t1.length)
+        throw H.ioore(t2);
+      if (J.$eq(J.get$type$x(t1[t2]), 3) && face === 1)
+        return true;
+    }
+    return false;
+  },
+  update$0: function() {
+    var e, t1, i, t2, tile, t3;
+    for (e = 0; e < 16; ++e)
+      for (t1 = e * 32, i = 0; i < 21; ++i) {
+        t2 = this.mapset.m;
+        if (i >= t2.length)
+          throw H.ioore(i);
+        t2 = t2[i];
+        if (e >= t2.length)
+          throw H.ioore(e);
+        tile = t2[e];
+        t2 = i * 32;
+        J.drawImageToRect$3$sourceRect$x(this._liblib9$_ctx, this.mapsetImage, new W.Rect(t2, t1, 32, 32), new W.Rect(tile.get$xImg(), tile.get$yImg(), 32, 32));
+        t3 = this.mapset2.m;
+        if (i >= t3.length)
+          throw H.ioore(i);
+        t3 = t3[i];
+        if (e >= t3.length)
+          throw H.ioore(e);
+        t3 = t3[e];
+        if (typeof t3 !== "number")
+          return this.update$0$bailout(1, t3, i, e, t2, t1);
+        if (t3 !== 0)
+          J.drawImageToRect$3$sourceRect$x(this._liblib9$_ctx, this.mapsetImage, new W.Rect(t2, t1, 32, 32), new W.Rect(t3.get$xImg(), t3.get$yImg(), 32, 32));
+      }
+  },
+  update$0$bailout: function(state0, t3, i, e, t2, t1) {
+    switch (state0) {
+      case 0:
+        e = 0;
+      case 1:
+        var tile, tile2;
+        L0:
+          while (true)
+            switch (state0) {
+              case 0:
+                if (!(e < 16))
+                  break L0;
+                t1 = e * 32;
+                i = 0;
+              case 1:
+                L1:
+                  while (true)
+                    switch (state0) {
+                      case 0:
+                        if (!(i < 21))
+                          break L1;
+                        t2 = this.mapset.m;
+                        if (i >= t2.length)
+                          throw H.ioore(i);
+                        t2 = t2[i];
+                        if (e >= t2.length)
+                          throw H.ioore(e);
+                        tile = t2[e];
+                        t2 = i * 32;
+                        J.drawImageToRect$3$sourceRect$x(this._liblib9$_ctx, this.mapsetImage, new W.Rect(t2, t1, 32, 32), new W.Rect(tile.get$xImg(), tile.get$yImg(), 32, 32));
+                        t3 = this.mapset2.m;
+                        if (i >= t3.length)
+                          throw H.ioore(i);
+                        t3 = t3[i];
+                        if (e >= t3.length)
+                          throw H.ioore(e);
+                        t3 = t3[e];
+                      case 1:
+                        state0 = 0;
+                        if (!J.$eq(t3, 0)) {
+                          t3 = this.mapset2.m;
+                          if (i >= t3.length)
+                            throw H.ioore(i);
+                          t3 = t3[i];
+                          if (e >= t3.length)
+                            throw H.ioore(e);
+                          tile2 = t3[e];
+                          J.drawImageToRect$3$sourceRect$x(this._liblib9$_ctx, this.mapsetImage, new W.Rect(t2, t1, 32, 32), new W.Rect(tile2.get$xImg(), tile2.get$yImg(), 32, 32));
+                        }
+                        ++i;
+                    }
+                ++e;
+            }
+    }
+  },
+  MapSet$3: function(_doc, _ctx, canvas) {
+    this._liblib9$_doc = _doc;
+    this._liblib9$_ctx = _ctx;
+    this.canvas = canvas;
+    this.mapset = T.Matrix$(40, 32);
+    this.mapset2 = T.Matrix$(40, 32);
+    this.mapset3 = T.Matrix$(40, 32);
+    this.initValues$0();
+    this.loadGraphic$1("assets/tileset.png");
+  },
+  static: {
+MapSet$: function(_doc, _ctx, canvas) {
+  var t1 = new M.MapSet(null, null, null, null, null, null, null, null, null, null);
+  t1.MapSet$3(_doc, _ctx, canvas);
+  return t1;
+}}
+
+},
+
+MapSet_loadGraphic_closure: {"": "Closure;this_0",
   call$1: function(value) {
     return this.this_0.update$0();
   }
@@ -7201,58 +7692,45 @@ Matrix$: function(cols, rows) {
 
 }}],
 ["message", "lib/message.dart", , E, {
-Message: {"": "Object;_liblib6$_ctx,text,x,y,maxWidth,lineHeight,duration",
+Message: {"": "Object;_liblib4$_ctx,text,x>,y>,maxWidth,lineHeight,duration",
   wrapText$0: function() {
-    var t1, t2, words, line, n, testLine, testWidth;
-    t1 = this.x;
-    t2 = this.text.length;
-    if (t1 == null)
-      throw t1.$sub();
-    this.x = t1 - t2 * 2.5;
-    t2 = this.y;
-    if (t2 == null)
-      throw t2.$sub();
-    this.y = t2 - 8;
-    words = this.text.split(" ");
+    var words, line, n, testLine, testWidth, t1, t2;
+    this.x = J.$sub$n(this.x, J.$mul$n(J.get$length$asx(this.text), 2.5));
+    this.y = J.$sub$n(this.y, 8);
+    words = J.split$1$s(this.text, " ");
     for (line = "", n = 0; n < words.length; ++n) {
       testLine = line + H.S(words[n]) + " ";
-      testWidth = J.measureText$1$x(this._liblib6$_ctx, testLine).width;
+      testWidth = J.measureText$1$x(this._liblib4$_ctx, testLine).width;
       t1 = this.maxWidth;
       if (testWidth == null)
         throw testWidth.$gt();
       if (t1 == null)
         throw H.iae(t1);
       if (testWidth > t1) {
-        J.fillText$3$x(this._liblib6$_ctx, line, this.x, this.y);
+        J.fillText$3$x(this._liblib4$_ctx, line, this.x, this.y);
         if (n >= words.length)
           throw H.ioore(n);
         line = H.S(words[n]) + " ";
-        t1 = this.y;
-        t2 = this.lineHeight;
-        if (t1 == null)
-          throw t1.$add();
-        if (t2 == null)
-          throw H.iae(t2);
-        this.y = t1 + t2;
+        this.y = J.$add$ns(this.y, this.lineHeight);
       } else
         line = testLine;
     }
-    t1 = this._liblib6$_ctx;
+    t1 = this._liblib4$_ctx;
     t2 = J.getInterceptor$x(t1);
     t2.save$0(t1);
     t2.set$font(t1, "12pt Verdana");
     t2.set$fillStyle(t1, "white");
     t2.set$lineWidth(t1, 3);
     t2.set$strokeStyle(t1, "black");
-    J.strokeText$3$x(this._liblib6$_ctx, line, this.x, this.y);
-    J.fillText$3$x(this._liblib6$_ctx, line, this.x, this.y);
-    J.restore$0$x(this._liblib6$_ctx);
+    J.strokeText$3$x(this._liblib4$_ctx, line, this.x, this.y);
+    J.fillText$3$x(this._liblib4$_ctx, line, this.x, this.y);
+    J.restore$0$x(this._liblib4$_ctx);
   },
   update$0: function() {
     this.wrapText$0();
   },
   Message$7: function(context, text, x, y, maxWidth, lineHeight, duration) {
-    this._liblib6$_ctx = context;
+    this._liblib4$_ctx = context;
     this.text = text;
     this.x = x;
     this.y = y;
@@ -7283,355 +7761,206 @@ DocsEditable: {"": "Object;"},
 
 Unstable: {"": "Object;"}}],
 ["scene", "core/scene.dart", , A, {
-Scene: {"": "Object;_liblib2$_doc,_liblib2$_ctx,canvas,sceneImage,structuresData,mapset,mapset2,mapset3",
-  loadGraphic$1: function(src) {
-    var t1, t2;
-    this.sceneImage = W._ElementFactoryProvider_createElement_tag("img", null);
-    this.sceneImage = this._liblib2$_doc.createElement("img");
-    J.set$src$x(this.sceneImage, src);
-    t1 = J.get$onLoad$x(this.sceneImage);
-    t2 = new W._EventStreamSubscription(0, t1._target, t1._eventType, new A.Scene_loadGraphic_closure(this), t1._useCapture);
-    H.setRuntimeTypeInfo(t2, [H.getRuntimeTypeArgument(t1, "_EventStream", 0)]);
-    t2._tryResume$0();
+Scene: {"": "Object;_doc,_ctx,canvas,gameMap,chars,mainCharacter,items,activeEvents,offsetX',offsetY'",
+  update$0: function() {
+    var t1, charas, c, itemsIte, eventIte;
+    this.gameMap.offsetX = this.offsetX;
+    this.gameMap.offsetY = this.offsetY;
+    this.gameMap.update$0();
+    t1 = this.chars;
+    t1.get$iterator;
+    charas = new H.ListIterator(t1, t1.length, 0, null);
+    for (; charas.moveNext$0();) {
+      c = charas._current;
+      t1 = J.getInterceptor$x(c);
+      t1.set$offsetX(c, this.offsetX);
+      t1.set$offsetY(c, this.offsetY);
+      c.update$0();
+    }
+    t1 = this.items;
+    t1.get$iterator;
+    itemsIte = new H.ListIterator(t1, t1.length, 0, null);
+    for (; itemsIte.moveNext$0();)
+      itemsIte._current.update$0();
+    this.mainCharacter.update$0();
+    t1 = this.activeEvents;
+    t1.get$iterator;
+    eventIte = new H.ListIterator(t1, t1.length, 0, null);
+    for (; eventIte.moveNext$0();)
+      eventIte._current.update$0();
   },
-  initValues$0: function() {
-    var y, x, t, t1;
-    for (y = 0; y < 15; ++y)
-      for (x = 0; x < 20; ++x) {
-        t = new K.Tile(null, null, null);
-        t.xImg = 160;
-        t.yImg = 64;
-        t.type = 0;
-        t1 = this.mapset.m;
-        if (x >= t1.length)
-          throw H.ioore(x);
-        t1 = t1[x];
-        if (y >= t1.length)
-          throw H.ioore(y);
-        t1[y] = t;
-        t1 = this.mapset2.m;
-        if (x >= t1.length)
-          throw H.ioore(x);
-        t1 = t1[x];
-        if (y >= t1.length)
-          throw H.ioore(y);
-        t1[y] = 0;
-        t1 = this.mapset3.m;
-        if (x >= t1.length)
-          throw H.ioore(x);
-        t1 = t1[x];
-        if (y >= t1.length)
-          throw H.ioore(y);
-        t1[y] = 0;
-      }
-    this.loadFile$0();
-  },
-  loadFile$0: function() {
+  loadProperties$0: function() {
+    W.HttpRequest_getString("data/characters.json", null, null).then$1(this.get$loadCharacters());
     W.HttpRequest_getString("data/structures.json", null, null).then$1(this.get$loadStructures());
+    W.HttpRequest_getString("data/items.json", null, null).then$1(this.get$loadItems());
+  },
+  loadItems$1: function(responseText) {
+    var iteItems, i, t1, t2, t3, coords, tile, item;
+    iteItems = J.get$iterator$ax(J.$index$asx(P.parse(responseText, null), "items"));
+    for (; iteItems.moveNext$0();) {
+      i = iteItems.get$current();
+      t1 = J.getInterceptor$asx(i);
+      t2 = t1.$index(i, "x");
+      t3 = t1.$index(i, "y");
+      coords = new L.Coordinate(null, null);
+      coords.x = t2;
+      coords.y = t3;
+      t3 = t1.$index(i, "xTile");
+      t2 = t1.$index(i, "yTile");
+      tile = new K.Tile(null, null, null);
+      tile.xImg = J.$mul$n(t3, 32);
+      tile.yImg = J.$mul$n(t2, 32);
+      tile.type = 0;
+      item = A.Item$(this._doc, this._ctx, this.canvas, coords, tile, this, t1.$index(i, "pushable"), 1);
+      this.items.push(item);
+    }
+  },
+  get$loadItems: function() {
+    return new P.BoundClosure$1(this, "loadItems$1", null);
+  },
+  loadCharacters$1: function(responseText) {
+    var characters, t1, m, t2, t3, t4, coords, character, t, milliseconds;
+    characters = J.get$iterator$ax(J.$index$asx(P.parse(responseText, null), "characters"));
+    for (t1 = C.Duration_3000000._duration; characters.moveNext$0();) {
+      m = characters.get$current();
+      t2 = J.getInterceptor$asx(m);
+      t3 = t2.$index(m, "x");
+      t4 = t2.$index(m, "y");
+      coords = new L.Coordinate(null, null);
+      coords.x = t3;
+      coords.y = t4;
+      character = Z.Character$(this._doc, this._ctx, this.canvas, coords, t2.$index(m, "characterId"), this, t2.$index(m, "message"), 1);
+      if (t2.$index(m, "moveRandom") === true) {
+        t2 = character.get$doMoveRandom();
+        t = new P._ZoneTimer($.get$_Zone__current(), t2, null);
+        t2 = t._zone;
+        t2._openCallbacks = t2._openCallbacks + 1;
+        t2 = t.get$_run();
+        milliseconds = C.JSNumber_methods.$tdiv(t1, 1000);
+        t._timer = H.TimerImpl$(milliseconds < 0 ? 0 : milliseconds, t2);
+      }
+      this.chars.push(character);
+    }
+  },
+  get$loadCharacters: function() {
+    return new P.BoundClosure$1(this, "loadCharacters$1", null);
   },
   loadStructures$1: function(responseText) {
-    this.structuresData = P.parse(responseText, null);
-    this.addBuilding$3(0, 6, 5);
-    this.addRandomDetails$0();
+    this.gameMap.structuresData = P.parse(responseText, null);
+    this.gameMap.addBuilding$3(0, 6, 5);
+    this.gameMap.addRandomDetails$0();
   },
   get$loadStructures: function() {
     return new P.BoundClosure$1(this, "loadStructures$1", null);
   },
-  addBuilding$3: function(index, x, y) {
-    var structure, t1, tilesMapset1, m, t2, t3, t4, t5, t, blocks, block, tilesMapset2;
-    structure = J.elementAt$1$ax(J.$index$asx(this.structuresData, "buildings"), index);
-    t1 = J.getInterceptor$asx(structure);
-    tilesMapset1 = J.get$iterator$ax(J.$index$asx(t1.$index(structure, "mapset1"), "tiles"));
-    for (; tilesMapset1.moveNext$0();) {
-      m = tilesMapset1.get$current();
-      t2 = J.getInterceptor$asx(m);
-      t3 = t2.$index(m, "xTile");
-      t4 = t2.$index(m, "yTile");
-      t5 = t2.$index(m, "type");
-      t = new K.Tile(null, null, null);
-      t.xImg = J.$mul$n(t3, 32);
-      t.yImg = J.$mul$n(t4, 32);
-      t.type = t5;
-      blocks = J.get$iterator$ax(t2.$index(m, "blocks"));
-      for (; blocks.moveNext$0();) {
-        block = blocks.get$current();
-        t2 = this.mapset;
-        t3 = J.getInterceptor$asx(block);
-        t4 = J.toInt$0$n(t3.$index(block, "x"));
-        if (typeof t4 !== "number")
-          throw H.iae(t4);
-        t4 = x + t4;
-        t3 = J.toInt$0$n(t3.$index(block, "y"));
-        if (typeof t3 !== "number")
-          throw H.iae(t3);
-        t3 = y + t3;
-        t2 = t2.m;
-        if (t4 >>> 0 !== t4 || t4 >= t2.length)
-          throw H.ioore(t4);
-        t4 = t2[t4];
-        if (t3 >>> 0 !== t3 || t3 >= t4.length)
-          throw H.ioore(t3);
-        t4[t3] = t;
+  createMessage$1: function($char) {
+    var t1, t2, t3, msg, t, $event;
+    t1 = this._ctx;
+    t2 = $char.message;
+    t3 = $char.curPosPx;
+    msg = E.Message$(t1, t2, t3.x, t3.y, 100, 10, 10);
+    t3 = this.get$removeEvent();
+    t = new P._ZoneTimer($.get$_Zone__current(), t3, null);
+    t3 = t._zone;
+    t3._openCallbacks = t3._openCallbacks + 1;
+    t._timer = P._createTimer(C.Duration_5000000, t.get$_run());
+    $event = new O.Action(null, null, null);
+    $event.object = $char;
+    $event.event = msg;
+    $event.type = 0;
+    this.activeEvents.push($event);
+  },
+  removeEvent$0: function() {
+    var t1, $event;
+    t1 = this.activeEvents;
+    t1.elementAt$1;
+    if (0 >= t1.length)
+      throw H.ioore(0);
+    $event = t1[0];
+    if ($event.type === 0)
+      $event.object.trigger = false;
+    J.removeAt$1$ax(this.activeEvents, 0);
+  },
+  get$removeEvent: function() {
+    return new Z.BoundClosure$0(this, "removeEvent$0", null);
+  },
+  shallPass$2: function(face, c) {
+    var t1, t2, charas, $char, nextTo, itemsIte, item, itemFace;
+    t1 = this.gameMap;
+    t2 = c.get$curPos();
+    if (t1.nextToTile$3(t2.x, t2.y, face))
+      return false;
+    t1 = this.chars;
+    t1.get$iterator;
+    charas = new H.ListIterator(t1, t1.length, 0, null);
+    for (; charas.moveNext$0();) {
+      $char = charas._current;
+      nextTo = $char.get$curPosPx().nextToThis$2(face, c.get$curPosPx());
+      if ($char.get$phasable() !== true && nextTo)
+        return false;
+    }
+    t1 = this.items;
+    t1.get$iterator;
+    itemsIte = new H.ListIterator(t1, t1.length, 0, null);
+    for (; itemsIte.moveNext$0();) {
+      item = itemsIte._current;
+      itemFace = item.get$curPosPx().nextToThis$2(face, c.get$curPosPx());
+      if (item.get$pushable() !== true && itemFace)
+        return false;
+      else if (itemFace)
+        if (!item.move$1(face))
+          return false;
+    }
+    return true;
+  },
+  getCharacterInFront$0: function() {
+    var t1, charas, $char, t2, charFace;
+    t1 = this.chars;
+    t1.get$iterator;
+    charas = new H.ListIterator(t1, t1.length, 0, null);
+    for (; charas.moveNext$0();) {
+      $char = charas._current;
+      t1 = $char.get$curPosPx();
+      t2 = this.mainCharacter;
+      charFace = t1.facingThis$2(t2.getCurrentDirection$0(), t2.curPosPx);
+      if (charFace >= 0) {
+        $char.faceDirection$1(charFace);
+        return $char;
       }
     }
-    tilesMapset2 = J.get$iterator$ax(J.$index$asx(t1.$index(structure, "mapset2"), "tiles"));
-    for (; tilesMapset2.moveNext$0();) {
-      m = tilesMapset2.get$current();
-      t1 = J.getInterceptor$asx(m);
-      t2 = t1.$index(m, "xTile");
-      t3 = t1.$index(m, "yTile");
-      t4 = t1.$index(m, "type");
-      t = new K.Tile(null, null, null);
-      t.xImg = J.$mul$n(t2, 32);
-      t.yImg = J.$mul$n(t3, 32);
-      t.type = t4;
-      blocks = J.get$iterator$ax(t1.$index(m, "blocks"));
-      for (; blocks.moveNext$0();) {
-        block = blocks.get$current();
-        t1 = this.mapset2;
-        t2 = J.getInterceptor$asx(block);
-        t3 = J.toInt$0$n(t2.$index(block, "x"));
-        if (typeof t3 !== "number")
-          throw H.iae(t3);
-        t3 = x + t3;
-        t2 = J.toInt$0$n(t2.$index(block, "y"));
-        if (typeof t2 !== "number")
-          throw H.iae(t2);
-        t2 = y + t2;
-        t1 = t1.m;
-        if (t3 >>> 0 !== t3 || t3 >= t1.length)
-          throw H.ioore(t3);
-        t3 = t1[t3];
-        if (t2 >>> 0 !== t2 || t2 >= t3.length)
-          throw H.ioore(t2);
-        t3[t2] = t;
-      }
-    }
-  },
-  addRandomDetails$0: function() {
-    var i, t1, max, rX, rY, t;
-    for (i = 0; i < 7; ++i) {
-      t1 = this.mapset2.cols;
-      if (t1 == null)
-        throw t1.$lt();
-      if (t1 < 0)
-        H.throwExpression(new P.ArgumentError("negative max: " + H.S(t1)));
-      if (t1 > 4294967295)
-        max = 4294967295;
-      else
-        max = t1;
-      rX = Math.random() * max >>> 0;
-      t1 = this.mapset2.rows;
-      if (t1 == null)
-        throw t1.$lt();
-      if (t1 < 0)
-        H.throwExpression(new P.ArgumentError("negative max: " + H.S(t1)));
-      if (t1 > 4294967295)
-        max = 4294967295;
-      else
-        max = t1;
-      rY = Math.random() * max >>> 0;
-      t = new K.Tile(null, null, null);
-      t.xImg = 160;
-      t.yImg = 320;
-      t.type = 0;
-      t1 = this.mapset.m;
-      if (rX < 0 || rX >= t1.length)
-        throw H.ioore(rX);
-      t1 = t1[rX];
-      if (rY < 0 || rY >= t1.length)
-        throw H.ioore(rY);
-      if (J.$eq(J.get$type$x(t1[rY]), 0)) {
-        t1 = this.mapset2.m;
-        if (rX >= t1.length)
-          throw H.ioore(rX);
-        t1 = t1[rX];
-        if (rY >= t1.length)
-          throw H.ioore(rY);
-        t1[rY] = t;
-      }
-    }
-  },
-  nextToTile$3: function(x, y, face) {
-    var t1, t2;
-    if (x == null)
-      throw x.$ge();
-    if (x >= 1) {
-      t1 = x - 1;
-      t2 = this.mapset.m;
-      if (t1 >>> 0 !== t1 || t1 >= t2.length)
-        throw H.ioore(t1);
-      t1 = t2[t1];
-      if (y >>> 0 !== y || y >= t1.length)
-        throw H.ioore(y);
-      if (J.$eq(J.get$type$x(t1[y]), 3) && face === 2)
-        return true;
-    }
-    if (y == null)
-      throw y.$ge();
-    if (y >= 1) {
-      t1 = y - 1;
-      t2 = this.mapset.m;
-      if (x >>> 0 !== x || x >= t2.length)
-        throw H.ioore(x);
-      t2 = t2[x];
-      if (t1 >>> 0 !== t1 || t1 >= t2.length)
-        throw H.ioore(t1);
-      if (J.$eq(J.get$type$x(t2[t1]), 3) && face === 0)
-        return true;
-    }
-    t1 = this.mapset;
-    t2 = t1.cols;
-    if (t2 == null)
-      throw t2.$sub();
-    if (x < t2 - 1) {
-      t2 = x + 1;
-      t1 = t1.m;
-      if (t2 >>> 0 !== t2 || t2 >= t1.length)
-        throw H.ioore(t2);
-      t2 = t1[t2];
-      if (y >>> 0 !== y || y >= t2.length)
-        throw H.ioore(y);
-      if (J.$eq(J.get$type$x(t2[y]), 3) && face === 3)
-        return true;
-    }
-    t1 = this.mapset;
-    t2 = t1.rows;
-    if (t2 == null)
-      throw t2.$sub();
-    if (y < t2 - 1) {
-      t2 = y + 1;
-      t1 = t1.m;
-      if (x >>> 0 !== x || x >= t1.length)
-        throw H.ioore(x);
-      t1 = t1[x];
-      if (t2 >>> 0 !== t2 || t2 >= t1.length)
-        throw H.ioore(t2);
-      if (J.$eq(J.get$type$x(t1[t2]), 3) && face === 1)
-        return true;
-    }
-    return false;
-  },
-  update$0: function() {
-    var e, t1, i, t2, tile, t3;
-    for (e = 0; e < 15; ++e)
-      for (t1 = e * 32, i = 0; i < 20; ++i) {
-        t2 = this.mapset.m;
-        if (i >= t2.length)
-          throw H.ioore(i);
-        t2 = t2[i];
-        if (e >= t2.length)
-          throw H.ioore(e);
-        tile = t2[e];
-        t2 = i * 32;
-        J.drawImageToRect$3$sourceRect$x(this._liblib2$_ctx, this.sceneImage, new W.Rect(t2, t1, 32, 32), new W.Rect(tile.get$xImg(), tile.get$yImg(), 32, 32));
-        t3 = this.mapset2.m;
-        if (i >= t3.length)
-          throw H.ioore(i);
-        t3 = t3[i];
-        if (e >= t3.length)
-          throw H.ioore(e);
-        t3 = t3[e];
-        if (typeof t3 !== "number")
-          return this.update$0$bailout(1, i, t3, t2, e, t1);
-        if (t3 !== 0)
-          J.drawImageToRect$3$sourceRect$x(this._liblib2$_ctx, this.sceneImage, new W.Rect(t2, t1, 32, 32), new W.Rect(t3.get$xImg(), t3.get$yImg(), 32, 32));
-      }
-  },
-  update$0$bailout: function(state0, i, t3, t2, e, t1) {
-    switch (state0) {
-      case 0:
-        e = 0;
-      case 1:
-        var tile, tile2;
-        L0:
-          while (true)
-            switch (state0) {
-              case 0:
-                if (!(e < 15))
-                  break L0;
-                t1 = e * 32;
-                i = 0;
-              case 1:
-                L1:
-                  while (true)
-                    switch (state0) {
-                      case 0:
-                        if (!(i < 20))
-                          break L1;
-                        t2 = this.mapset.m;
-                        if (i >= t2.length)
-                          throw H.ioore(i);
-                        t2 = t2[i];
-                        if (e >= t2.length)
-                          throw H.ioore(e);
-                        tile = t2[e];
-                        t2 = i * 32;
-                        J.drawImageToRect$3$sourceRect$x(this._liblib2$_ctx, this.sceneImage, new W.Rect(t2, t1, 32, 32), new W.Rect(tile.get$xImg(), tile.get$yImg(), 32, 32));
-                        t3 = this.mapset2.m;
-                        if (i >= t3.length)
-                          throw H.ioore(i);
-                        t3 = t3[i];
-                        if (e >= t3.length)
-                          throw H.ioore(e);
-                        t3 = t3[e];
-                      case 1:
-                        state0 = 0;
-                        if (!J.$eq(t3, 0)) {
-                          t3 = this.mapset2.m;
-                          if (i >= t3.length)
-                            throw H.ioore(i);
-                          t3 = t3[i];
-                          if (e >= t3.length)
-                            throw H.ioore(e);
-                          tile2 = t3[e];
-                          J.drawImageToRect$3$sourceRect$x(this._liblib2$_ctx, this.sceneImage, new W.Rect(t2, t1, 32, 32), new W.Rect(tile2.get$xImg(), tile2.get$yImg(), 32, 32));
-                        }
-                        ++i;
-                    }
-                ++e;
-            }
-    }
+    return;
   },
   Scene$3: function(_doc, _ctx, canvas) {
-    this._liblib2$_doc = _doc;
-    this._liblib2$_ctx = _ctx;
+    var initCoor, t1;
+    this._doc = _doc;
+    this._ctx = _ctx;
     this.canvas = canvas;
-    this.mapset = T.Matrix$(C.JSNumber_methods.toInt$0(Math.floor(20)), C.JSNumber_methods.toInt$0(Math.floor(15)));
-    this.mapset2 = T.Matrix$(C.JSNumber_methods.toInt$0(Math.floor(20)), C.JSNumber_methods.toInt$0(Math.floor(15)));
-    this.mapset3 = T.Matrix$(C.JSNumber_methods.toInt$0(Math.floor(20)), C.JSNumber_methods.toInt$0(Math.floor(15)));
-    this.initValues$0();
-    this.loadGraphic$1("assets/tileset.png");
+    this.gameMap = M.MapSet$(_doc, _ctx, canvas);
+    initCoor = new L.Coordinate(null, null);
+    initCoor.x = 10;
+    initCoor.y = 6;
+    this.mainCharacter = Z.Character$(_doc, _ctx, canvas, initCoor, 0, this, "", 1);
+    t1 = P.List_List(null, Z.Character);
+    H.setRuntimeTypeInfo(t1, [Z.Character]);
+    this.chars = t1;
+    t1 = P.List_List(null, A.Item);
+    H.setRuntimeTypeInfo(t1, [A.Item]);
+    this.items = t1;
+    t1 = P.List_List(null, O.Action);
+    H.setRuntimeTypeInfo(t1, [O.Action]);
+    this.activeEvents = t1;
+    this.loadProperties$0();
   },
   static: {
 Scene$: function(_doc, _ctx, canvas) {
-  var t1 = new A.Scene(null, null, null, null, null, null, null, null);
+  var t1 = new A.Scene(null, null, null, null, null, null, null, null, null, null);
   t1.Scene$3(_doc, _ctx, canvas);
   return t1;
 }}
 
-},
-
-Scene_loadGraphic_closure: {"": "Closure;this_0",
-  call$1: function(value) {
-    return this.this_0.update$0();
-  }
 }}],
 ["tile", "core/tile.dart", , K, {
-Tile: {"": "Object;xImg<,yImg<,type>",
-  Tile$3: function(x, y, type) {
-    this.xImg = J.$mul$n(x, 32);
-    this.yImg = J.$mul$n(y, 32);
-    this.type = type;
-  },
-  static: {
-Tile$: function(x, y, type) {
-  var t1 = new K.Tile(null, null, null);
-  t1.Tile$3(x, y, type);
-  return t1;
-}}
-
-}}],
+Tile: {"": "Object;xImg<,yImg<,type>"}}],
 ]);
 Isolate.$finishClasses($$, $, null);
 $$ = null;
@@ -7656,7 +7985,6 @@ init.globalFunctions._defaultHashCode$closure = P._defaultHashCode$closure = new
 init.globalFunctions.identical$closure = P.identical$closure = new P.Closure$identical(P.identical, "identical$closure");
 init.globalFunctions.main$closure = B.main$closure = new B.Closure$main(B.main, "main$closure");
 init.globalFunctions.update$closure = B.update$closure = new B.Closure$update(B.update, "update$closure");
-init.globalFunctions.removeEvent$closure = B.removeEvent$closure = new B.Closure$removeEvent(B.removeEvent, "removeEvent$closure");
 // Runtime type support
 // getInterceptor methods
 J.getInterceptor = function(receiver) {
@@ -7712,6 +8040,28 @@ J.getInterceptor$n = function(receiver) {
     return J.UnknownJavaScriptObject.prototype;
   return receiver;
 };
+J.getInterceptor$ns = function(receiver) {
+  if (typeof receiver == "number")
+    return J.JSNumber.prototype;
+  if (typeof receiver == "string")
+    return J.JSString.prototype;
+  if (receiver == null)
+    return receiver;
+  if (!(receiver instanceof P.Object))
+    return J.UnknownJavaScriptObject.prototype;
+  return receiver;
+};
+J.getInterceptor$nx = function(receiver) {
+  if (typeof receiver == "number")
+    return J.JSNumber.prototype;
+  if (receiver == null)
+    return receiver;
+  if (typeof receiver != "object")
+    return receiver;
+  if (receiver instanceof P.Object)
+    return receiver;
+  return J.getNativeInterceptor(receiver);
+};
 J.getInterceptor$s = function(receiver) {
   if (typeof receiver == "string")
     return J.JSString.prototype;
@@ -7736,6 +8086,7 @@ C.C_UnknownJavaScriptObject = new J.UnknownJavaScriptObject();
 C.C__DelayedDone = new P._DelayedDone();
 C.C__Random = new P._Random();
 C.Duration_0 = new P.Duration(0);
+C.Duration_3000000 = new P.Duration(3000000);
 C.Duration_5000000 = new P.Duration(5000000);
 C.EventStreamProvider_error = new W.EventStreamProvider("error");
 C.EventStreamProvider_keydown = new W.EventStreamProvider("keydown");
@@ -7775,15 +8126,16 @@ $._doc = null;
 $._ctx = null;
 $.canvas = null;
 $.scene = null;
-$.chars = null;
-$.mainCharacter = null;
-$.items = null;
-$.activeEvents = null;
 J.$$dom_addEventListener$3$x = function(receiver, a0, a1, a2) {
   return J.getInterceptor$x(receiver).$$dom_addEventListener$3(receiver, a0, a1, a2);
 };
 J.$$dom_removeEventListener$3$x = function(receiver, a0, a1, a2) {
   return J.getInterceptor$x(receiver).$$dom_removeEventListener$3(receiver, a0, a1, a2);
+};
+J.$add$ns = function(receiver, a0) {
+  if (typeof receiver == "number" && typeof a0 == "number")
+    return receiver + a0;
+  return J.getInterceptor$ns(receiver).$add(receiver, a0);
 };
 J.$eq = function(receiver, a0) {
   if (receiver == null)
@@ -7813,10 +8165,20 @@ J.$indexSet$ax = function(receiver, a0, a1) {
     return receiver[a0] = a1;
   return J.getInterceptor$ax(receiver).$indexSet(receiver, a0, a1);
 };
+J.$lt$n = function(receiver, a0) {
+  if (typeof receiver == "number" && typeof a0 == "number")
+    return receiver < a0;
+  return J.getInterceptor$n(receiver).$lt(receiver, a0);
+};
 J.$mul$n = function(receiver, a0) {
   if (typeof receiver == "number" && typeof a0 == "number")
     return receiver * a0;
   return J.getInterceptor$n(receiver).$mul(receiver, a0);
+};
+J.$sub$n = function(receiver, a0) {
+  if (typeof receiver == "number" && typeof a0 == "number")
+    return receiver - a0;
+  return J.getInterceptor$n(receiver).$sub(receiver, a0);
 };
 J.abs$0$n = function(receiver) {
   return J.getInterceptor$n(receiver).abs$0(receiver);
@@ -7887,11 +8249,14 @@ J.set$src$x = function(receiver, value) {
 J.set$width$x = function(receiver, value) {
   return J.getInterceptor$x(receiver).set$width(receiver, value);
 };
+J.split$1$s = function(receiver, a0) {
+  return J.getInterceptor$s(receiver).split$1(receiver, a0);
+};
 J.strokeText$3$x = function(receiver, a0, a1, a2) {
   return J.getInterceptor$x(receiver).strokeText$3(receiver, a0, a1, a2);
 };
-J.toInt$0$n = function(receiver) {
-  return J.getInterceptor$n(receiver).toInt$0(receiver);
+J.toInt$0$nx = function(receiver) {
+  return J.getInterceptor$nx(receiver).toInt$0(receiver);
 };
 J.toString$0 = function(receiver) {
   return J.getInterceptor(receiver).toString$0(receiver);
@@ -7967,7 +8332,7 @@ Isolate.$lazy($, "_toStringList", "Maps__toStringList", "get$Maps__toStringList"
   return P.List_List(null, null);
 });
 // Native classes
-H.defineNativeMethods("CanvasGradient|CanvasPattern|DOMError|FileError|MediaError|MediaKeyError|Navigator|NavigatorUserMediaError|PositionError|SQLError|SVGAnimatedEnumeration|SVGAnimatedLength|SVGAnimatedLengthList|SVGAnimatedNumber|SVGAnimatedNumberList|TextMetrics", J.Interceptor);
+H.defineNativeMethods("CanvasGradient|CanvasPattern|DOMError|FileError|MediaError|MediaKeyError|Navigator|NavigatorUserMediaError|PositionError|SQLError|SVGAnimatedEnumeration|SVGAnimatedLength|SVGAnimatedLengthList|SVGAnimatedNumber|SVGAnimatedNumberList|SVGAnimatedString|TextMetrics", J.Interceptor);
 
 H.defineNativeMethods("HTMLAppletElement|HTMLAreaElement|HTMLBRElement|HTMLBaseElement|HTMLBaseFontElement|HTMLContentElement|HTMLDListElement|HTMLDataListElement|HTMLDetailsElement|HTMLDialogElement|HTMLDirectoryElement|HTMLDivElement|HTMLFontElement|HTMLFrameElement|HTMLFrameSetElement|HTMLHRElement|HTMLHeadElement|HTMLHeadingElement|HTMLHtmlElement|HTMLLabelElement|HTMLLegendElement|HTMLMapElement|HTMLMarqueeElement|HTMLMenuElement|HTMLMetaElement|HTMLMeterElement|HTMLModElement|HTMLOptGroupElement|HTMLOptionElement|HTMLParagraphElement|HTMLParamElement|HTMLPreElement|HTMLProgressElement|HTMLQuoteElement|HTMLShadowElement|HTMLSpanElement|HTMLTableCaptionElement|HTMLTableCellElement|HTMLTableColElement|HTMLTableDataCellElement|HTMLTableElement|HTMLTableHeaderCellElement|HTMLTableRowElement|HTMLTableSectionElement|HTMLTemplateElement|HTMLTitleElement|HTMLUListElement|HTMLUnknownElement", W.HtmlElement);
 
@@ -8061,6 +8426,8 @@ H.defineNativeMethods("DOMWindow|Window", W.Window);
 
 H.defineNativeMethodsNonleaf("XMLHttpRequestEventTarget", W.XmlHttpRequestEventTarget);
 
+H.defineNativeMethods("ClientRect", W._ClientRect);
+
 H.defineNativeMethods("SVGFEBlendElement", P.FEBlendElement);
 
 H.defineNativeMethods("SVGFEColorMatrixElement", P.FEColorMatrixElement);
@@ -8087,7 +8454,11 @@ H.defineNativeMethods("SVGFEMorphologyElement", P.FEMorphologyElement);
 
 H.defineNativeMethods("SVGFEOffsetElement", P.FEOffsetElement);
 
+H.defineNativeMethods("SVGFEPointLightElement", P.FEPointLightElement);
+
 H.defineNativeMethods("SVGFESpecularLightingElement", P.FESpecularLightingElement);
+
+H.defineNativeMethods("SVGFESpotLightElement", P.FESpotLightElement);
 
 H.defineNativeMethods("SVGFETileElement", P.FETileElement);
 
@@ -8097,7 +8468,7 @@ H.defineNativeMethods("SVGFilterElement", P.FilterElement);
 
 H.defineNativeMethods("SVGForeignObjectElement", P.ForeignObjectElement);
 
-H.defineNativeMethods("SVGAElement|SVGAltGlyphElement|SVGCircleElement|SVGClipPathElement|SVGDefsElement|SVGEllipseElement|SVGGElement|SVGLineElement|SVGPathElement|SVGPolygonElement|SVGPolylineElement|SVGSwitchElement|SVGTRefElement|SVGTSpanElement|SVGTextContentElement|SVGTextElement|SVGTextPathElement|SVGTextPositioningElement", P.GraphicsElement);
+H.defineNativeMethods("SVGAElement|SVGCircleElement|SVGClipPathElement|SVGDefsElement|SVGEllipseElement|SVGGElement|SVGLineElement|SVGPathElement|SVGPolygonElement|SVGPolylineElement|SVGSwitchElement", P.GraphicsElement);
 
 H.defineNativeMethodsNonleaf("SVGGraphicsElement", P.GraphicsElement);
 
@@ -8113,11 +8484,17 @@ H.defineNativeMethods("SVGScriptElement", P.ScriptElement0);
 
 H.defineNativeMethods("SVGStyleElement", P.StyleElement0);
 
-H.defineNativeMethods("SVGAltGlyphDefElement|SVGAltGlyphItemElement|SVGAnimateColorElement|SVGAnimateElement|SVGAnimateMotionElement|SVGAnimateTransformElement|SVGAnimationElement|SVGComponentTransferFunctionElement|SVGCursorElement|SVGDescElement|SVGFEDistantLightElement|SVGFEDropShadowElement|SVGFEFuncAElement|SVGFEFuncBElement|SVGFEFuncGElement|SVGFEFuncRElement|SVGFEMergeNodeElement|SVGFEPointLightElement|SVGFESpotLightElement|SVGFontElement|SVGFontFaceElement|SVGFontFaceFormatElement|SVGFontFaceNameElement|SVGFontFaceSrcElement|SVGFontFaceUriElement|SVGGlyphElement|SVGGlyphRefElement|SVGGradientElement|SVGHKernElement|SVGLinearGradientElement|SVGMPathElement|SVGMarkerElement|SVGMetadataElement|SVGMissingGlyphElement|SVGRadialGradientElement|SVGSetElement|SVGStopElement|SVGSymbolElement|SVGTitleElement|SVGVKernElement|SVGViewElement", P.SvgElement);
+H.defineNativeMethods("SVGAltGlyphDefElement|SVGAltGlyphItemElement|SVGAnimateColorElement|SVGAnimateElement|SVGAnimateMotionElement|SVGAnimateTransformElement|SVGAnimationElement|SVGComponentTransferFunctionElement|SVGCursorElement|SVGDescElement|SVGFEDistantLightElement|SVGFEDropShadowElement|SVGFEFuncAElement|SVGFEFuncBElement|SVGFEFuncGElement|SVGFEFuncRElement|SVGFEMergeNodeElement|SVGFontElement|SVGFontFaceElement|SVGFontFaceFormatElement|SVGFontFaceNameElement|SVGFontFaceSrcElement|SVGFontFaceUriElement|SVGGlyphElement|SVGGlyphRefElement|SVGGradientElement|SVGHKernElement|SVGLinearGradientElement|SVGMPathElement|SVGMarkerElement|SVGMetadataElement|SVGMissingGlyphElement|SVGRadialGradientElement|SVGSetElement|SVGStopElement|SVGSymbolElement|SVGTitleElement|SVGVKernElement|SVGViewElement", P.SvgElement);
 
 H.defineNativeMethodsNonleaf("SVGElement", P.SvgElement);
 
 H.defineNativeMethods("SVGSVGElement", P.SvgSvgElement);
+
+H.defineNativeMethods("SVGTextPathElement", P.TextContentElement);
+
+H.defineNativeMethodsNonleaf("SVGTextContentElement", P.TextContentElement);
+
+H.defineNativeMethods("SVGAltGlyphElement|SVGTRefElement|SVGTSpanElement|SVGTextElement|SVGTextPositioningElement", P.TextPositioningElement);
 
 H.defineNativeMethods("SVGUseElement", P.UseElement);
 
