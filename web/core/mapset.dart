@@ -48,7 +48,7 @@ class MapSet implements Graphic{
   void initValues(){
     for (var y = 0; y < ( MAP_HEIGHT_TILES); y++){
       for (var x = 0; x < (MAP_WIDTH_TILES); x++){
-        Tile t = new Tile(5, 2, TILE_SOIL);
+        Tile t = new Tile(8, 2, TILE_SOIL);
         mapset.set(x, y, t);
         mapset2.set(x, y, 0);
         mapset3.set(x, y, 0);
@@ -85,12 +85,44 @@ class MapSet implements Graphic{
   
   void addRandomDetails(){
     var random = new Math.Random();
-    for(var i = 0; i< 7; i++){
+    for(var i = 0; i< 10; i++){
       var rX = random.nextInt(mapset2.cols);
       var rY = random.nextInt(mapset2.rows);
-      Tile t = new Tile(5, 10);
+      Tile t = new Tile(1, 32);
       if(mapset.get(rX, rY).type == TILE_SOIL){
         mapset2.set(rX, rY, t);
+      }else{
+        i --;
+      }
+    }
+    for(var i = 0; i< 12; i++){
+      var rX = random.nextInt(mapset2.cols);
+      var rY = random.nextInt(mapset2.rows);
+      Tile t = new Tile(3, 32);
+      if(mapset.get(rX, rY).type == TILE_SOIL){
+        mapset2.set(rX, rY, t);
+      }else{
+        i --;
+      }
+    }
+    for(var i = 0; i< 8; i++){
+      var rX = random.nextInt(mapset2.cols);
+      var rY = random.nextInt(mapset2.rows);
+      Tile t = new Tile(4, 32);
+      if(mapset.get(rX, rY).type == TILE_SOIL){
+        mapset2.set(rX, rY, t);
+      }else{
+        i --;
+      }
+    }
+    for(var i = 0; i< 8; i++){
+      var rX = random.nextInt(mapset2.cols);
+      var rY = random.nextInt(mapset2.rows);
+      Tile t = new Tile(6, 33);
+      if(mapset.get(rX, rY).type == TILE_SOIL){
+        mapset2.set(rX, rY, t);
+      }else{
+        i --;
       }
     }
   }

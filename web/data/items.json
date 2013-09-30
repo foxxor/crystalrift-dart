@@ -9,9 +9,23 @@
     {
       "xTile":5,
       "yTile":31,
-      "x":2,
-      "y":6,
+      "x":4,
+      "y":7,
       "pushable": true
+    },
+    {
+      "xTile":21,
+      "yTile":35,
+      "x":5,
+      "y":8,
+      "pushable": false
+    },
+    {
+      "xTile":22,
+      "yTile":35,
+      "x":5,
+      "y":9,
+      "pushable": false
     }
   ]
 }
