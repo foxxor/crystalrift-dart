@@ -38,18 +38,19 @@ class Character implements Graphic{
   int speed;
   // Event is executing?
   bool trigger;
-  
   //Parent scene calling this objetc
   Scene scene;
+  //Message of the character
+  String message;
   
   int offsetX;
   int offsetY;
   
-  var acDelta = 0;
-  var lastUpdateTime = 0;
+  var acDelta = 0; //Deprecated 
+  var lastUpdateTime = 0; //Deprecated
   
   Character(HtmlDocument _doc, CanvasRenderingContext2D _ctx, CanvasElement canvas, 
-      Coordinate curPos, int charSprite, Scene scene, [int speed = 1]) {
+      Coordinate curPos, int charSprite, Scene scene, String message, [int speed = 1]) {
     this._doc = _doc;
     this._ctx = _ctx;
     this.canvas = canvas;
@@ -63,6 +64,7 @@ class Character implements Graphic{
     this.faceDir = INITIAL_FACE;
     this.trigger = false;
     this.scene = scene;
+    this.message = message;
     offsetX = 0;
     offsetY = 0;
     loadGraphic("assets/characters.png");
@@ -85,7 +87,6 @@ class Character implements Graphic{
       faceDirection(face);
       return false;
     }
-    
     switch (face) {
       case 0: //up
         faceDirection(UP);
@@ -210,7 +211,7 @@ class Character implements Graphic{
     frame = 1;
   }
   
-  //This function shouldnt be used, for performance a Future is much better than this
+  //This function shouldnt be used, for performance moveRandom() is much better than this
   void processMovements(){
     if(randomMovement){
       DateTime thisInstant = new DateTime.now();

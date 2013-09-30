@@ -1,0 +1,17 @@
+{"characters":[
+    {
+      "xTile":3,
+      "yTile": 3,
+      "characterId":2,
+      "moveRandom" : true,
+      "message": "Soy un guerrero"
+    },
+    {
+      "xTile":12,
+      "yTile": 8,
+      "characterId":3,
+      "moveRandom" : false,
+      "message": "Holap!"
+    }
+  ]
+}

@@ -5,7 +5,6 @@ library mapset;
 
 import 'dart:html';
 import 'dart:async';
-import 'dart:json';
 import 'globals.dart';
 import 'graphic.dart';
 import '../helpers/matrix.dart';
@@ -55,18 +54,6 @@ class MapSet implements Graphic{
         mapset3.set(x, y, 0);
       }
     }
-    loadFile();
-  }
-  
-  void loadFile(){
-    String url = "data/structures.json";
-    var request = HttpRequest.getString(url).then(loadStructures);
-  }
-  
-  void loadStructures(String responseText) {
-    structuresData = parse(responseText);
-    addBuilding(0, 6,5);
-    addRandomDetails();
   }
   
   void addBuilding(int index, int x, int y){

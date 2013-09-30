@@ -5,6 +5,7 @@ library scene;
 
 import 'dart:html';
 import 'dart:async';
+import 'dart:json';
 import 'globals.dart';
 import '../helpers/coordinate.dart';
 import '../lib/message.dart';
@@ -31,23 +32,15 @@ class Scene{
     this._doc = _doc;
     this._ctx = _ctx;
     this.canvas = canvas;
-    gameMap = new MapSet(_doc, _ctx, canvas);
     
-    Coordinate initCoor1 = new Coordinate(10, 6);
-    Coordinate initCoor2 = new Coordinate(3, 3);
-    Coordinate initCoor2C = new Coordinate(12, 8);
-    mainCharacter = new Character(_doc, _ctx, canvas, initCoor1, 0, this); //Main Player
-    Character char2 = new Character(_doc, _ctx, canvas, initCoor2, 2, this);
-    char2.moveRandom();
-    Character char3 = new Character(_doc, _ctx, canvas, initCoor2C, 3, this);
+    gameMap = new MapSet(_doc, _ctx, canvas);
+    Coordinate initCoor = new Coordinate(10, 6);
+    mainCharacter = new Character(_doc, _ctx, canvas, initCoor, 0, this, ""); //Main Player
     chars = new List<Character>();
-    //char2.randomMovement = true;
-    chars.add(char2);
-    chars.add(char3);
     
     Coordinate initCoor3 = new Coordinate(5,8);
     Coordinate initCoor4 = new Coordinate(3,5);
-    Tile tile = new Tile(20, 34);//(7, 32); //Rock
+    Tile tile = new Tile(20, 34);
     Tile tile2 = new Tile(5, 31);
     Item item1 = new Item(_doc, _ctx, canvas, initCoor3, tile, this, true);
     Item item2 = new Item(_doc, _ctx, canvas, initCoor4, tile2, this, true);
@@ -56,8 +49,8 @@ class Scene{
     items.add(item2);
     //offsetX = 3; TO-DO: Camera offset
     //offsetY = 3;
-    
     activeEvents = new List<Action>();
+    loadFiles();
   }
   
   void update(){
@@ -87,9 +80,33 @@ class Scene{
     }
   }
   
-
+  void loadFiles(){
+    var request = HttpRequest.getString("data/characters.json").then(loadCharacters);
+    var request2 = HttpRequest.getString("data/structures.json").then(loadStructures);
+  }
+  
+  void loadCharacters(String responseText) {
+    Map charactersData = parse(responseText);
+    Iterator<Map> characters = charactersData['characters'].iterator;
+    while(characters.moveNext()){
+      Map m = characters.current;
+      Coordinate coords = new Coordinate(m['xTile'], m['yTile']);
+      Character character = new Character(_doc, _ctx, canvas, coords, m['characterId'], this, m['message']);
+      if(m['moveRandom']){
+        character.moveRandom();
+      }
+      chars.add(character);
+    }
+  }
+  
+  void loadStructures(String responseText) {
+    gameMap.structuresData = parse(responseText);
+    gameMap.addBuilding(0, 6,5);
+    gameMap.addRandomDetails();
+  }
+  
   void createMessage(Character char){
-    Message msg = new Message(_ctx, 'ola k ase', char.curPosPx.x, char.curPosPx.y, 100, 10);
+    Message msg = new Message(_ctx, char.message, char.curPosPx.x, char.curPosPx.y, 100, 10);
     const ms = const Duration(milliseconds: 5000);
     Timer t = new Timer( ms, removeEvent);
     Action event = new Action(char, msg, EVENT_TYPE_MESSAGE);
