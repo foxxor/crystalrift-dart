@@ -1,0 +1,17 @@
+{"items":[
+    {
+      "xTile":20,
+      "yTile":34,
+      "x":9,
+      "y":8,
+      "pushable": true
+    },
+    {
+      "xTile":5,
+      "yTile":31,
+      "x":2,
+      "y":6,
+      "pushable": true
+    }
+  ]
+}

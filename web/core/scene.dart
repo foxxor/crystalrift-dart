@@ -37,20 +37,11 @@ class Scene{
     Coordinate initCoor = new Coordinate(10, 6);
     mainCharacter = new Character(_doc, _ctx, canvas, initCoor, 0, this, ""); //Main Player
     chars = new List<Character>();
-    
-    Coordinate initCoor3 = new Coordinate(5,8);
-    Coordinate initCoor4 = new Coordinate(3,5);
-    Tile tile = new Tile(20, 34);
-    Tile tile2 = new Tile(5, 31);
-    Item item1 = new Item(_doc, _ctx, canvas, initCoor3, tile, this, true);
-    Item item2 = new Item(_doc, _ctx, canvas, initCoor4, tile2, this, true);
     items = new List<Item>();
-    items.add(item1);
-    items.add(item2);
     //offsetX = 3; TO-DO: Camera offset
     //offsetY = 3;
     activeEvents = new List<Action>();
-    loadFiles();
+    loadProperties();
   }
   
   void update(){
@@ -80,9 +71,22 @@ class Scene{
     }
   }
   
-  void loadFiles(){
+  void loadProperties(){
     var request = HttpRequest.getString("data/characters.json").then(loadCharacters);
     var request2 = HttpRequest.getString("data/structures.json").then(loadStructures);
+    var request3 = HttpRequest.getString("data/items.json").then(loadItems);
+  }
+  
+  void loadItems(String responseText){
+    Map itemsData = parse(responseText);
+    Iterator<Map> iteItems = itemsData['items'].iterator;
+    while(iteItems.moveNext()){
+      Map i = iteItems.current;
+      Coordinate coords = new Coordinate(i['x'], i['y']);
+      Tile tile = new Tile(i['xTile'], i['yTile']);
+      Item item = new Item(_doc, _ctx, canvas, coords, tile, this, i['pushable']);
+      items.add(item);
+    }
   }
   
   void loadCharacters(String responseText) {
@@ -90,7 +94,7 @@ class Scene{
     Iterator<Map> characters = charactersData['characters'].iterator;
     while(characters.moveNext()){
       Map m = characters.current;
-      Coordinate coords = new Coordinate(m['xTile'], m['yTile']);
+      Coordinate coords = new Coordinate(m['x'], m['y']);
       Character character = new Character(_doc, _ctx, canvas, coords, m['characterId'], this, m['message']);
       if(m['moveRandom']){
         character.moveRandom();
