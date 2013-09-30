@@ -15,21 +15,21 @@ class Coordinate {
     this.y = yi;
   }
   
-  int nextToThis(Coordinate coor){
+  bool nextToThis(int face, Coordinate coor){
     num deltaX = ((coor.x - x)/TILE_SIZE);
     num deltaY = ((coor.y - y)/TILE_SIZE);
     
-    if( deltaX == 0 && deltaY.ceil() == 1){
-      return UP; //face down
-    }else if( deltaX == 0 && deltaY.round() == -1){
-      return DOWN; //face up
-    }else if( deltaX.ceil() == 1 && deltaY == 0){
-      return LEFT; //face left
-    }else if( deltaX.round() == -1 && deltaY == 0){
-      return RIGHT; //face right
+    if( deltaX == 0 && deltaY.ceil() == 1 && face == UP){
+      return true;
+    }else if( deltaX == 0 && deltaY.round() == -1 && face == DOWN){
+      return true;
+    }else if( deltaX.ceil() == 1 && deltaY == 0 && face == LEFT){
+      return true; 
+    }else if( deltaX.round() == -1 && deltaY == 0 &&face == RIGHT){
+      return true;
     }
     
-    return -1;
+    return false;
   }
   
   int facingThis(int face, Coordinate coor){

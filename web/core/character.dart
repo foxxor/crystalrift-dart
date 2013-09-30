@@ -24,8 +24,6 @@ class Character implements Graphic{
   Coordinate curPosPx;
   // Current animation frame
   int frame;
-  // Character is moving?
-  bool moving;
   // Facing direction
   int faceDir;
   // Current selected chart
@@ -52,7 +50,6 @@ class Character implements Graphic{
     this.speed = speed;
     this.curPos = curPos;
     this.curPosPx = new Coordinate(curPos.x *TILE_SIZE, curPos.y *TILE_SIZE);
-    this.moving = false;
     this.frame = INITIAL_FRAME;
     this.faceDir = INITIAL_FACE;
     this.trigger = false;
