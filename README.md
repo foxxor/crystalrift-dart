@@ -9,7 +9,7 @@ An HTML5 game engine using dart and canvas. I'm planning to convert this into a 
 * Character movement in 4 directions. (W,A,S,D)
 * Character collission detection. (Buggy when the movement is fast)
 * Pushable elements.
-* Buildings and decorations are loaded dinamically using a json.
+* Buildings, characters, items and decorations are loaded dinamically using json files.
 * Map tilesets, each tile can have a different graphic and collision rule.
 * Character to character interaction. (Enter)
 * Actions handling. (Only text on screen at the moment)
@@ -20,12 +20,12 @@ An HTML5 game engine using dart and canvas. I'm planning to convert this into a 
 
 ### TODO
 
-* Create visual elements
+* ~~Create visual elements~~
 * Create complex visual elements
 * Different maps handling
 * Camera movement with main character
-* Text boxes for characters
-* Character interactions
+* ~~Text boxes for characters~~ (Not fully working)
+* ~~Character interactions~~
 * Character special actions (Jump, teleport, flip?)
 * Lots of things...Items, Battle, Menus.
 
