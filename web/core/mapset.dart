@@ -47,9 +47,6 @@ class MapSet implements Graphic{
   }
   
   void initValues(){
-    offsetX = 3;
-    offsetY = 3;
-    
     for (var y = 0; y < ( MAP_HEIGHT_TILES); y++){
       for (var x = 0; x < (MAP_WIDTH_TILES); x++){
         Tile t = new Tile(5, 2, TILE_SOIL);
@@ -113,25 +110,25 @@ class MapSet implements Graphic{
   
   bool nextToTile(int x, int y, int face){
     if(x >= 1){
-      Tile t1 = mapset.get(x-1 +offsetX, y +offsetY);
+      Tile t1 = mapset.get(x-1, y);
       if( t1.type == TILE_BUILDING_UNPASSABLE && face == LEFT){
         return true;
       }
     }
     if(y >= 1){
-      Tile t2 = mapset.get(x +offsetX, y-1 +offsetY);
+      Tile t2 = mapset.get(x, y-1);
       if( t2.type == TILE_BUILDING_UNPASSABLE && face == UP){
         return true;
       }
     }
     if(x < mapset.cols -1){
-      Tile t3 = mapset.get(x+1 +offsetX, y+ offsetY);
+      Tile t3 = mapset.get(x+1, y);
       if( t3.type == TILE_BUILDING_UNPASSABLE && face == RIGHT){
         return true;
       }
     }
     if(y < mapset.rows -1){
-      Tile t4 = mapset.get(x +offsetX, y+1+offsetX);
+      Tile t4 = mapset.get(x, y+1);
       if( t4.type == TILE_BUILDING_UNPASSABLE && face == DOWN){
         return true;
       }
@@ -142,12 +139,12 @@ class MapSet implements Graphic{
   void update(){
     for (var e = 0; e < (CAMERA_HEIGHT_TILES); e++){
       for (var i = 0; i < (CAMERA_WIDTH_TILES); i++){
-        Tile tile = mapset.get( i +offsetY, e+offsetY);
+        Tile tile = mapset.get( i , e);
         _ctx.drawImageToRect(this.mapsetImage , new Rect(i * TILE_SIZE, e * TILE_SIZE, TILE_SIZE, TILE_SIZE), //Rect to paint the image
             sourceRect: new Rect( tile.xImg, tile.yImg, TILE_SIZE, TILE_SIZE)); //Size of the image
         
-        if(mapset2.get(i +offsetY, e+offsetY) != 0){
-          Tile tile2 = mapset2.get(i +offsetY, e+offsetY);
+        if(mapset2.get(i, e) != 0){
+          Tile tile2 = mapset2.get(i, e);
           _ctx.drawImageToRect(this.mapsetImage , new Rect(i * TILE_SIZE, e * TILE_SIZE, TILE_SIZE, TILE_SIZE), //Rect to paint the image
               sourceRect: new Rect( tile2.xImg, tile2.yImg, TILE_SIZE, TILE_SIZE)); //Size of the image
         }

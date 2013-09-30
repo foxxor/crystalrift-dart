@@ -4,6 +4,7 @@
 library scene;
 
 import 'dart:html';
+import 'dart:async';
 import 'globals.dart';
 import '../helpers/coordinate.dart';
 import '../lib/message.dart';
@@ -23,6 +24,8 @@ class Scene{
   Character mainCharacter;
   List<Item> items;
   List<Action> activeEvents;
+  int offsetX;
+  int offsetY;
   
   Scene(HtmlDocument _doc, CanvasRenderingContext2D _ctx, CanvasElement canvas) {
     this._doc = _doc;
@@ -31,32 +34,42 @@ class Scene{
     gameMap = new MapSet(_doc, _ctx, canvas);
     
     Coordinate initCoor1 = new Coordinate(10, 6);
-    Coordinate initCoor2 = new Coordinate(2, 2);
-    mainCharacter = new Character(_doc, _ctx, canvas, initCoor1, 0); //Main Player
-    Character char2 = new Character(_doc, _ctx, canvas, initCoor2, 2);
+    Coordinate initCoor2 = new Coordinate(3, 3);
+    Coordinate initCoor2C = new Coordinate(12, 8);
+    mainCharacter = new Character(_doc, _ctx, canvas, initCoor1, 0, this); //Main Player
+    Character char2 = new Character(_doc, _ctx, canvas, initCoor2, 2, this);
+    char2.moveRandom();
+    Character char3 = new Character(_doc, _ctx, canvas, initCoor2C, 3, this);
     chars = new List<Character>();
     //char2.randomMovement = true;
     chars.add(char2);
+    chars.add(char3);
     
     Coordinate initCoor3 = new Coordinate(5,8);
     Coordinate initCoor4 = new Coordinate(3,5);
     Tile tile = new Tile(20, 34);//(7, 32); //Rock
     Tile tile2 = new Tile(5, 31);
-    Item item1 = new Item(_doc, _ctx, canvas, initCoor3, tile, true);
-    Item item2 = new Item(_doc, _ctx, canvas, initCoor4, tile2, true);
+    Item item1 = new Item(_doc, _ctx, canvas, initCoor3, tile, this, true);
+    Item item2 = new Item(_doc, _ctx, canvas, initCoor4, tile2, this, true);
     items = new List<Item>();
     items.add(item1);
     items.add(item2);
+    //offsetX = 3; TO-DO: Camera offset
+    //offsetY = 3;
     
     activeEvents = new List<Action>();
   }
   
   void update(){
+    gameMap.offsetX = offsetX;
+    gameMap.offsetY = offsetY;
     gameMap.update();
     
     Iterator<Character> charas = chars.iterator;
     while(charas.moveNext()){
       Character c = charas.current;
+      c.offsetX = offsetX;
+      c.offsetY = offsetY;
       c.update();
     }
     
@@ -92,7 +105,7 @@ class Scene{
     activeEvents.removeAt(0);
   }
   
-  bool shallPass(int face, Character c){
+  bool shallPass(int face, var c){
     if(gameMap.nextToTile(c.curPos.x, c.curPos.y, face)){
       return false;
     }

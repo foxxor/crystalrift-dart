@@ -7,6 +7,7 @@ library item;
 import 'dart:html';
 import 'globals.dart';
 import 'graphic.dart';
+import 'scene.dart';
 import '../helpers/coordinate.dart';
 import 'tile.dart';
 import 'dart:math' as Math;
@@ -16,21 +17,24 @@ class Item implements Graphic{
   CanvasRenderingContext2D _ctx;
   CanvasElement canvas;
   ImageElement itemImage;
-  int speed;
   
+  //Animation speed
+  int speed;
   //Current position in tiles
   Coordinate curPos;
   //Current position in pixels
   Coordinate curPosPx;
   //Tile of the object
   Tile tile;
-  
   //Item is moving?
   bool moving;
   //Item can be pushed?
   bool pushable;
+  //Parent scene
+  Scene scene;
   
-  Item(HtmlDocument _doc, CanvasRenderingContext2D _ctx, CanvasElement canvas, Coordinate curPos, Tile tile, [bool pushable=false, int speed = 1]){
+  Item(HtmlDocument _doc, CanvasRenderingContext2D _ctx, CanvasElement canvas, 
+      Coordinate curPos, Tile tile, Scene scene, [bool pushable=false, int speed = 1]){
     this._doc = _doc;
     this._ctx = _ctx;
     this.canvas = canvas;
@@ -40,6 +44,7 @@ class Item implements Graphic{
     this.curPosPx = new Coordinate(curPos.x *TILE_SIZE, curPos.y *TILE_SIZE);
     this.moving = false;
     this.pushable = pushable;
+    this.scene = scene;
     loadGraphic("assets/tileset.png");
   }
   
@@ -51,6 +56,10 @@ class Item implements Graphic{
   }
   
   bool move(int face){
+    if(!scene.shallPass(face, this)){
+      return false;
+    }
+    
     int deltaY = (curPos.y * TILE_SIZE - curPosPx.y).abs();
     int deltaX = (curPos.x * TILE_SIZE - curPosPx.x).abs();
     

@@ -5,7 +5,9 @@
 library character;
 
 import 'dart:html';
+import 'dart:async';
 import 'globals.dart';
+import 'scene.dart';
 import 'graphic.dart';
 import '../helpers/coordinate.dart';
 import 'dart:math' as Math;
@@ -37,10 +39,17 @@ class Character implements Graphic{
   // Event is executing?
   bool trigger;
   
+  //Parent scene calling this objetc
+  Scene scene;
+  
+  int offsetX;
+  int offsetY;
+  
   var acDelta = 0;
   var lastUpdateTime = 0;
   
-  Character(HtmlDocument _doc, CanvasRenderingContext2D _ctx, CanvasElement canvas, Coordinate curPos, int charSprite, [int speed = 1]) {
+  Character(HtmlDocument _doc, CanvasRenderingContext2D _ctx, CanvasElement canvas, 
+      Coordinate curPos, int charSprite, Scene scene, [int speed = 1]) {
     this._doc = _doc;
     this._ctx = _ctx;
     this.canvas = canvas;
@@ -53,16 +62,30 @@ class Character implements Graphic{
     this.frame = INITIAL_FRAME;
     this.faceDir = INITIAL_FACE;
     this.trigger = false;
+    this.scene = scene;
+    offsetX = 0;
+    offsetY = 0;
     loadGraphic("assets/characters.png");
   }
   
   void moveRandom(){
+    const ms = const Duration(milliseconds: 3000);
+    Timer t = new Timer( ms, doMoveRandom);
+  }
+  
+  void doMoveRandom(){
     var random = new Math.Random();
     var number = random.nextInt(4);
     move(number);
+    moveRandom();
   }
   
   bool move(int face){
+    if(!scene.shallPass(face, this)){
+      faceDirection(face);
+      return false;
+    }
+    
     switch (face) {
       case 0: //up
         faceDirection(UP);
@@ -187,6 +210,7 @@ class Character implements Graphic{
     frame = 1;
   }
   
+  //This function shouldnt be used, for performance a Future is much better than this
   void processMovements(){
     if(randomMovement){
       DateTime thisInstant = new DateTime.now();
@@ -202,14 +226,13 @@ class Character implements Graphic{
   }
 
   void update(){
-    processMovements();
     if(isMoving()){
       updateMove();
     }else{
       stopMove();
     }
     
-    _ctx.drawImageToRect(this.characterImage , new Rect(curPosPx.x , curPosPx.y, TILE_SIZE, TILE_SIZE), //Rect to paint the image
+    _ctx.drawImageToRect(this.characterImage , new Rect(curPosPx.x, curPosPx.y, TILE_SIZE, TILE_SIZE), //Rect to paint the image
         sourceRect: new Rect(((selectedChar *3) + frame) * TILE_SIZE, TILE_SIZE * faceDir, TILE_SIZE, TILE_SIZE)); //Size of the image
   }
 }

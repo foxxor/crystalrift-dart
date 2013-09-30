@@ -3,22 +3,14 @@
 */
 
 import 'dart:html';
-import 'dart:async';
-import 'lib/message.dart';
-import 'helpers/coordinate.dart';
 import 'core/globals.dart';
 import 'core/character.dart';
-import 'core/item.dart';
 import 'core/scene.dart';
-import 'core/mapset.dart';
-import 'core/tile.dart';
-import 'core/action.dart';
 
 //System vars
 HtmlDocument _doc;
 CanvasRenderingContext2D _ctx;
 CanvasElement canvas;
-//Character char;
 Scene scene;
 
 void main() {
@@ -57,29 +49,13 @@ void setupKeys(){
 
 void reactKey(var evt) {
   if(evt.keyCode == 37 || evt.keyCode == 65 ) { //left
-    if(scene.shallPass(LEFT,scene.mainCharacter)){
       scene.mainCharacter.move(LEFT);
-    }else{
-      scene.mainCharacter.faceDirection(LEFT);
-    }
   }else if(evt.keyCode == 38 || evt.keyCode == 87 ){ //up
-    if(scene.shallPass(UP,scene.mainCharacter)){
       scene.mainCharacter.move(UP);
-    }else{
-      scene.mainCharacter.faceDirection(UP);
-    }
   }else if(evt.keyCode == 39 || evt.keyCode == 68 ){ //right
-    if(scene.shallPass(RIGHT, scene.mainCharacter)){
       scene. mainCharacter.move(RIGHT);
-    }else{
-      scene.mainCharacter.faceDirection(RIGHT);
-    }
   }else if(evt.keyCode == 40 || evt.keyCode == 83 ){ //down
-    if(scene.shallPass(DOWN,scene.mainCharacter)){
       scene.mainCharacter.move(DOWN);
-    }else{
-      scene.mainCharacter.faceDirection(DOWN);
-    }
   }else if(evt.keyCode == 13 ){ //Action
     Character c = scene.getCharacterInFront();
     if(c != null){
