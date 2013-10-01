@@ -14,8 +14,8 @@
       "message": "Muevete!"
     },
     {
-      "x":12,
-      "y": 8,
+      "x":13,
+      "y": 9,
       "characterId":3,
       "moveRandom" : false,
       "message": "Por el rey!"

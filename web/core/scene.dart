@@ -14,6 +14,7 @@ import 'character.dart';
 import 'item.dart';
 import 'tile.dart';
 import 'action.dart';
+import 'animation.dart';
 
 class Scene{
   HtmlDocument _doc;
@@ -25,6 +26,7 @@ class Scene{
   Character mainCharacter;
   List<Item> items;
   List<Action> activeEvents;
+  List<Animation> activeAnimations;
   int offsetX;
   int offsetY;
   
@@ -32,9 +34,13 @@ class Scene{
     this._doc = _doc;
     this._ctx = _ctx;
     this.canvas = canvas;
-    
     gameMap = new MapSet(_doc, _ctx, canvas);
     Coordinate initCoor = new Coordinate(10, 6);
+    Coordinate initCoor2 = new Coordinate(12, 7);
+    Animation animation = new Animation(_doc, _ctx, canvas, initCoor2);
+    animation.startAnimation();
+    activeAnimations = new List<Animation>();
+    activeAnimations.add(animation);
     mainCharacter = new Character(_doc, _ctx, canvas, initCoor, 0, this, ""); //Main Player
     chars = new List<Character>();
     items = new List<Item>();
@@ -45,6 +51,8 @@ class Scene{
   }
   
   void update(){
+    //The order of rendering here controls the priority of visualization
+    
     gameMap.offsetX = offsetX;
     gameMap.offsetY = offsetY;
     gameMap.update();
@@ -63,6 +71,12 @@ class Scene{
       i.update();
     }
     mainCharacter.update();  
+    
+    Iterator<Animation> animationsIte = activeAnimations.iterator;
+    while(animationsIte.moveNext()){
+      Animation a = animationsIte.current;
+      a.update();
+    }
     
     Iterator<Action> eventIte = activeEvents.iterator;
     while(eventIte.moveNext()){

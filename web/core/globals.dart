@@ -32,3 +32,7 @@ const int TILE_BUILDING_UNPASSABLE = 3;
 
 //Event types
 const int EVENT_TYPE_MESSAGE = 0;
+
+//Animations
+const int ANIMATION_FRAME_HEIGHT = 195;
+const int ANIMATION_FRAME_WIDTH = 192;
