@@ -19,16 +19,16 @@ class Animation implements Graphic{
   CanvasElement canvas;
   ImageElement animationImage;
   
-  Coordinate curPos;
+  Coordinate curPosPx;
   int animationFrame;
   
-  Animation(HtmlDocument _doc, CanvasRenderingContext2D _ctx, CanvasElement canvas, Coordinate curPos){
+  Animation(HtmlDocument _doc, CanvasRenderingContext2D _ctx, CanvasElement canvas, Coordinate curPosPx, String file){
     this._doc = _doc;
     this._ctx = _ctx;
     this.canvas = canvas;
-    this.curPos = curPos;
+    this.curPosPx = curPosPx;
     this.animationFrame = 0;
-    loadGraphic('assets/animations/fire_001.png');
+    loadGraphic('assets/animations/'+ file +'.png');
   }
   
   void startAnimation(){
@@ -37,7 +37,8 @@ class Animation implements Graphic{
   }
   
   void updateFrame(){
-    if(animationFrame >= 20){
+    num maxFrames = (animationImage.height / ANIMATION_FRAME_HEIGHT) * 5;
+    if(animationFrame >= maxFrames){
       animationFrame = 0;
     }
     animationFrame++;
@@ -48,7 +49,7 @@ class Animation implements Graphic{
     num frameX = animationFrame % 5;
     num frameY = (animationFrame / 5).floor();
     _ctx.drawImageScaledFromSource(animationImage, ANIMATION_FRAME_WIDTH * frameX, ANIMATION_FRAME_HEIGHT * frameY, 
-        ANIMATION_FRAME_WIDTH, ANIMATION_FRAME_HEIGHT, curPos.x * TILE_SIZE, curPos.y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+        ANIMATION_FRAME_WIDTH, ANIMATION_FRAME_HEIGHT, curPosPx.x, curPosPx.y, TILE_SIZE, TILE_SIZE+10);
   }
   
   void loadGraphic(String src){

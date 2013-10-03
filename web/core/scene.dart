@@ -15,6 +15,7 @@ import 'item.dart';
 import 'tile.dart';
 import 'action.dart';
 import 'animation.dart';
+import 'particle.dart';
 
 class Scene{
   HtmlDocument _doc;
@@ -27,6 +28,7 @@ class Scene{
   List<Item> items;
   List<Action> activeEvents;
   List<Animation> activeAnimations;
+  Particle particle;
   int offsetX;
   int offsetY;
   
@@ -36,9 +38,13 @@ class Scene{
     this.canvas = canvas;
     gameMap = new MapSet(_doc, _ctx, canvas);
     Coordinate initCoor = new Coordinate(10, 6);
-    Coordinate initCoor2 = new Coordinate(12, 7);
-    Animation animation = new Animation(_doc, _ctx, canvas, initCoor2);
+    Coordinate initCoor2 = new Coordinate(12 * TILE_SIZE, 7* TILE_SIZE);
+    Animation animation = new Animation(_doc, _ctx, canvas, initCoor2, 'fire_001');
     animation.startAnimation();
+    
+    Coordinate partCoor = new Coordinate(12 * TILE_SIZE, 10 * TILE_SIZE);
+    particle = new Particle(_doc, _ctx, canvas, partCoor, "fire");
+    
     activeAnimations = new List<Animation>();
     activeAnimations.add(animation);
     mainCharacter = new Character(_doc, _ctx, canvas, initCoor, 0, this, ""); //Main Player
@@ -77,6 +83,7 @@ class Scene{
       Animation a = animationsIte.current;
       a.update();
     }
+    particle.update();
     
     Iterator<Action> eventIte = activeEvents.iterator;
     while(eventIte.moveNext()){
@@ -128,6 +135,16 @@ class Scene{
     const ms = const Duration(milliseconds: 5000);
     Timer t = new Timer( ms, removeEvent);
     Action event = new Action(char, msg, EVENT_TYPE_MESSAGE);
+    activeEvents.add(event);
+  }
+  
+  void createAnimation(Character char){
+    Coordinate coord = new Coordinate(0,0);
+    Animation animation = new Animation(_doc, _ctx, canvas, coord, 'light_002');
+    animation.startAnimation();
+    const ms = const Duration(milliseconds: 10000);
+    Timer t = new Timer( ms, removeEvent);
+    Action event = new Action(char, animation, EVENT_TYPE_ANIMATION);
     activeEvents.add(event);
   }
   

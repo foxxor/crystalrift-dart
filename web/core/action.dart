@@ -6,6 +6,7 @@ library event;
 
 import '../core/globals.dart';
 import '../core/character.dart';
+import '../core/animation.dart';
 import '../lib/message.dart';
 
 class Action {
@@ -26,6 +27,12 @@ class Action {
       m.x = c.curPosPx.x;
       m.y = c.curPosPx.y;
       m.update();
+    }else if(type == EVENT_TYPE_ANIMATION){
+      Character c = object;
+      Animation a = event;
+      a.curPosPx.x = c.curPosPx.x;
+      a.curPosPx.y = c.curPosPx.y;
+      a.update();
     }
   }
   
