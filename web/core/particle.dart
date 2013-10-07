@@ -57,11 +57,11 @@ class Particle implements Graphic{
       loadGraphic('assets/particles/smoke.png');
     }else if(effect == "fire"){
       alpha = 0.55;
-      maxParticles = 20;
+      maxParticles = 10;
       width = (TILE_SIZE/ 3).floor();
       height = (TILE_SIZE/ 3).floor();
-      loadGraphic('assets/particles/particle_yellow.png');
       loadGraphic('assets/particles/particle_red.png');
+      loadGraphic('assets/particles/particle_yellow.png');
     }else if(effect == "circle"){
       alpha = 0.6;
       maxParticles = 3;

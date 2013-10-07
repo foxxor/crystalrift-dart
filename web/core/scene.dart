@@ -171,6 +171,13 @@ class Scene{
       }
     }
     
+    if(c != mainCharacter){
+      bool nextTo = mainCharacter.curPosPx.nextToThis(face, c.curPosPx);
+      if(!mainCharacter.phasable && nextTo){
+        return false;
+      }
+    }
+    
     Iterator<Item> itemsIte = items.iterator;
     while(itemsIte.moveNext()){
       Item item = itemsIte.current;
