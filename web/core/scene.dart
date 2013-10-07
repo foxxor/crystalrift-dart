@@ -38,11 +38,11 @@ class Scene{
     this.canvas = canvas;
     gameMap = new MapSet(_doc, _ctx, canvas);
     Coordinate initCoor = new Coordinate(10, 6);
-    Coordinate initCoor2 = new Coordinate(12 * TILE_SIZE, 7* TILE_SIZE);
+    Coordinate initCoor2 = new Coordinate(12 * TILE_SIZE, 4* TILE_SIZE);
     Animation animation = new Animation(_doc, _ctx, canvas, initCoor2, 'fire_001');
     animation.startAnimation();
     
-    Coordinate partCoor = new Coordinate(12 * TILE_SIZE, 10 * TILE_SIZE);
+    Coordinate partCoor = new Coordinate(12 * TILE_SIZE, 7 * TILE_SIZE);
     particle = new Particle(_doc, _ctx, canvas, partCoor, "fire");
     particle.start();
     activeAnimations = new List<Animation>();

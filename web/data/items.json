@@ -28,10 +28,17 @@
       "pushable": false
     },
     {
-      "xTile":2,
+      "xTile":3,
       "yTile":55,
       "x":12,
       "y":7,
+      "pushable": false
+    },
+    {
+      "xTile":2,
+      "yTile":58,
+      "x":12,
+      "y":4,
       "pushable": false
     }
   ]
