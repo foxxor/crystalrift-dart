@@ -44,7 +44,7 @@ class Scene{
     
     Coordinate partCoor = new Coordinate(12 * TILE_SIZE, 10 * TILE_SIZE);
     particle = new Particle(_doc, _ctx, canvas, partCoor, "fire");
-    
+    particle.start();
     activeAnimations = new List<Animation>();
     activeAnimations.add(animation);
     mainCharacter = new Character(_doc, _ctx, canvas, initCoor, 0, this, ""); //Main Player
