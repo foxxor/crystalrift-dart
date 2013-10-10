@@ -42,7 +42,7 @@ class Character implements Graphic{
   Scene scene;
   //Message of the character
   String message;
-  
+
   int offsetX;
   int offsetY;
   
@@ -67,7 +67,7 @@ class Character implements Graphic{
     this.message = message;
     offsetX = 0;
     offsetY = 0;
-    loadGraphic("assets/characters.png");
+    loadGraphic("assets/character/characters.png");
   }
   
   void moveRandom(){
@@ -76,10 +76,14 @@ class Character implements Graphic{
   }
   
   void doMoveRandom(){
+    randomMove();
+    moveRandom();
+  }
+  
+  void randomMove(){
     var random = new Math.Random();
     var number = random.nextInt(4);
     move(number);
-    moveRandom();
   }
   
   void moveTo(int x, int y){
@@ -172,17 +176,20 @@ class Character implements Graphic{
   
   void updateMove(){
     var distance = 2 * speed;
-    
     if(curPos.y * TILE_SIZE > curPosPx.y){
+      faceDirection(DOWN);
       curPosPx.y = Math.min(curPosPx.y + distance, curPos.y * TILE_SIZE);
     }
     if(curPos.x * TILE_SIZE > curPosPx.x){
+      faceDirection(RIGHT);
       curPosPx.x = Math.min(curPosPx.x + distance, curPos.x * TILE_SIZE);  
     }
     if(curPos.y * TILE_SIZE < curPosPx.y){
+      faceDirection(UP);
       curPosPx.y = Math.max(curPosPx.y - distance, curPos.y * TILE_SIZE);
     }
     if(curPos.x * TILE_SIZE < curPosPx.x){
+      faceDirection(LEFT);
       curPosPx.x = Math.max(curPosPx.x - distance, curPos.x * TILE_SIZE);
     }
     animate();
@@ -214,21 +221,6 @@ class Character implements Graphic{
     }
     
     frame = 1;
-  }
-  
-  //This function shouldnt be used, for performance moveRandom() is much better than this
-  void processMovements(){
-    if(randomMovement){
-      DateTime thisInstant = new DateTime.now();
-      int delta = thisInstant.millisecondsSinceEpoch - lastUpdateTime;
-      if (acDelta > MS_PER_FRAME) {
-        acDelta = 0;
-        moveRandom();
-      } else {
-        acDelta += delta;
-      }
-      lastUpdateTime = thisInstant.millisecondsSinceEpoch;
-    }
   }
 
   void update(){

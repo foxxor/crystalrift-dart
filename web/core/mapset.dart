@@ -35,7 +35,7 @@ class MapSet implements Graphic{
     mapset2 = new Matrix(MAP_WIDTH_TILES, MAP_HEIGHT_TILES);
     mapset3 = new Matrix(MAP_WIDTH_TILES, MAP_HEIGHT_TILES);
     initValues();
-    loadGraphic("assets/tileset.png");
+    loadGraphic("assets/tileset/tileset.png");
   }
   
   void loadGraphic(String src){

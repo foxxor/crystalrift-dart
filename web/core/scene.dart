@@ -59,7 +59,6 @@ class Scene{
   
   void update(){
     //The order of rendering here controls the priority of visualization
-    
     gameMap.offsetX = offsetX;
     gameMap.offsetY = offsetY;
     gameMap.update();
