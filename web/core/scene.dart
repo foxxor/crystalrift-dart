@@ -48,6 +48,7 @@ class Scene{
     activeAnimations = new List<Animation>();
     activeAnimations.add(animation);
     mainCharacter = new Character(_doc, _ctx, canvas, initCoor, 0, this, ""); //Main Player
+    mainCharacter.moveTo( 13, 4);
     chars = new List<Character>();
     items = new List<Item>();
     //offsetX = 3; TO-DO: Camera offset
@@ -158,21 +159,30 @@ class Scene{
   }
   
   bool shallPass(int face, var c){
+    Coordinate newCoords;
+    if(face == UP){
+      newCoords = new Coordinate(c.curPos.x, c.curPos.y - 1);
+    }else if(face == DOWN){
+      newCoords = new Coordinate(c.curPos.x, c.curPos.y + 1);
+    }else if(face == LEFT){
+      newCoords = new Coordinate(c.curPos.x -1, c.curPos.y);
+    }else if(face == RIGHT){
+      newCoords = new Coordinate(c.curPos.x +1, c.curPos.y);
+    }
+    
     if(gameMap.nextToTile(c.curPos.x, c.curPos.y, face)){
       return false;
     }
-    
     Iterator<Character> charas = chars.iterator;
     while(charas.moveNext()){
       Character char = charas.current;
-      bool nextTo = char.curPosPx.nextToThis(face, c.curPosPx);
+      bool nextTo = char.curPos.nextToThis2(newCoords);
       if(!char.phasable && nextTo){
         return false;
       }
     }
-    
     if(c != mainCharacter){
-      bool nextTo = mainCharacter.curPosPx.nextToThis(face, c.curPosPx);
+      bool nextTo = mainCharacter.curPos.nextToThis2(newCoords);
       if(!mainCharacter.phasable && nextTo){
         return false;
       }
@@ -181,7 +191,7 @@ class Scene{
     Iterator<Item> itemsIte = items.iterator;
     while(itemsIte.moveNext()){
       Item item = itemsIte.current;
-      bool itemFace = item.curPosPx.nextToThis(face ,c.curPosPx);
+      bool itemFace = item.curPos.nextToThis2(newCoords);
       if(!item.pushable && itemFace){
           return false;
       }else if(itemFace){

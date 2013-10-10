@@ -82,6 +82,11 @@ class Character implements Graphic{
     moveRandom();
   }
   
+  void moveTo(int x, int y){
+    curPos.y = y;
+    curPos.x = x;
+  }
+  
   bool move(int face){
     if(!scene.shallPass(face, this)){
       faceDirection(face);

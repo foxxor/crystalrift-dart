@@ -57,7 +57,7 @@ class Particle implements Graphic{
       loadGraphic('assets/particles/smoke.png');
     }else if(effect == "fire"){
       alpha = 0.55;
-      maxParticles = 10;
+      maxParticles = 5;
       width = (TILE_SIZE/ 3).floor();
       height = (TILE_SIZE/ 3).floor();
       loadGraphic('assets/particles/particle_red.png');
@@ -151,6 +151,8 @@ class Particle implements Graphic{
       coord.moveNext();
       Coordinate c = coord.current;
       _ctx.save();
+      //_ctx.setFillColorHsl(100, 100, 50);
+      //_ctx.fillRect(c.x, c.y, width, height);
       _ctx.globalAlpha = nAlpha; //Modify the transparency
       _ctx.drawImageScaled(p, c.x, c.y, width, height);
       _ctx.restore();      

@@ -25,10 +25,16 @@ class Coordinate {
       return true;
     }else if( deltaX.ceil() == 1 && deltaY == 0 && face == LEFT){
       return true; 
-    }else if( deltaX.round() == -1 && deltaY == 0 &&face == RIGHT){
+    }else if( deltaX.round() == -1 && deltaY == 0 && face == RIGHT){
       return true;
     }
-    
+    return false;
+  }
+  
+  bool nextToThis2(Coordinate newCoord){
+    if( newCoord.x == x && newCoord.y == y){
+      return true;
+    }
     return false;
   }
   
