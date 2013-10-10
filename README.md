@@ -1,18 +1,19 @@
 # Crystal Rift - a dart 2D game engine
 
-An HTML5 game engine using dart and canvas. I'm planning to convert this into a Zelda style game.
+An HTML5 2D game engine using dart and canvas. Movements and interactions are like Zelda.
 
 [Live demo here](http://foxxor.github.io/crystalrift-dart/gameengine.html)
 
 ## What is working?
 
 * Character movement in 4 directions. (W,A,S,D)
-* Character collission detection. (Buggy when the movement is fast)
+* Character collission detection.
 * Pushable elements.
 * Buildings, characters, items and decorations are loaded dinamically using json files.
 * Map tilesets, each tile can have a different graphic and collision rule.
 * Character to character interaction. (Enter)
-* Actions handling. (Only text on screen at the moment)
+* Actions handling. (On-screen text, framed-animations)
+* Particle effects like fire, poison, smoke.(Little buggy still trying to figure out some things on dart)
 
 ## Additional Utils in the repository
 
@@ -33,4 +34,4 @@ An HTML5 game engine using dart and canvas. I'm planning to convert this into a 
 
 Do you think you can do something better or improve the existing?
 
-Go ahead! I just started with Dart and I'm not a jedi, any help is appreciated.
+Go ahead! I just started with Dart and I'm not a Dart jedi, any help is appreciated.
