@@ -153,7 +153,7 @@ class Particle implements Graphic{
       _ctx.save();
       //_ctx.setFillColorHsl(100, 100, 50);
       //_ctx.fillRect(c.x, c.y, width, height);
-      _ctx.globalAlpha = nAlpha; //Modify the transparency
+      _ctx.globalAlpha = nAlpha;
       _ctx.drawImageScaled(p, c.x, c.y, width, height);
       _ctx.restore();      
     }

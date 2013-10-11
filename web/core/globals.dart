@@ -37,3 +37,9 @@ const int EVENT_TYPE_ANIMATION = 1;
 //Animations
 const int ANIMATION_FRAME_HEIGHT = 195;
 const int ANIMATION_FRAME_WIDTH = 192;
+
+//Windowsets
+const int WINDOWSET_BORDER_PADDING = 5;
+const int WINDOWSET_BG_TILE = 64;
+const int WINDOWSET_FG_TILE = 64;
+const int WINDOWSET_TEXT_PADDING = 10;

@@ -6,17 +6,19 @@ import 'dart:html';
 import 'core/globals.dart';
 import 'core/character.dart';
 import 'core/scene.dart';
+import 'core/windowset.dart';
 
 //System vars
 HtmlDocument _doc;
 CanvasRenderingContext2D _ctx;
 CanvasElement canvas;
 Scene scene;
+WindowSet windowInfo;
 
 void main() {
   setupCanvas();
   scene = new Scene(_doc, _ctx, canvas);
-  
+  windowInfo = new WindowSet(_doc, _ctx, canvas, 0, SCREEN_HEIGHT - 128, SCREEN_WIDTH, 128);
   setupKeys();
   window.animationFrame.then(update);
 }
@@ -25,6 +27,7 @@ void main() {
 void update(num delta) {
   _ctx.clearRect(0, 0, canvas.width, canvas.height);
   scene.update();
+  windowInfo.update();
   window.animationFrame.then(update);
 }
 

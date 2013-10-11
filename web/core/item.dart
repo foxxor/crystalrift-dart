@@ -45,7 +45,7 @@ class Item implements Graphic{
     this.moving = false;
     this.pushable = pushable;
     this.scene = scene;
-    loadGraphic("assets/tileset.png");
+    loadGraphic("assets/tileset/tileset.png");
   }
   
   void loadGraphic(String src){
