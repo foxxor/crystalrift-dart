@@ -40,22 +40,22 @@ class WindowSet implements Graphic{
     //Draw foreground
     int y = curPos.y;
     for(int x = curPos.x; x <= width ; x = x + WINDOWSET_FG_TILE){
-      _ctx.drawImageToRect(windowImage , new Rect(x, y, WINDOWSET_FG_TILE, WINDOWSET_FG_TILE), //Rect to paint the image
-          sourceRect: new Rect(0, WINDOWSET_FG_TILE, WINDOWSET_FG_TILE, WINDOWSET_FG_TILE)); //Size of the image
-      _ctx.drawImageToRect(windowImage , new Rect(x, y + WINDOWSET_FG_TILE, WINDOWSET_FG_TILE, WINDOWSET_FG_TILE), //Rect to paint the image
-          sourceRect: new Rect(0, WINDOWSET_FG_TILE, WINDOWSET_FG_TILE, WINDOWSET_FG_TILE)); //Size of the image
+      _ctx.drawImageToRect(windowImage , new Rectangle(x, y, WINDOWSET_FG_TILE, WINDOWSET_FG_TILE), //Rect to paint the image
+          sourceRect: new Rectangle(0, WINDOWSET_FG_TILE, WINDOWSET_FG_TILE, WINDOWSET_FG_TILE)); //Size of the image
+      _ctx.drawImageToRect(windowImage , new Rectangle(x, y + WINDOWSET_FG_TILE, WINDOWSET_FG_TILE, WINDOWSET_FG_TILE), //Rect to paint the image
+          sourceRect: new Rectangle(0, WINDOWSET_FG_TILE, WINDOWSET_FG_TILE, WINDOWSET_FG_TILE)); //Size of the image
     }
     _ctx.restore();
     
     //Draw border borders
-    _ctx.drawImageToRect(windowImage , new Rect(curPos.x, curPos.y, 9, 9), //Rect to paint the image
-        sourceRect: new Rect(64, 0, 9, 9)); //Size of the image
-    _ctx.drawImageToRect(windowImage , new Rect(curPos.x + width - 8, curPos.y, 10, 9), //Rect to paint the image
-        sourceRect: new Rect(64 + 48 + 9, 0, 9, 9)); //Size of the image
-    _ctx.drawImageToRect(windowImage , new Rect(curPos.x, curPos.y + height - 8, 9, 9), //Rect to paint the image
-        sourceRect: new Rect(64, 48 + 9, 9, 9)); //Size of the image
-    _ctx.drawImageToRect(windowImage , new Rect(curPos.x + width - 9, curPos.y + height - 8, 10, 9), //Rect to paint the image
-        sourceRect: new Rect(64 + 48 + 9, 48 + 9, 9, 9)); //Size of the image
+    _ctx.drawImageToRect(windowImage , new Rectangle(curPos.x, curPos.y, 9, 9), //Rect to paint the image
+        sourceRect: new Rectangle(64, 0, 9, 9)); //Size of the image
+    _ctx.drawImageToRect(windowImage , new Rectangle(curPos.x + width - 8, curPos.y, 10, 9), //Rect to paint the image
+        sourceRect: new Rectangle(64 + 48 + 9, 0, 9, 9)); //Size of the image
+    _ctx.drawImageToRect(windowImage , new Rectangle(curPos.x, curPos.y + height - 8, 9, 9), //Rect to paint the image
+        sourceRect: new Rectangle(64, 48 + 9, 9, 9)); //Size of the image
+    _ctx.drawImageToRect(windowImage , new Rectangle(curPos.x + width - 9, curPos.y + height - 8, 10, 9), //Rect to paint the image
+        sourceRect: new Rectangle(64 + 48 + 9, 48 + 9, 9, 9)); //Size of the image
     
     //Draw border side lines
     _ctx.drawImageScaledFromSource(windowImage, 64 + 9, 0, 9, 9,

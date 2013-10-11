@@ -50,8 +50,8 @@ void mousePressed(MouseEvent e){
   int y = (e.pageY/TILE_SIZE).round() -1;
   
   _ctxTile.clearRect(0, 0, TILE_SIZE, TILE_SIZE);
-  _ctxTile.drawImageToRect(imageTile , new Rect(0, 0, TILE_SIZE, TILE_SIZE), //Rect to paint the image
-      sourceRect: new Rect( x * TILE_SIZE, y* TILE_SIZE, TILE_SIZE, TILE_SIZE)); //Size of the image
+  _ctxTile.drawImageToRect(imageTile , new Rectangle(0, 0, TILE_SIZE, TILE_SIZE), //Rect to paint the image
+      sourceRect: new Rectangle( x * TILE_SIZE, y* TILE_SIZE, TILE_SIZE, TILE_SIZE)); //Size of the image
   
   divX.text = 'X:'+ x.toString();
   divY.text = 'Y:'+ y.toString();

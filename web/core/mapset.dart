@@ -159,13 +159,13 @@ class MapSet implements Graphic{
     for (var e = 0; e < (CAMERA_HEIGHT_TILES); e++){
       for (var i = 0; i < (CAMERA_WIDTH_TILES); i++){
         Tile tile = mapset.get( i , e);
-        _ctx.drawImageToRect(this.mapsetImage , new Rect(i * TILE_SIZE, e * TILE_SIZE, TILE_SIZE, TILE_SIZE), //Rect to paint the image
-            sourceRect: new Rect( tile.xImg, tile.yImg, TILE_SIZE, TILE_SIZE)); //Size of the image
+        _ctx.drawImageToRect(this.mapsetImage , new Rectangle(i * TILE_SIZE, e * TILE_SIZE, TILE_SIZE, TILE_SIZE), //Rect to paint the image
+            sourceRect: new Rectangle( tile.xImg, tile.yImg, TILE_SIZE, TILE_SIZE)); //Size of the image
         
         if(mapset2.get(i, e) != 0){
           Tile tile2 = mapset2.get(i, e);
-          _ctx.drawImageToRect(this.mapsetImage , new Rect(i * TILE_SIZE, e * TILE_SIZE, TILE_SIZE, TILE_SIZE), //Rect to paint the image
-              sourceRect: new Rect( tile2.xImg, tile2.yImg, TILE_SIZE, TILE_SIZE)); //Size of the image
+          _ctx.drawImageToRect(this.mapsetImage , new Rectangle(i * TILE_SIZE, e * TILE_SIZE, TILE_SIZE, TILE_SIZE), //Rect to paint the image
+              sourceRect: new Rectangle( tile2.xImg, tile2.yImg, TILE_SIZE, TILE_SIZE)); //Size of the image
         }
       }
     }
