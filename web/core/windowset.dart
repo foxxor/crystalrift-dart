@@ -26,6 +26,7 @@ class WindowSet implements Graphic{
     this.width = width;
     this.height = height;
     this.curPos = new Coordinate(x, y);
+    this.text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec tincidunt posuere nibh, vitae dignissim ligula molestie nec. Fusce in mauris nibh. Vivamus sodales vitae eros et dapibus. Donec vitae leo tincidunt risus viverra dapibus. Donec sit amet eros rhoncus lacus aliquam laoreet. Nulla id augue quis nisl tempor ullamcorper. Maecenas lacinia lectus vel erat eleifend egestas.";
     loadGraphic('assets/window/BlueGloss.png');
   }
   
@@ -70,6 +71,43 @@ class WindowSet implements Graphic{
     _ctx.drawImageScaledFromSource(windowImage, 64, 9, 9, 9,
         curPos.x + width - 9, curPos.y + 9, 
         9, height - (9*2) +1);
+    
+    drawText();
+  }
+  
+  void drawText() {
+    num x = curPos.x + WINDOWSET_TEXT_PADDING;
+    num y = curPos.y + WINDOWSET_TEXT_PADDING + 10;
+    var words = text.split(" ");
+    var line = "";
+    var numLines = 0;
+    _ctx..save()
+      ..font = '12pt Verdana'
+      ..fillStyle = "white"
+      ..lineWidth = 3
+      ..strokeStyle = "black";
+    //Shadow Text
+    _ctx..shadowOffsetX = 0
+        ..shadowOffsetY = 0
+        ..shadowBlur    = 5
+        ..shadowColor = 'rgba(0, 0, 0, 1)';
+    
+    for(var n = 0; n < words.length; n++) {
+      var testLine = '${line}${words[n]} ';
+      var metrics = _ctx.measureText(testLine);
+      var testWidth = metrics.width;
+      if(testWidth > (width - (WINDOWSET_TEXT_PADDING* 2))) {
+        _ctx.fillText(line, x, y);
+        line = '${words[n]} ';
+        y += 25;
+        numLines ++;
+      }
+      else { line = testLine; }
+      
+      if(numLines >= 4)
+        break;
+    }
+    _ctx.restore();
   }
   
   void loadGraphic(String src){

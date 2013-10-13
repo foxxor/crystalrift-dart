@@ -131,7 +131,7 @@ class Scene{
   }
   
   void createMessage(Character char){
-    Message msg = new Message(_ctx, char.message, char.curPosPx.x, char.curPosPx.y, 100, 10);
+    Message msg = new Message(_ctx, char.message, char.curPosPx.x, char.curPosPx.y, 100, 20);
     const ms = const Duration(milliseconds: 5000);
     Timer t = new Timer( ms, removeEvent);
     Action event = new Action(char, msg, EVENT_TYPE_MESSAGE);

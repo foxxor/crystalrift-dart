@@ -26,7 +26,13 @@ class Message{
     wrapText();
   }
   
-  wrapText() {
+  void wrapText() {
+    _ctx..save()
+      ..font = '12pt Verdana'
+      ..fillStyle = "white"
+      ..lineWidth = 3
+      ..strokeStyle = "black";
+    
     x -= text.length * 2.5;
     y -= 8;
     var words = text.split(" ");
@@ -36,24 +42,13 @@ class Message{
       var metrics = _ctx.measureText(testLine);
       var testWidth = metrics.width;
       if(testWidth > maxWidth) {
+        _ctx.strokeText(line, x, y);
         _ctx.fillText(line, x, y);
         line = '${words[n]} ';
         y += lineHeight;
       }
       else { line = testLine; }
     }
-    _ctx..save()
-        ..font = '12pt Verdana'
-        ..fillStyle = "white"
-        ..lineWidth = 3
-        ..strokeStyle = "black";
-    
-    //Shadow Text
-    //_ctx..shadowOffsetX = 0
-    //    ..shadowOffsetY = 0
-    //    ..shadowBlur    = 5
-    //    ..shadowColor = 'rgba(0, 0, 0, 1)';
-    
     //Stroke
     _ctx.strokeText(line, x, y);
     _ctx.fillText(line, x, y);
