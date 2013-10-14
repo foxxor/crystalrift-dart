@@ -18,7 +18,8 @@ WindowSet windowInfo;
 void main() {
   setupCanvas();
   scene = new Scene(_doc, _ctx, canvas);
-  windowInfo = new WindowSet(_doc, _ctx, canvas, 0, SCREEN_HEIGHT - 128, SCREEN_WIDTH, 128);
+  String text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas fermentum dictum lacus. Mauris metus urna, consectetur ut nulla in, ullamcorper vehicula mauris. Fusce aliquam sapien eu hendrerit euismod. Mauris dignissim non arcu sit amet egestas. Proin blandit nec tellus sit amet tristique. ";;
+  windowInfo = new WindowSet(_doc, _ctx, canvas, 0, SCREEN_HEIGHT - 128, SCREEN_WIDTH, 128, text);
   setupKeys();
   window.animationFrame.then(update);
 }
@@ -27,7 +28,10 @@ void main() {
 void update(num delta) {
   _ctx.clearRect(0, 0, canvas.width, canvas.height);
   scene.update();
-  windowInfo.update();
+  if(!windowInfo.endOfLine){
+    windowInfo.update();
+  }
+  
   window.animationFrame.then(update);
 }
 
@@ -60,6 +64,8 @@ void reactKey(var evt) {
   }else if(evt.keyCode == 40 || evt.keyCode == 83 ){ //down
       scene.mainCharacter.move(DOWN);
   }else if(evt.keyCode == 13 ){ //Action
+    windowInfo.moveLines();
+    //Character message if in front
     Character c = scene.getCharacterInFront();
     if(c != null){
       if(!c.trigger){

@@ -41,7 +41,6 @@ class Scene{
     Coordinate initCoor2 = new Coordinate(12 * TILE_SIZE, 4* TILE_SIZE);
     Animation animation = new Animation(_doc, _ctx, canvas, initCoor2, 'fire_001');
     animation.startAnimation();
-    
     Coordinate partCoor = new Coordinate(12 * TILE_SIZE, 7 * TILE_SIZE);
     particle = new Particle(_doc, _ctx, canvas, partCoor, "fire");
     particle.start();
