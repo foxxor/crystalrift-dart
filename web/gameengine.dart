@@ -66,14 +66,14 @@ void reactKey(var evt) {
   }else if(evt.keyCode == 13 ){ //Action
     windowInfo.moveLines();
     //Character message if in front
-    Character c = scene.getCharacterInFront();
+    /*Character c = scene.getCharacterInFront();
     if(c != null){
       if(!c.trigger){
         c.trigger = true;
         scene.createMessage(c);
         scene.createAnimation(scene.mainCharacter);
       }
-    }
+    }*/
   }
   
 }

@@ -29,8 +29,8 @@ class Scene{
   List<Action> activeEvents;
   List<Animation> activeAnimations;
   Particle particle;
-  int offsetX;
-  int offsetY;
+  int displayX;
+  int displayY;
   
   Scene(HtmlDocument _doc, CanvasRenderingContext2D _ctx, CanvasElement canvas) {
     this._doc = _doc;
@@ -50,23 +50,19 @@ class Scene{
     mainCharacter.moveTo( 13, 4);
     chars = new List<Character>();
     items = new List<Item>();
-    //offsetX = 3; TO-DO: Camera offset
-    //offsetY = 3;
+    //displayX = 3; TO-DO: Camera
+    //displayY = 3;
     activeEvents = new List<Action>();
     loadProperties();
   }
   
   void update(){
     //The order of rendering here controls the priority of visualization
-    gameMap.offsetX = offsetX;
-    gameMap.offsetY = offsetY;
     gameMap.update();
     
     Iterator<Character> charas = chars.iterator;
     while(charas.moveNext()){
       Character c = charas.current;
-      c.offsetX = offsetX;
-      c.offsetY = offsetY;
       c.update();
     }
     

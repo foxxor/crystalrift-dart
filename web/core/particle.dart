@@ -151,8 +151,6 @@ class Particle implements Graphic{
       coord.moveNext();
       Coordinate c = coord.current;
       _ctx.save();
-      //_ctx.setFillColorHsl(100, 100, 50);
-      //_ctx.fillRect(c.x, c.y, width, height);
       _ctx.globalAlpha = nAlpha;
       _ctx.drawImageScaled(p, c.x, c.y, width, height);
       _ctx.restore();      

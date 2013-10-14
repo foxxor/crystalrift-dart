@@ -106,7 +106,7 @@ class Character implements Graphic{
         break;
       case 1: //down
         faceDirection(DOWN);
-        if((curPos.y *TILE_SIZE)  < (canvas.height - TILE_SIZE)){
+        if((curPos.y)  < MAP_HEIGHT_TILES){
           curPos.y += 1;
           return true;
         }
@@ -120,7 +120,7 @@ class Character implements Graphic{
         break;
       case 3: //right
         faceDirection(RIGHT);
-        if((curPos.x* TILE_SIZE)< (canvas.width - TILE_SIZE)){
+        if((curPos.x) < MAP_WIDTH_TILES){
           curPos.x += 1;
           return true;
         }
