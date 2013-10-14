@@ -230,7 +230,8 @@ class Character implements Graphic{
       stopMove();
     }
     
-    _ctx.drawImageToRect(this.characterImage , new Rectangle(curPosPx.x, curPosPx.y, TILE_SIZE, TILE_SIZE), //Rect to paint the image
+    _ctx.drawImageToRect(this.characterImage , new Rectangle(curPosPx.x - scene.displayPxX, curPosPx.y - scene.displayPxY,
+        TILE_SIZE, TILE_SIZE), //Rect to paint the image
         sourceRect: new Rectangle(((selectedChar *3) + frame) * TILE_SIZE, TILE_SIZE * faceDir, TILE_SIZE, TILE_SIZE)); //Size of the image
   }
 }

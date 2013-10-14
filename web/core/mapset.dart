@@ -7,6 +7,7 @@ import 'dart:html';
 import 'dart:async';
 import 'globals.dart';
 import 'graphic.dart';
+import 'scene.dart';
 import '../helpers/matrix.dart';
 import 'tile.dart';
 import 'dart:math' as Math;
@@ -17,8 +18,7 @@ class MapSet implements Graphic{
   CanvasElement canvas;
   ImageElement mapsetImage;
   Map structuresData;
-  int offsetX;
-  int offsetY;
+  Scene scene;
   
   // The map matrix that represent the first visual terrain layer 
   Matrix mapset;
@@ -27,10 +27,11 @@ class MapSet implements Graphic{
 // The map matrix that represent the third visual terrain layer 
   Matrix mapset3;
   
-  MapSet(HtmlDocument _doc, CanvasRenderingContext2D _ctx, CanvasElement canvas) {
+  MapSet(HtmlDocument _doc, CanvasRenderingContext2D _ctx, CanvasElement canvas, Scene scene) {
     this._doc = _doc;
     this._ctx = _ctx;
     this.canvas = canvas;
+    this.scene = scene;
     mapset = new Matrix(MAP_WIDTH_TILES, MAP_HEIGHT_TILES);
     mapset2 = new Matrix(MAP_WIDTH_TILES, MAP_HEIGHT_TILES);
     mapset3 = new Matrix(MAP_WIDTH_TILES, MAP_HEIGHT_TILES);
@@ -159,12 +160,12 @@ class MapSet implements Graphic{
     for (var e = 0; e < (CAMERA_HEIGHT_TILES); e++){
       for (var i = 0; i < (CAMERA_WIDTH_TILES); i++){
         Tile tile = mapset.get( i , e);
-        _ctx.drawImageToRect(this.mapsetImage , new Rectangle(i * TILE_SIZE, e * TILE_SIZE, TILE_SIZE, TILE_SIZE), //Rect to paint the image
+        _ctx.drawImageToRect(this.mapsetImage , new Rectangle(i * TILE_SIZE - scene.displayPxX, e * TILE_SIZE - scene.displayPxY, TILE_SIZE, TILE_SIZE), //Rect to paint the image
             sourceRect: new Rectangle( tile.xImg, tile.yImg, TILE_SIZE, TILE_SIZE)); //Size of the image
         
         if(mapset2.get(i, e) != 0){
           Tile tile2 = mapset2.get(i, e);
-          _ctx.drawImageToRect(this.mapsetImage , new Rectangle(i * TILE_SIZE, e * TILE_SIZE, TILE_SIZE, TILE_SIZE), //Rect to paint the image
+          _ctx.drawImageToRect(this.mapsetImage , new Rectangle(i * TILE_SIZE - scene.displayPxX, e * TILE_SIZE - scene.displayPxY, TILE_SIZE, TILE_SIZE), //Rect to paint the image
               sourceRect: new Rectangle( tile2.xImg, tile2.yImg, TILE_SIZE, TILE_SIZE)); //Size of the image
         }
       }

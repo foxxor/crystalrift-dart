@@ -16,6 +16,7 @@ import 'tile.dart';
 import 'action.dart';
 import 'animation.dart';
 import 'particle.dart';
+import 'dart:math' as Math;
 
 class Scene{
   HtmlDocument _doc;
@@ -29,35 +30,46 @@ class Scene{
   List<Action> activeEvents;
   List<Animation> activeAnimations;
   Particle particle;
+  
+  //Camera offset tiles
   int displayX;
   int displayY;
+  
+//Camera offset tiles
+  int displayPxX;
+  int displayPxY;
   
   Scene(HtmlDocument _doc, CanvasRenderingContext2D _ctx, CanvasElement canvas) {
     this._doc = _doc;
     this._ctx = _ctx;
     this.canvas = canvas;
-    gameMap = new MapSet(_doc, _ctx, canvas);
+    gameMap = new MapSet(_doc, _ctx, canvas, this);
     Coordinate initCoor = new Coordinate(10, 6);
     Coordinate initCoor2 = new Coordinate(12 * TILE_SIZE, 4* TILE_SIZE);
-    Animation animation = new Animation(_doc, _ctx, canvas, initCoor2, 'fire_001');
+    Animation animation = new Animation(_doc, _ctx, canvas, this, initCoor2, 'fire_001');
     animation.startAnimation();
     Coordinate partCoor = new Coordinate(12 * TILE_SIZE, 7 * TILE_SIZE);
-    particle = new Particle(_doc, _ctx, canvas, partCoor, "fire");
+    particle = new Particle(_doc, _ctx, canvas, this, partCoor, "fire");
     particle.start();
     activeAnimations = new List<Animation>();
     activeAnimations.add(animation);
     mainCharacter = new Character(_doc, _ctx, canvas, initCoor, 0, this, ""); //Main Player
-    mainCharacter.moveTo( 13, 4);
+    //mainCharacter.moveTo( 13, 4);
     chars = new List<Character>();
     items = new List<Item>();
-    //displayX = 3; TO-DO: Camera
-    //displayY = 3;
+    displayX = 3;
+    displayY = 3;
+    displayPxX = 3 * TILE_SIZE;
+    displayPxY = 3 * TILE_SIZE;
     activeEvents = new List<Action>();
     loadProperties();
   }
   
   void update(){
     //The order of rendering here controls the priority of visualization
+    if(mainCharacter.isMoving()){
+      updateMove();
+    }
     gameMap.update();
     
     Iterator<Character> charas = chars.iterator;
@@ -71,6 +83,7 @@ class Scene{
       Item i = itemsIte.current;
       i.update();
     }
+    
     mainCharacter.update();  
     
     Iterator<Animation> animationsIte = activeAnimations.iterator;
@@ -78,12 +91,58 @@ class Scene{
       Animation a = animationsIte.current;
       a.update();
     }
+    
     particle.update();
     
     Iterator<Action> eventIte = activeEvents.iterator;
     while(eventIte.moveNext()){
       Action e = eventIte.current;
       e.update();
+    }
+  }
+  
+  void updateMove(){
+    var distance = 2 * mainCharacter.speed;
+    if(displayY * TILE_SIZE > displayPxY){
+      displayPxY = Math.min(displayPxY + distance, displayY * TILE_SIZE);
+    }
+    if(displayX * TILE_SIZE > displayPxX){
+      displayPxX = Math.min(displayPxX + distance, displayX * TILE_SIZE);  
+    }
+    if(displayY * TILE_SIZE < displayPxY){
+      displayPxY = Math.max(displayPxY - distance, displayY * TILE_SIZE);
+    }
+    if(displayX * TILE_SIZE < displayPxX){
+      displayPxX = Math.max(displayPxX - distance, displayX * TILE_SIZE);
+    }
+  }
+  
+  void move(int direction){
+    switch (direction){
+      case UP:
+        mainCharacter.move(UP);
+        if(displayY > 0){
+          displayY --;
+        }
+        break;
+      case DOWN:
+        mainCharacter.move(DOWN);
+        if(displayY < (MAP_HEIGHT_TILES - (CAMERA_HEIGHT_TILES / 2))){
+          displayY ++;
+        }
+        break;
+      case LEFT:
+        mainCharacter.move(LEFT);
+        if(displayX < 0){
+          displayX --;
+        }
+        break;
+      case RIGHT:
+        mainCharacter.move(RIGHT);
+        if(displayX > (MAP_WIDTH_TILES - (CAMERA_WIDTH_TILES / 2))){
+          displayX ++;
+        }
+        break;  
     }
   }
   

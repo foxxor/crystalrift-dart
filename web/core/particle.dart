@@ -28,11 +28,13 @@ class Particle implements Graphic{
   int width;
   int height;
   num alpha;
+  Scene scene;
   
-  Particle(HtmlDocument _doc, CanvasRenderingContext2D _ctx, CanvasElement canvas, Coordinate curPosPx, String effect){
+  Particle(HtmlDocument _doc, CanvasRenderingContext2D _ctx, CanvasElement canvas, Scene scene, Coordinate curPosPx, String effect){
     this._doc = _doc;
     this._ctx = _ctx;
     this.canvas = canvas;
+    this.scene = scene;
     this.curPosPx = curPosPx;
     this.particles = new List<ImageElement>();
     this.particlesCoords = new List<Coordinate>();
@@ -152,7 +154,7 @@ class Particle implements Graphic{
       Coordinate c = coord.current;
       _ctx.save();
       _ctx.globalAlpha = nAlpha;
-      _ctx.drawImageScaled(p, c.x, c.y, width, height);
+      _ctx.drawImageScaled(p, c.x - scene.displayPxX, c.y - scene.displayPxY, width, height);
       _ctx.restore();      
     }
   }
@@ -168,7 +170,7 @@ class Particle implements Graphic{
       ImageElement particleImageN = particleImage.clone(false);
       particles.add(particleImageN);
       var number = random.nextInt(5);
-      Coordinate coordinateN = new Coordinate(curPosPx.x + (TILE_SIZE / 2).floor() + number, curPosPx.y +TILE_SIZE - 16);
+      Coordinate coordinateN = new Coordinate(curPosPx.x + (TILE_SIZE / 2).floor() + number, curPosPx.y + TILE_SIZE - 16);
       particlesCoords.add(coordinateN);
       num nAlpha = alpha;
       particlesAlpha.add(nAlpha);

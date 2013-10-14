@@ -18,14 +18,15 @@ class Animation implements Graphic{
   CanvasRenderingContext2D _ctx;
   CanvasElement canvas;
   ImageElement animationImage;
-  
+  Scene scene;
   Coordinate curPosPx;
   int animationFrame;
   
-  Animation(HtmlDocument _doc, CanvasRenderingContext2D _ctx, CanvasElement canvas, Coordinate curPosPx, String file){
+  Animation(HtmlDocument _doc, CanvasRenderingContext2D _ctx, CanvasElement canvas, Scene scene, Coordinate curPosPx, String file){
     this._doc = _doc;
     this._ctx = _ctx;
     this.canvas = canvas;
+    this.scene = scene;
     this.curPosPx = curPosPx;
     this.animationFrame = 0;
     loadGraphic('assets/animations/'+ file +'.png');
@@ -49,7 +50,7 @@ class Animation implements Graphic{
     num frameX = animationFrame % 5;
     num frameY = (animationFrame / 5).floor();
     _ctx.drawImageScaledFromSource(animationImage, ANIMATION_FRAME_WIDTH * frameX, ANIMATION_FRAME_HEIGHT * frameY, 
-        ANIMATION_FRAME_WIDTH, ANIMATION_FRAME_HEIGHT, curPosPx.x, curPosPx.y, TILE_SIZE, TILE_SIZE+10);
+        ANIMATION_FRAME_WIDTH, ANIMATION_FRAME_HEIGHT, curPosPx.x - scene.displayPxX, curPosPx.y - scene.displayPxY, TILE_SIZE, TILE_SIZE+10);
   }
   
   void loadGraphic(String src){

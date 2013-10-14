@@ -56,13 +56,13 @@ void setupKeys(){
 
 void reactKey(var evt) {
   if(evt.keyCode == 37 || evt.keyCode == 65 ) { //left
-      scene.mainCharacter.move(LEFT);
+      scene.move(LEFT);
   }else if(evt.keyCode == 38 || evt.keyCode == 87 ){ //up
-      scene.mainCharacter.move(UP);
+      scene.move(UP);
   }else if(evt.keyCode == 39 || evt.keyCode == 68 ){ //right
-      scene. mainCharacter.move(RIGHT);
+      scene.move(RIGHT);
   }else if(evt.keyCode == 40 || evt.keyCode == 83 ){ //down
-      scene.mainCharacter.move(DOWN);
+      scene.move(DOWN);
   }else if(evt.keyCode == 13 ){ //Action
     windowInfo.moveLines();
     //Character message if in front
