@@ -12,8 +12,8 @@ const int INITIAL_FACE = 0; // Initial facing direction for main character
 const int SCREEN_HEIGHT = 512;
 const int SCREEN_WIDTH = 672;
 
-const int MAP_HEIGHT_TILES = 32;
-const int MAP_WIDTH_TILES = 40;
+const int MAP_HEIGHT_TILES = 24;
+const int MAP_WIDTH_TILES = 30;
 
 const int CAMERA_HEIGHT_TILES = 16;
 const int CAMERA_WIDTH_TILES = 21;

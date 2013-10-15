@@ -96,32 +96,33 @@ class Character implements Graphic{
       faceDirection(face);
       return false;
     }
+    
     switch (face) {
       case 0: //up
         faceDirection(UP);
         if(curPos.y > 0){
-          curPos.y -= 1;
+          curPos.y --;
           return true;
         }
         break;
       case 1: //down
         faceDirection(DOWN);
-        if((curPos.y)  < MAP_HEIGHT_TILES){
-          curPos.y += 1;
+        if((curPos.y)  < MAP_HEIGHT_TILES - 1){
+          curPos.y ++;
           return true;
         }
         break;
       case 2: //left
         faceDirection(LEFT);
         if(curPos.x > 0){
-          curPos.x -= 1;
+          curPos.x --;
           return true;
         }
         break;
       case 3: //right
         faceDirection(RIGHT);
-        if((curPos.x) < MAP_WIDTH_TILES){
-          curPos.x += 1;
+        if((curPos.x) < MAP_WIDTH_TILES - 1){
+          curPos.x ++;
           return true;
         }
         break;

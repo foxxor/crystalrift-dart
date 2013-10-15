@@ -157,8 +157,8 @@ class MapSet implements Graphic{
   }
   
   void update(){
-    for (var e = 0; e < (CAMERA_HEIGHT_TILES); e++){
-      for (var i = 0; i < (CAMERA_WIDTH_TILES); i++){
+    for (var e = 0; e < (MAP_HEIGHT_TILES); e++){
+      for (var i = 0; i < (MAP_WIDTH_TILES); i++){
         Tile tile = mapset.get( i , e);
         _ctx.drawImageToRect(this.mapsetImage , new Rectangle(i * TILE_SIZE - scene.displayPxX, e * TILE_SIZE - scene.displayPxY, TILE_SIZE, TILE_SIZE), //Rect to paint the image
             sourceRect: new Rectangle( tile.xImg, tile.yImg, TILE_SIZE, TILE_SIZE)); //Size of the image

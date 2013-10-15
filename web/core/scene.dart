@@ -57,18 +57,20 @@ class Scene{
     //mainCharacter.moveTo( 13, 4);
     chars = new List<Character>();
     items = new List<Item>();
-    displayX = 3;
-    displayY = 3;
-    displayPxX = 3 * TILE_SIZE;
-    displayPxY = 3 * TILE_SIZE;
+    displayX = 0;
+    displayY = 0;
+    displayPxX = 0 * TILE_SIZE;
+    displayPxY = 0 * TILE_SIZE;
     activeEvents = new List<Action>();
     loadProperties();
   }
   
   void update(){
     //The order of rendering here controls the priority of visualization
-    if(mainCharacter.isMoving()){
+    if(isMoving()){
       updateMove();
+    }else{
+      stopMove();
     }
     gameMap.update();
     
@@ -117,29 +119,52 @@ class Scene{
     }
   }
   
+  bool isMoving(){
+    return (displayPxX != displayX * TILE_SIZE || displayPxY != displayY * TILE_SIZE);
+  }
+  
+  void stopMove(){
+    if(displayY * TILE_SIZE > displayPxY){
+      num dy = (displayY + (TILE_SIZE - (displayPxY % TILE_SIZE))) / TILE_SIZE;
+      displayY = Math.min(dy.floor(), displayY);
+    }
+    if(displayX * TILE_SIZE > displayPxX){
+      num dx = (displayX + (TILE_SIZE - (displayPxX % TILE_SIZE))) / TILE_SIZE;
+      displayX = Math.min(dx.floor(), displayX);
+    }
+    if(displayY * TILE_SIZE < displayPxY){
+      num dy = (displayPxY + (TILE_SIZE - (displayPxY % TILE_SIZE))) / TILE_SIZE;
+      displayY = Math.max(dy.floor(), displayY) -1;
+    }
+    if(displayX * TILE_SIZE < displayPxY){
+      num dx = (displayPxX + (TILE_SIZE - (displayPxX % TILE_SIZE))) / TILE_SIZE;
+      displayX = Math.max(dx.floor(), displayX) -1;
+    }
+  }
+  
   void move(int direction){
     switch (direction){
       case UP:
         mainCharacter.move(UP);
-        if(displayY > 0){
+        if(displayY > 0 && mainCharacter.curPos.y < (MAP_HEIGHT_TILES - (CAMERA_HEIGHT_TILES / 2))){
           displayY --;
         }
         break;
       case DOWN:
         mainCharacter.move(DOWN);
-        if(displayY < (MAP_HEIGHT_TILES - (CAMERA_HEIGHT_TILES / 2))){
+        if(mainCharacter.curPos.y > CAMERA_HEIGHT_TILES / 2 && mainCharacter.curPos.y < (MAP_HEIGHT_TILES - (CAMERA_HEIGHT_TILES / 2))){
           displayY ++;
         }
         break;
       case LEFT:
         mainCharacter.move(LEFT);
-        if(displayX < 0){
+        if(displayX > 0 && mainCharacter.curPos.x < (MAP_WIDTH_TILES - (CAMERA_WIDTH_TILES / 2))){
           displayX --;
         }
         break;
       case RIGHT:
         mainCharacter.move(RIGHT);
-        if(displayX > (MAP_WIDTH_TILES - (CAMERA_WIDTH_TILES / 2))){
+        if(mainCharacter.curPos.x > CAMERA_WIDTH_TILES / 2 && mainCharacter.curPos.x < (MAP_WIDTH_TILES - (CAMERA_WIDTH_TILES / 2)) ){
           displayX ++;
         }
         break;  
@@ -194,7 +219,7 @@ class Scene{
   
   void createAnimation(Character char){
     Coordinate coord = new Coordinate(0,0);
-    Animation animation = new Animation(_doc, _ctx, canvas, coord, 'light_002');
+    Animation animation = new Animation(_doc, _ctx, canvas, this, coord, 'light_002');
     animation.startAnimation();
     const ms = const Duration(milliseconds: 10000);
     Timer t = new Timer( ms, removeEvent);
