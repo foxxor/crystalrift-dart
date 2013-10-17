@@ -7,6 +7,7 @@ An HTML5 2D game engine using dart and canvas. Movements and interactions are li
 ## What is working?
 
 * Character movement in 4 directions. (W,A,S,D)
+* Camera following main character.
 * Character collission detection.
 * Pushable elements.
 * Buildings, characters, items and decorations are loaded dinamically using json files.
@@ -14,6 +15,7 @@ An HTML5 2D game engine using dart and canvas. Movements and interactions are li
 * Character to character interaction. (Enter)
 * Actions handling. (On-screen text, framed-animations)
 * Particle effects like fire, poison, smoke.(Little buggy still trying to figure out some things on dart)
+* Text boxes for long texts. (Enter to skip)
 
 ## Additional Utils in the repository
 
@@ -22,13 +24,14 @@ An HTML5 2D game engine using dart and canvas. Movements and interactions are li
 ### TODO
 
 * ~~Create visual elements~~
-* Create complex visual elements
+* ~~Create complex visual elements~~
 * Different maps handling
-* Camera movement with main character
-* ~~Text boxes for characters~~ (Not fully working)
+* ~~Camera movement with main character~~
+* ~~Text boxes for characters~~
 * ~~Character interactions~~
 * Character special actions (Jump, teleport, flip?)
 * Lots of things...Items, Battle, Menus.
+* Fix particles
 
 ### Want to help?
 
