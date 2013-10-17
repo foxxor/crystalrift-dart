@@ -5,7 +5,7 @@ library scene;
 
 import 'dart:html';
 import 'dart:async';
-import 'dart:json';
+import 'dart:convert';
 import 'globals.dart';
 import '../helpers/coordinate.dart';
 import '../lib/message.dart';
@@ -165,9 +165,9 @@ class Scene{
   
   void centerCamera(int type){
     if(type == 1){
-      displayX = Math.min(Math.max(mainCharacter.curPos.x - (CAMERA_WIDTH_TILES / 2).floor() +1, 0), MAP_WIDTH_TILES);
+      displayX = Math.min(Math.max(mainCharacter.curPos.x - (CAMERA_WIDTH_TILES / 2).floor() -1, 0), MAP_WIDTH_TILES);
     }else{
-      displayY = Math.min(Math.max(mainCharacter.curPos.y - (CAMERA_HEIGHT_TILES / 2).floor() +1, 0), MAP_HEIGHT_TILES);
+      displayY = Math.min(Math.max(mainCharacter.curPos.y - (CAMERA_HEIGHT_TILES / 2).floor() -1, 0), MAP_HEIGHT_TILES);
     }
   }
   
@@ -178,7 +178,7 @@ class Scene{
   }
   
   void loadItems(String responseText){
-    Map itemsData = parse(responseText);
+    Map itemsData = JSON.decode(responseText);
     Iterator<Map> iteItems = itemsData['items'].iterator;
     while(iteItems.moveNext()){
       Map i = iteItems.current;
@@ -190,7 +190,7 @@ class Scene{
   }
   
   void loadCharacters(String responseText) {
-    Map charactersData = parse(responseText);
+    Map charactersData = JSON.decode(responseText);
     Iterator<Map> characters = charactersData['characters'].iterator;
     while(characters.moveNext()){
       Map m = characters.current;
@@ -204,7 +204,7 @@ class Scene{
   }
   
   void loadStructures(String responseText) {
-    gameMap.structuresData = parse(responseText);
+    gameMap.structuresData = JSON.decode(responseText);
     gameMap.addBuilding(0, 6,5);
     gameMap.addRandomDetails();
   }

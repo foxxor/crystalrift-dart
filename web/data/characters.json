@@ -29,7 +29,7 @@
     },
     {
       "x":7,
-      "y": 9,
+      "y": 12,
       "characterId":2,
       "moveRandom" : true,
       "message": "Por el rey!"

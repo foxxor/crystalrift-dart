@@ -151,16 +151,12 @@ class Character implements Graphic{
     switch (faceDir) {
       case 3: //up
         return UP;
-        break;
       case 0: //down
         return DOWN;
-        break;
       case 1: //left
         return LEFT;
-        break;
       case 2: //right
         return RIGHT;
-        break;
     }
   }
   
