@@ -16,7 +16,7 @@ const int MAP_HEIGHT_TILES = 24;
 const int MAP_WIDTH_TILES = 30;
 
 const int CAMERA_HEIGHT_TILES = 16;
-const int CAMERA_WIDTH_TILES = 21;
+const int CAMERA_WIDTH_TILES = 22;
 
 //Directions
 const int LEFT = 2;

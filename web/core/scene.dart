@@ -67,7 +67,7 @@ class Scene{
   
   void update(){
     //The order of rendering here controls the priority of visualization
-    if(isMoving()){
+    if(isMoving() && mainCharacter.isMoving()){
       updateMove();
     }else{
       stopMove();
@@ -146,29 +146,32 @@ class Scene{
     switch (direction){
       case UP:
         mainCharacter.move(UP);
-        if(displayY > 0 && mainCharacter.curPos.y < (MAP_HEIGHT_TILES - (CAMERA_HEIGHT_TILES / 2))){
-          displayY --;
-        }
         break;
       case DOWN:
         mainCharacter.move(DOWN);
-        if(mainCharacter.curPos.y > CAMERA_HEIGHT_TILES / 2 && mainCharacter.curPos.y < (MAP_HEIGHT_TILES - (CAMERA_HEIGHT_TILES / 2))){
-          displayY ++;
-        }
         break;
       case LEFT:
         mainCharacter.move(LEFT);
-        if(displayX > 0 && mainCharacter.curPos.x < (MAP_WIDTH_TILES - (CAMERA_WIDTH_TILES / 2))){
-          displayX --;
-        }
         break;
       case RIGHT:
         mainCharacter.move(RIGHT);
-        if(mainCharacter.curPos.x > CAMERA_WIDTH_TILES / 2 && mainCharacter.curPos.x < (MAP_WIDTH_TILES - (CAMERA_WIDTH_TILES / 2)) ){
-          displayX ++;
-        }
         break;  
     }
+    if(mainCharacter.curPos.x < (MAP_WIDTH_TILES - displayX)  
+       && mainCharacter.curPos.x < MAP_WIDTH_TILES - (CAMERA_WIDTH_TILES / 2)
+       && mainCharacter.curPos.y > CAMERA_HEIGHT_TILES / 2 && mainCharacter.curPos.y < (MAP_HEIGHT_TILES - displayY)
+       && mainCharacter.curPos.y < (MAP_HEIGHT_TILES - displayY) 
+       && mainCharacter.curPos.y < MAP_HEIGHT_TILES - (CAMERA_HEIGHT_TILES / 2)
+       && mainCharacter.curPos.x < (MAP_WIDTH_TILES - displayX)  
+       && mainCharacter.curPos.x < MAP_WIDTH_TILES - (CAMERA_WIDTH_TILES / 2)){
+      centerCamera();
+    }
+    
+  }
+  
+  void centerCamera(){
+    displayX = Math.min(Math.max(mainCharacter.curPos.x - (CAMERA_WIDTH_TILES / 2).ceil() -1, 0), MAP_WIDTH_TILES);
+    displayY = Math.min(Math.max(mainCharacter.curPos.y - (CAMERA_HEIGHT_TILES / 2).ceil() +1, 0), MAP_HEIGHT_TILES);
   }
   
   void loadProperties(){
