@@ -73,29 +73,23 @@ class Scene{
       stopMove();
     }
     gameMap.update();
-    
     Iterator<Character> charas = chars.iterator;
     while(charas.moveNext()){
       Character c = charas.current;
       c.update();
     }
-    
     Iterator<Item> itemsIte = items.iterator;
     while(itemsIte.moveNext()){
       Item i = itemsIte.current;
       i.update();
     }
-    
     mainCharacter.update();  
-    
     Iterator<Animation> animationsIte = activeAnimations.iterator;
     while(animationsIte.moveNext()){
       Animation a = animationsIte.current;
       a.update();
     }
-    
     particle.update();
-    
     Iterator<Action> eventIte = activeEvents.iterator;
     while(eventIte.moveNext()){
       Action e = eventIte.current;
@@ -170,7 +164,6 @@ class Scene{
   }
   
   void centerCamera(int type){
-    print(type);
     if(type == 1){
       displayX = Math.min(Math.max(mainCharacter.curPos.x - (CAMERA_WIDTH_TILES / 2).floor() +1, 0), MAP_WIDTH_TILES);
     }else{

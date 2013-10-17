@@ -19,6 +19,20 @@
       "characterId":3,
       "moveRandom" : false,
       "message": "Por el rey!"
+    },
+    {
+      "x":10,
+      "y": 15,
+      "characterId":2,
+      "moveRandom" : true,
+      "message": "Por el rey!"
+    },
+    {
+      "x":7,
+      "y": 9,
+      "characterId":2,
+      "moveRandom" : true,
+      "message": "Por el rey!"
     }
   ]
 }
