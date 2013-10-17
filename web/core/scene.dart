@@ -159,19 +159,23 @@ class Scene{
     }
     if(mainCharacter.curPos.x < (MAP_WIDTH_TILES - displayX)  
        && mainCharacter.curPos.x < MAP_WIDTH_TILES - (CAMERA_WIDTH_TILES / 2)
-       && mainCharacter.curPos.y > CAMERA_HEIGHT_TILES / 2 && mainCharacter.curPos.y < (MAP_HEIGHT_TILES - displayY)
-       && mainCharacter.curPos.y < (MAP_HEIGHT_TILES - displayY) 
-       && mainCharacter.curPos.y < MAP_HEIGHT_TILES - (CAMERA_HEIGHT_TILES / 2)
-       && mainCharacter.curPos.x < (MAP_WIDTH_TILES - displayX)  
        && mainCharacter.curPos.x < MAP_WIDTH_TILES - (CAMERA_WIDTH_TILES / 2)){
-      centerCamera();
+      centerCamera(1);
     }
-    
+    if(mainCharacter.curPos.y > CAMERA_HEIGHT_TILES / 2 
+        && mainCharacter.curPos.y < (MAP_HEIGHT_TILES - displayY)
+        && mainCharacter.curPos.y < MAP_HEIGHT_TILES - (CAMERA_HEIGHT_TILES / 2)){
+      centerCamera(2);
+    }
   }
   
-  void centerCamera(){
-    displayX = Math.min(Math.max(mainCharacter.curPos.x - (CAMERA_WIDTH_TILES / 2).ceil() -1, 0), MAP_WIDTH_TILES);
-    displayY = Math.min(Math.max(mainCharacter.curPos.y - (CAMERA_HEIGHT_TILES / 2).ceil() +1, 0), MAP_HEIGHT_TILES);
+  void centerCamera(int type){
+    print(type);
+    if(type == 1){
+      displayX = Math.min(Math.max(mainCharacter.curPos.x - (CAMERA_WIDTH_TILES / 2).floor() +1, 0), MAP_WIDTH_TILES);
+    }else{
+      displayY = Math.min(Math.max(mainCharacter.curPos.y - (CAMERA_HEIGHT_TILES / 2).floor() +1, 0), MAP_HEIGHT_TILES);
+    }
   }
   
   void loadProperties(){
