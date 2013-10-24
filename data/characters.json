@@ -14,10 +14,24 @@
       "message": "Muevete!"
     },
     {
-      "x":12,
-      "y": 8,
+      "x":13,
+      "y": 9,
       "characterId":3,
       "moveRandom" : false,
+      "message": "Por el rey!"
+    },
+    {
+      "x":10,
+      "y": 15,
+      "characterId":2,
+      "moveRandom" : true,
+      "message": "Por el rey!"
+    },
+    {
+      "x":7,
+      "y": 12,
+      "characterId":2,
+      "moveRandom" : true,
       "message": "Por el rey!"
     }
   ]
