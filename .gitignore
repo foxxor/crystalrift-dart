@@ -1,3 +1,4 @@
 *.js
 *.deps
 *.map
+*.DS_Store
