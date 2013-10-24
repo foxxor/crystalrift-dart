@@ -11,7 +11,7 @@ import '../helpers/coordinate.dart';
 import '../lib/message.dart';
 import 'mapset.dart';
 import 'character.dart';
-import 'item.dart';
+import 'entity.dart';
 import 'tile.dart';
 import 'action.dart';
 import 'animation.dart';
@@ -26,7 +26,7 @@ class Scene{
   MapSet gameMap;
   List<Character> chars; //List of current characters
   Character mainCharacter;
-  List<Item> items;
+  List<Entity> entities;
   List<Action> activeEvents;
   List<Animation> activeAnimations;
   Particle particle;
@@ -56,7 +56,7 @@ class Scene{
     mainCharacter = new Character(_doc, _ctx, canvas, initCoor, 0, this, ""); //Main Player
     //mainCharacter.moveTo( 13, 4);
     chars = new List<Character>();
-    items = new List<Item>();
+    entities = new List<Entity>();
     displayX = 0;
     displayY = 0;
     displayPxX = 0 * TILE_SIZE;
@@ -78,9 +78,9 @@ class Scene{
       Character c = charas.current;
       c.update();
     }
-    Iterator<Item> itemsIte = items.iterator;
-    while(itemsIte.moveNext()){
-      Item i = itemsIte.current;
+    Iterator<Entity> entitiesIte = entities.iterator;
+    while(entitiesIte.moveNext()){
+      Entity i = entitiesIte.current;
       i.update();
     }
     mainCharacter.update();  
@@ -140,52 +140,62 @@ class Scene{
     switch (direction){
       case UP:
         mainCharacter.move(UP);
+        if(mainCharacter.curPos.y > (CAMERA_HEIGHT_TILES / 2 )
+            && mainCharacter.curPos.y < (MAP_HEIGHT_TILES - displayY)
+            && mainCharacter.curPos.y < MAP_HEIGHT_TILES - (CAMERA_HEIGHT_TILES / 2)){
+          centerCamera(2);
+        }
         break;
       case DOWN:
         mainCharacter.move(DOWN);
+        if(mainCharacter.curPos.y > (CAMERA_HEIGHT_TILES / 2 )
+            && mainCharacter.curPos.y < (MAP_HEIGHT_TILES - displayY)
+            && mainCharacter.curPos.y < MAP_HEIGHT_TILES - (CAMERA_HEIGHT_TILES / 2)){
+          centerCamera(2);
+        }
         break;
       case LEFT:
         mainCharacter.move(LEFT);
+        if(mainCharacter.curPos.x < (MAP_WIDTH_TILES - displayX)
+            && mainCharacter.curPos.x < MAP_WIDTH_TILES - (CAMERA_WIDTH_TILES / 2)
+            && mainCharacter.curPos.x < MAP_WIDTH_TILES - (CAMERA_WIDTH_TILES / 2)){
+          centerCamera(1);
+        }
         break;
       case RIGHT:
         mainCharacter.move(RIGHT);
+        if(mainCharacter.curPos.x < (MAP_WIDTH_TILES - displayX)
+            && mainCharacter.curPos.x < MAP_WIDTH_TILES - (CAMERA_WIDTH_TILES / 2)
+            && mainCharacter.curPos.x < MAP_WIDTH_TILES - (CAMERA_WIDTH_TILES / 2)){
+          centerCamera(1);
+        }
         break;  
-    }
-    if(mainCharacter.curPos.x < (MAP_WIDTH_TILES - displayX)  
-       && mainCharacter.curPos.x < MAP_WIDTH_TILES - (CAMERA_WIDTH_TILES / 2)
-       && mainCharacter.curPos.x < MAP_WIDTH_TILES - (CAMERA_WIDTH_TILES / 2)){
-      centerCamera(1);
-    }
-    if(mainCharacter.curPos.y > CAMERA_HEIGHT_TILES / 2 
-        && mainCharacter.curPos.y < (MAP_HEIGHT_TILES - displayY)
-        && mainCharacter.curPos.y < MAP_HEIGHT_TILES - (CAMERA_HEIGHT_TILES / 2)){
-      centerCamera(2);
     }
   }
   
   void centerCamera(int type){
     if(type == 1){
-      displayX = Math.min(Math.max(mainCharacter.curPos.x - (CAMERA_WIDTH_TILES / 2).floor() -1, 0), MAP_WIDTH_TILES);
+      displayX = Math.max(Math.min(mainCharacter.curPos.x - (CAMERA_WIDTH_TILES / 2).floor(), MAP_WIDTH_TILES), 0);
     }else{
-      displayY = Math.min(Math.max(mainCharacter.curPos.y - (CAMERA_HEIGHT_TILES / 2).floor() -1, 0), MAP_HEIGHT_TILES);
+      displayY = Math.max(Math.min(mainCharacter.curPos.y - (CAMERA_HEIGHT_TILES / 2).floor(), MAP_HEIGHT_TILES), 0);
     }
   }
   
   void loadProperties(){
     var request = HttpRequest.getString("data/characters.json").then(loadCharacters);
     var request2 = HttpRequest.getString("data/structures.json").then(loadStructures);
-    var request3 = HttpRequest.getString("data/items.json").then(loadItems);
+    var request3 = HttpRequest.getString("data/entities.json").then(loadEntities);
   }
   
-  void loadItems(String responseText){
-    Map itemsData = JSON.decode(responseText);
-    Iterator<Map> iteItems = itemsData['items'].iterator;
-    while(iteItems.moveNext()){
-      Map i = iteItems.current;
+  void loadEntities(String responseText){
+    Map entitiesData = JSON.decode(responseText);
+    Iterator<Map> iteEntities = entitiesData['entities'].iterator;
+    while(iteEntities.moveNext()){
+      Map i = iteEntities.current;
       Coordinate coords = new Coordinate(i['x'], i['y']);
       Tile tile = new Tile(i['xTile'], i['yTile']);
-      Item item = new Item(_doc, _ctx, canvas, coords, tile, this, i['pushable']);
-      items.add(item);
+      Entity item = new Entity(_doc, _ctx, canvas, coords, tile, this, i['pushable']);
+      entities.add(item);
     }
   }
   
@@ -266,9 +276,9 @@ class Scene{
       }
     }
     
-    Iterator<Item> itemsIte = items.iterator;
-    while(itemsIte.moveNext()){
-      Item item = itemsIte.current;
+    Iterator<Entity> entitiesIte = entities.iterator;
+    while(entitiesIte.moveNext()){
+      Entity item = entitiesIte.current;
       bool itemFace = item.curPos.nextToThis2(newCoords);
       if(!item.pushable && itemFace){
           return false;

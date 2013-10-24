@@ -155,8 +155,18 @@ class Particle implements Graphic{
       _ctx.save();
       _ctx.globalAlpha = nAlpha;
       _ctx.drawImageScaled(p, c.x - scene.displayPxX, c.y - scene.displayPxY, width, height);
+      //drawParticle(c.x - scene.displayPxX, c.y - scene.displayPxY);
       _ctx.restore();      
     }
+  }
+  
+  //This method doesnt work because is super slow :(
+  void drawParticle(num x, num y){
+    var radius = 2;
+    _ctx.arc(x, y, radius, 0, 
+        2 * Math.PI, false);
+    _ctx.fillStyle = 'orange';
+    _ctx.fill();
   }
   
   void loadGraphic(String src){
