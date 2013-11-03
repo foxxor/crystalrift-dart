@@ -154,8 +154,10 @@ class Particle implements Graphic{
       Coordinate c = coord.current;
       _ctx.save();
       _ctx.globalAlpha = nAlpha;
+      _ctx.globalCompositeOperation = 'lighter';
+      _ctx.fillStyle = "#f30";
       _ctx.drawImageScaled(p, c.x - scene.displayPxX, c.y - scene.displayPxY, width, height);
-      //drawParticle(c.x - scene.displayPxX, c.y - scene.displayPxY);
+      //_ctx.fillRect(c.x - scene.displayPxX, c.y - scene.displayPxY, width, height);
       _ctx.restore();      
     }
   }
