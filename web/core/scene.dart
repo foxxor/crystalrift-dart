@@ -49,7 +49,7 @@ class Scene{
     Animation animation = new Animation(_doc, _ctx, canvas, this, initCoor2, 'fire_001');
     animation.startAnimation();
     Coordinate partCoor = new Coordinate(12 * TILE_SIZE, 7 * TILE_SIZE);
-    particle = new Particle(_doc, _ctx, canvas, this, partCoor, "fire");
+    particle = new Particle(_doc, _ctx, canvas, this, partCoor, "smoke");
     particle.start();
     activeAnimations = new List<Animation>();
     activeAnimations.add(animation);

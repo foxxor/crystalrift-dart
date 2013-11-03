@@ -29,6 +29,8 @@ class Particle implements Graphic{
   int height;
   num alpha;
   Scene scene;
+  String blendType;
+  String color;
   
   Particle(HtmlDocument _doc, CanvasRenderingContext2D _ctx, CanvasElement canvas, Scene scene, Coordinate curPosPx, String effect){
     this._doc = _doc;
@@ -52,17 +54,20 @@ class Particle implements Graphic{
       height = (TILE_SIZE/ 5).floor();
       loadGraphic('assets/particles/particle_purple.png');
     }else if(effect == "smoke"){
-      alpha = 0.5;
-      maxParticles = 25;
+      alpha = 0.7;
+      maxParticles = 20;
+      blendType = 'lighter';
+      color = "#FFF";
       width = (TILE_SIZE/ 3).floor();
       height = (TILE_SIZE/ 3).floor();
       loadGraphic('assets/particles/smoke.png');
     }else if(effect == "fire"){
-      alpha = 0.55;
-      maxParticles = 5;
+      blendType = 'lighter';
+      color = "#f30";
+      alpha = 0.4;
+      maxParticles = 25;
       width = (TILE_SIZE/ 3).floor();
       height = (TILE_SIZE/ 3).floor();
-      loadGraphic('assets/particles/particle_red.png');
       loadGraphic('assets/particles/particle_yellow.png');
     }else if(effect == "circle"){
       alpha = 0.6;
@@ -77,67 +82,51 @@ class Particle implements Graphic{
   }
   
   void start(){
-    const ms = const Duration(milliseconds: 50);
+    const ms = const Duration(milliseconds: 60);
     Timer t = new Timer( ms, updateAnimation);
   }
   
   void updateAnimation(){
     var random = new Math.Random();
     Iterator<Coordinate> coordIte = particlesCoords.iterator;
-    Iterator<num> alphaIte = particlesAlpha.iterator;
     frame ++;
-    
+    num i = 0;
     while(coordIte.moveNext()){
       Coordinate c = coordIte.current;
       if(effect == "poison" || effect == "smoke"){
-        alphaIte.moveNext();
-        var nOpacity = random.nextInt(3);
-        num cAlpha = alphaIte.current;
-        cAlpha -= nOpacity/100;
-        
-        if(cAlpha <= 0){
-          cAlpha = 0.25;
-        }
-        
-        var number = random.nextInt(3);
-        var negative = random.nextBool();
-        if(c.y < curPosPx.y){
-          c.y = curPosPx.y + TILE_SIZE -12;
+        num cAlpha = particlesAlpha.elementAt(i);
+        if(cAlpha <= 0.05 || c.y <= curPosPx.y){
+          cAlpha = alpha;
+          c.y = curPosPx.y + TILE_SIZE - 17;
+          c.x = curPosPx.x + (TILE_SIZE/2).floor() - 5;
         }else{
+          var number = random.nextInt(2);
+          var negative = random.nextBool();
+          cAlpha -= number/50;
           c.y -= number;
-        }
-        if(c.x < curPosPx.x || c.x > (curPosPx.x + TILE_SIZE -10)){
-          c.x = curPosPx.x + (TILE_SIZE/2).floor();
-        }else{
           c.x += (negative? number * -1 : number);
         }
+        particlesAlpha.insert(i, cAlpha);
       }else if(effect == "fire"){
-        alphaIte.moveNext();
-        var nOpacity = random.nextInt(3);
-        num cAlpha = alphaIte.current;
-        cAlpha -= nOpacity/100;
-        
-        if(cAlpha <= 0){
-          cAlpha = 0.25;
-        }
-        
-        var number = random.nextInt(2);
-        var negative = random.nextBool();
-        if(c.y < curPosPx.y){
-          c.y = curPosPx.y + TILE_SIZE -16;
+        num cAlpha = particlesAlpha.elementAt(i);
+        if(cAlpha <= 0.05 || c.y <= curPosPx.y){
+          cAlpha = alpha;
+          c.y = curPosPx.y + TILE_SIZE - 17;
+          c.x = curPosPx.x + (TILE_SIZE/2).floor() - 5;
         }else{
+          var number = random.nextInt(2);
+          var negative = random.nextBool();
+          cAlpha -= number/50;
           c.y -= number;
-        }
-        if(c.x < curPosPx.x || c.x > (curPosPx.x + TILE_SIZE - 10)){
-          c.x = curPosPx.x + (TILE_SIZE/2).floor();
-        }else{
           c.x += (negative? number * -1 : number);
         }
+        particlesAlpha.insert(i, cAlpha);
       }else if(effect == "circle"){
         var number = random.nextInt(6);
         c.x = curPosPx.x + (TILE_SIZE * Math.cos(frame + number)).floor();
         c.y = curPosPx.y + (TILE_SIZE * Math.sin(frame + number)).floor();
       }
+      i++;
     }
     start();
   }
@@ -154,8 +143,10 @@ class Particle implements Graphic{
       Coordinate c = coord.current;
       _ctx.save();
       _ctx.globalAlpha = nAlpha;
-      _ctx.globalCompositeOperation = 'lighter';
-      _ctx.fillStyle = "#f30";
+      if(blendType != null){
+        _ctx.globalCompositeOperation = blendType;
+        _ctx.fillStyle = color;
+      }
       _ctx.drawImageScaled(p, c.x - scene.displayPxX, c.y - scene.displayPxY, width, height);
       //_ctx.fillRect(c.x - scene.displayPxX, c.y - scene.displayPxY, width, height);
       _ctx.restore();      
