@@ -21,6 +21,7 @@ void main() {
   _ctx = canvas.getContext("2d");
   canvas.width = 1024;//384;
   canvas.height = 2016;//15096;
+  tileElement = _doc.query("#tilesetCont");
   image = new ImageElement(src:'assets/tileset/tileset.png', width:canvas.width, height:canvas.height);
   image.onLoad.listen((value) => update());
   TILE_SIZE = 32;
@@ -29,14 +30,14 @@ void main() {
   _ctxTile = tileCanvas.getContext("2d");
   tileCanvas.width = TILE_SIZE;
   tileCanvas.height = TILE_SIZE;
-  
   imageTile = new ImageElement(src:'assets/tileset/tileset.png', width:TILE_SIZE, height:TILE_SIZE);
-  document.onMouseDown.listen(mousePressed);
+  
+  canvas.onMouseDown.listen(mousePressed);
 }
 
 void mousePressed(MouseEvent e){
-  int x = (e.client.x/TILE_SIZE).round() -1;
-  int y = (e.client.y/TILE_SIZE).round() -1;
+  int x = ((e.client.x + tileElement.scrollLeft)/TILE_SIZE).ceil() -1;
+  int y = ((e.client.y + tileElement.scrollTop)/TILE_SIZE).ceil() -1;
   _ctxTile.clearRect(0, 0, TILE_SIZE, TILE_SIZE);
   _ctxTile.drawImageToRect(imageTile , new Rectangle(0, 0, TILE_SIZE, TILE_SIZE), //Rect to paint the image
       sourceRect: new Rectangle( x * TILE_SIZE, y* TILE_SIZE, TILE_SIZE, TILE_SIZE)); //Size of the image
