@@ -2,25 +2,24 @@
 
 <html>
   <head>
-    <title>imageutil</title>
+    <title>Crystal Rift map editor</title>
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
   </head>
  
   <body>
   	<div class="row">
-  		<div class="col-md-8"><canvas id="canvas"></canvas></div>
-      	<div class="col-md-4">
-      	 <div style="position:fixed; top:10%; right:5%; font-size:18pt;">
-           <h3>Tileset coordinate util</h3>
-           <canvas id="tile" ></canvas>
-           <div id="divX">
-           X: 
-         </div>
-           <div id="divY">
-           Y: 
-           </div>
-           </div>
-      	</div>
+      <div class="col-md-4">
+        <div style="width: 256px; height: 320px; overflow: auto;">
+          <canvas id="canvas"></canvas>
+        </div>
+        <div style="font-size:18pt; position:relative;" id="tileContainer">
+          Selected tile:
+          <canvas id="tile"></canvas>
+        </div>
+      </div>
+      <div class="col-md-8">
+      	 
+  	  </div>
   	</div>
     <script type="application/dart" src="editor.dart"></script>
     <!-- for this next line to work, your pubspec.yaml file must have a dependency on 'browser' -->
