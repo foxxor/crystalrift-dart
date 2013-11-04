@@ -148,7 +148,6 @@ class Particle implements Graphic{
         _ctx.fillStyle = color;
       }
       _ctx.drawImageScaled(p, c.x - scene.displayPxX, c.y - scene.displayPxY, width, height);
-      //_ctx.fillRect(c.x - scene.displayPxX, c.y - scene.displayPxY, width, height);
       _ctx.restore();      
     }
   }

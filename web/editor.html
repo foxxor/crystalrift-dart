@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>imageutil</title>
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+  </head>
+ 
+  <body>
+  	<div class="row">
+  		<div class="col-md-8"><canvas id="canvas"></canvas></div>
+      	<div class="col-md-4">
+      	 <div style="position:fixed; top:10%; right:5%; font-size:18pt;">
+           <h3>Tileset coordinate util</h3>
+           <canvas id="tile" ></canvas>
+           <div id="divX">
+           X: 
+         </div>
+           <div id="divY">
+           Y: 
+           </div>
+           </div>
+      	</div>
+  	</div>
+    <script type="application/dart" src="editor.dart"></script>
+    <!-- for this next line to work, your pubspec.yaml file must have a dependency on 'browser' -->
+    <script src="packages/browser/dart.js"></script>
+  </body>
+</html>
