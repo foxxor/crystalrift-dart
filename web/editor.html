@@ -8,17 +8,48 @@
  
   <body>
   	<div class="row">
-      <div class="col-md-4">
-        <div style="width: 256px; height: 400px; overflow: auto;" id="tilesetCont">
-          <canvas id="canvas"></canvas>
+      <div class="col-md-3" id="sideMenu">
+        <div style="width: 100%; height: 334px; overflow: auto;" id="tilesetCont">
+          <canvas id="tileset"></canvas>
         </div>
-        <div style="font-size:14pt; position:relative; margin:10px;" id="tileCont">
-          Selected tile:
-          <canvas id="tile"></canvas>
+        <ul class="nav nav-tabs" id="navigation">
+          <li class="active"><a href="#" data-option="draw">Draw</a></li>
+          <li><a href="#" data-option="maps">Maps</a></li>
+          <li><a href="#" data-option="events">Events</a></li>
+          <li><a href="#" data-option="io">Export/Import</a></li>
+        </ul>
+        
+        <div id="windows" style="margin:10px; font-size:12pt; position:relative;">
+          <form role="form" id="drawWindow">
+            <div class="form-group">
+              <label for="tileCont">Selected tile:</label>
+               <div id="tileCont">
+                 <canvas id="tile"></canvas>
+               </div>
+            </div>
+            <div class="form-group">
+              <label for="toolset">Toolset:</label>
+               <div id="toolset">
+                 <button class="btn btn-default active" href="#" id="toolPencil"><span class="glyphicon glyphicon-pencil" style="vertical-align:middle"></span></button>
+                 <button class="btn btn-default" href="#" disabled="disabled" id="toolRectangle"><span class="glyphicon glyphicon-stop" style="vertical-align:middle"></span></button>
+                 <button class="btn btn-default" href="#" id="toolErase"><span class="glyphicon glyphicon-remove" style="vertical-align:middle"></span></button>
+               </div>
+            </div>
+          </form>
+          <div id="mapWindow">
+            <ul class="list-group">
+              <li class="list-group-item">
+                Map 001
+              </li>
+            </ul>
+          </div>
         </div>
+       
       </div>
-      <div class="col-md-8">
-      	 
+      <div class="col-md-9">
+        <div>
+          <canvas id="map"></canvas>
+        </div>
   	  </div>
   	</div>
     <script type="application/dart" src="editor.dart"></script>
