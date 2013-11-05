@@ -3,6 +3,7 @@
 */
 
 import 'dart:html';
+import 'editor/editorMap.dart';
 
 //System vars
 HtmlDocument _doc;
@@ -16,6 +17,7 @@ var tileElement;
 var navigation;
 var windows;
 int TILE_SIZE;
+List<EditorMap> maps;
 
 void main() {
   _doc = window.document;
@@ -23,6 +25,7 @@ void main() {
   loadTileSet();
   loadTileSelection();
   initMenuInteraction();
+  loadMap();
 }
 
 void initMenuInteraction(){
@@ -65,7 +68,18 @@ void navigationHideAll(){
 }
 
 void loadMap(){
-  loadTileSelection();
+  maps = new List<EditorMap>();
+  EditorMap m1 = new EditorMap("Map 001", 30, 24);
+  maps.add(m1);
+  drawMapsList();
+}
+
+void drawMapsList(){
+  var ul = _doc.query('#mapWindow .list-group');
+  for (var m in maps) {
+    var li = new Element.html('<li class="list-group-item"><span class="badge">'+m.widthTiles.toString()+' x ' +m.heightTiles.toString()+'</span>'+m.name+'</li>');
+    ul.children.add(li);
+  }
 }
 
 void loadTileSet(){
