@@ -14,24 +14,26 @@ An HTML5 2D game engine using dart and canvas. Movements and interactions are li
 * Map tilesets, each tile can have a different graphic and collision rule.
 * Character to character interaction. (Enter)
 * Actions handling. (On-screen text, framed-animations)
-* Particle effects like fire, poison, smoke.(Little buggy still trying to figure out some things on dart)
+* Particle effects like fire, poison, smoke.
 * Text boxes for long texts. (Enter to skip)
 
 ## Additional Utils in the repository
 
 * Tile selector utility, click on any tile of the tileset to retrieve the x,y coordinates.
+* Initial version of the map editor.
 
 ### TODO
 
 * ~~Create visual elements~~
 * ~~Create complex visual elements~~
-* Different maps handling
 * ~~Camera movement with main character~~
 * ~~Text boxes for characters~~
 * ~~Character interactions~~
+* ~~Fix particles~~
+* Different maps handling
 * Character special actions (Jump, teleport, flip?)
-* Lots of things...Items, Battle, Menus.
-* Fix particles
+* Lots of things...Dropable items, Battles, Menus.
+
 
 ### Want to help?
 
