@@ -61,7 +61,6 @@ class EditorMap{
   
   void setTile(int x, int y, int tx, int ty, [int layer=1,int type=TILE_SOIL]){
     Tile t = new Tile(tx, ty);
-    print(tx);
     if(layer == 1){
       layer1.set(x, y, t);
     }
@@ -79,6 +78,11 @@ class EditorMap{
           Tile tile2 = layer2.get(i, e);
           _ctx.drawImageToRect(this.mapImage , new Rectangle(i * TILE_SIZE, e * TILE_SIZE, TILE_SIZE, TILE_SIZE), //Rect to paint the image
               sourceRect: new Rectangle( tile2.xImg, tile2.yImg, TILE_SIZE, TILE_SIZE)); //Size of the image
+        }
+        if(layer3.get(i, e) != 0){
+          Tile tile3 = layer3.get(i, e);
+          _ctx.drawImageToRect(this.mapImage , new Rectangle(i * TILE_SIZE, e * TILE_SIZE, TILE_SIZE, TILE_SIZE), //Rect to paint the image
+              sourceRect: new Rectangle( tile3.xImg, tile3.yImg, TILE_SIZE, TILE_SIZE)); //Size of the image
         }
       }
     }

@@ -22,6 +22,7 @@ var tileElement;
 var mapElement;
 var navigation;
 var windows;
+int currentLayer;
 List<EditorMap> maps;
 
 void main() {
@@ -34,9 +35,11 @@ void main() {
 void initMenuInteraction(){
   initTabs();
   loadTileSelection();
+  layerSelection();
 }
 
 void initTabs(){
+  currentLayer = 1;
   navigation = _doc.query("#navigation");
   windows = _doc.query("#windows");
   navigation.onClick.listen((MouseEvent e){
@@ -59,6 +62,19 @@ void initTabs(){
         //windows.query('#drawWindow').classes.remove('hide');
         break;
     }
+  });
+}
+
+void layerSelection(){
+  var layers = _doc.query("#ulLayers");
+  layers.onClick.listen((MouseEvent e){
+    e.preventDefault();
+    for (var layer in layers.children) {
+      layer.classes.remove('active');
+    }
+    Element elem = e.toElement;
+    elem.parent.classes.add('active');
+    currentLayer = int.parse(elem.dataset['layer']);
   });
 }
 
@@ -93,10 +109,10 @@ void drawMapsList(){
 
 void loadMapSelection(){
   mapCanvas.onClick.listen((MouseEvent e){
-    int x = ((e.client.x + mapElement.scrollLeft - 370)/TILE_SIZE).ceil() -1;
+    int x = ((e.client.x + mapElement.scrollLeft - 360)/TILE_SIZE).ceil() -1;
     int y = ((e.client.y + mapElement.scrollTop - 10)/TILE_SIZE).ceil() -1;
     EditorMap curMap = maps.elementAt(0);
-    curMap.setTile(x, y, tileSelected.x, tileSelected.y);
+    curMap.setTile(x, y, tileSelected.x, tileSelected.y, currentLayer);
     curMap.reDraw();
   });
 }
