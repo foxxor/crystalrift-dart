@@ -59,12 +59,19 @@ class EditorMap{
     }
   }
   
+  void setTile(int x, int y, int tx, int ty, [int layer=1,int type=TILE_SOIL]){
+    Tile t = new Tile(tx, ty);
+    print(tx);
+    if(layer == 1){
+      layer1.set(x, y, t);
+    }
+  }
+  
   void reDraw(){
     _ctx.strokeRect(0,  0, widthTiles* TILE_SIZE, heightTiles* TILE_SIZE);
     for (var e = 0; e < (heightTiles); e++){
       for (var i = 0; i < (widthTiles); i++){
         Tile tile = layer1.get( i, e);
-        print(tile);
         _ctx.drawImageToRect(this.mapImage , new Rectangle(i * TILE_SIZE, e * TILE_SIZE, TILE_SIZE, TILE_SIZE), //Rect to paint the image
             sourceRect: new Rectangle( tile.xImg, tile.yImg, TILE_SIZE, TILE_SIZE)); //Size of the image
         

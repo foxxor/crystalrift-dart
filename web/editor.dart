@@ -5,6 +5,7 @@
 import 'dart:html';
 import 'editor/editorMap.dart';
 import 'core/globals.dart';
+import 'core/tile.dart';
 
 //System vars
 HtmlDocument _doc;
@@ -16,7 +17,9 @@ CanvasElement tileCanvas;
 CanvasElement mapCanvas;
 ImageElement image;
 ImageElement imageTile;
+Tile tileSelected;
 var tileElement;
+var mapElement;
 var navigation;
 var windows;
 List<EditorMap> maps;
@@ -73,9 +76,11 @@ void loadMap(){
   EditorMap m1 = new EditorMap("Map 001", 30, 20);
   mapCanvas = _doc.query("#map");
   mapCtx = mapCanvas.getContext("2d");
+  mapElement = _doc.query('#mapContainer');
   m1.initContext(_doc, mapCtx, mapCanvas);
   maps.add(m1);
   drawMapsList();
+  loadMapSelection();
 }
 
 void drawMapsList(){
@@ -84,6 +89,16 @@ void drawMapsList(){
     var li = new Element.html('<li class="list-group-item"><span class="badge">'+m.widthTiles.toString()+' x ' +m.heightTiles.toString()+'</span>'+m.name+'</li>');
     ul.children.add(li);
   }
+}
+
+void loadMapSelection(){
+  mapCanvas.onClick.listen((MouseEvent e){
+    int x = ((e.client.x + mapElement.scrollLeft - 370)/TILE_SIZE).ceil() -1;
+    int y = ((e.client.y + mapElement.scrollTop - 10)/TILE_SIZE).ceil() -1;
+    EditorMap curMap = maps.elementAt(0);
+    curMap.setTile(x, y, tileSelected.x, tileSelected.y);
+    curMap.reDraw();
+  });
 }
 
 void loadTileSet(){
@@ -107,12 +122,14 @@ void loadTileSelection(){
   tileCanvas.height = TILE_SIZE;
   imageTile = new ImageElement(src:'assets/tileset/tileset.png', width:TILE_SIZE, height:TILE_SIZE);
   _ctxTile.strokeRect(0,  0, TILE_SIZE, TILE_SIZE);
+  tileSelected = new Tile(0, 0);
   tilesetCanvas.onMouseDown.listen(tilesetPressed);
 }
 
 void tilesetPressed(MouseEvent e){
   int x = ((e.client.x + tileElement.scrollLeft)/TILE_SIZE).ceil() -1;
   int y = ((e.client.y + tileElement.scrollTop)/TILE_SIZE).ceil() -1;
+  tileSelected = new Tile(x, y);
   _ctxTile.clearRect(0, 0, TILE_SIZE, TILE_SIZE);
   _ctxTile.drawImageToRect(imageTile , new Rectangle(0, 0, TILE_SIZE, TILE_SIZE), //Rect to paint the image
       sourceRect: new Rectangle( x * TILE_SIZE, y* TILE_SIZE, TILE_SIZE, TILE_SIZE)); //Size of the image
