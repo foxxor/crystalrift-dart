@@ -4,32 +4,33 @@
 
 import 'dart:html';
 import 'editor/editorMap.dart';
+import 'core/globals.dart';
 
 //System vars
 HtmlDocument _doc;
 CanvasRenderingContext2D _ctx;
 CanvasRenderingContext2D _ctxTile;
+CanvasRenderingContext2D mapCtx;
 CanvasElement tilesetCanvas;
 CanvasElement tileCanvas;
+CanvasElement mapCanvas;
 ImageElement image;
 ImageElement imageTile;
 var tileElement;
 var navigation;
 var windows;
-int TILE_SIZE;
 List<EditorMap> maps;
 
 void main() {
   _doc = window.document;
-  TILE_SIZE = 32;
   loadTileSet();
-  loadTileSelection();
   initMenuInteraction();
   loadMap();
 }
 
 void initMenuInteraction(){
   initTabs();
+  loadTileSelection();
 }
 
 void initTabs(){
@@ -69,7 +70,10 @@ void navigationHideAll(){
 
 void loadMap(){
   maps = new List<EditorMap>();
-  EditorMap m1 = new EditorMap("Map 001", 30, 24);
+  EditorMap m1 = new EditorMap("Map 001", 30, 20);
+  mapCanvas = _doc.query("#map");
+  mapCtx = mapCanvas.getContext("2d");
+  m1.initContext(_doc, mapCtx, mapCanvas);
   maps.add(m1);
   drawMapsList();
 }
