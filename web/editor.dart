@@ -23,6 +23,7 @@ var mapElement;
 var navigation;
 var windows;
 int currentLayer;
+String currentTool;
 List<EditorMap> maps;
 
 void main() {
@@ -36,12 +37,14 @@ void initMenuInteraction(){
   initTabs();
   loadTileSelection();
   layerSelection();
+  toolSelection();
 }
 
 void initTabs(){
   currentLayer = 1;
-  navigation = _doc.query("#navigation");
-  windows = _doc.query("#windows");
+  currentTool = "pencil";
+  navigation = _doc.querySelector("#navigation");
+  windows = _doc.querySelector("#windows");
   navigation.onClick.listen((MouseEvent e){
     e.preventDefault();
     Element elem = e.toElement;
@@ -50,23 +53,23 @@ void initTabs(){
     elem.parent.classes.add('active');
     switch (option){
       case "draw":
-        windows.query('#drawWindow').classes.remove('hide');
+        windows.querySelector('#drawWindow').classes.remove('hide');
         break;
       case "maps":
-        windows.query('#mapWindow').classes.remove('hide');
+        windows.querySelector('#mapWindow').classes.remove('hide');
         break;
       case "events":
-        //windows.query('#drawWindow').classes.remove('hide');
+        //windows.querySelector('#drawWindow').classes.remove('hide');
         break;
       case "io":
-        //windows.query('#drawWindow').classes.remove('hide');
+        //windows.querySelector('#drawWindow').classes.remove('hide');
         break;
     }
   });
 }
 
 void layerSelection(){
-  var layers = _doc.query("#ulLayers");
+  var layers = _doc.querySelector("#ulLayers");
   layers.onClick.listen((MouseEvent e){
     e.preventDefault();
     for (var layer in layers.children) {
@@ -75,6 +78,19 @@ void layerSelection(){
     Element elem = e.toElement;
     elem.parent.classes.add('active');
     currentLayer = int.parse(elem.dataset['layer']);
+  });
+}
+
+void toolSelection(){
+  var tools = _doc.querySelector("#toolset ");
+  tools.onClick.listen((MouseEvent e){
+    e.preventDefault();
+    for (var layer in tools.children) {
+      layer.classes.remove('active');
+    }
+    Element elem = e.toElement;
+    elem.classes.add('active');
+    currentTool = elem.dataset['tool'];
   });
 }
 
@@ -90,9 +106,9 @@ void navigationHideAll(){
 void loadMap(){
   maps = new List<EditorMap>();
   EditorMap m1 = new EditorMap("Map 001", 30, 20);
-  mapCanvas = _doc.query("#map");
+  mapCanvas = _doc.querySelector("#map");
   mapCtx = mapCanvas.getContext("2d");
-  mapElement = _doc.query('#mapContainer');
+  mapElement = _doc.querySelector('#mapContainer');
   m1.initContext(_doc, mapCtx, mapCanvas);
   maps.add(m1);
   drawMapsList();
@@ -100,7 +116,7 @@ void loadMap(){
 }
 
 void drawMapsList(){
-  var ul = _doc.query('#mapWindow .list-group');
+  var ul = _doc.querySelector('#mapWindow .list-group');
   for (var m in maps) {
     var li = new Element.html('<li class="list-group-item"><span class="badge">'+m.widthTiles.toString()+' x ' +m.heightTiles.toString()+'</span>'+m.name+'</li>');
     ul.children.add(li);
@@ -108,29 +124,35 @@ void drawMapsList(){
 }
 
 void loadMapSelection(){
-  mapCanvas.onClick.listen((MouseEvent e){
+  mapCanvas.onMouseDown.listen((MouseEvent e){
     int x = ((e.client.x + mapElement.scrollLeft - 360)/TILE_SIZE).ceil() -1;
     int y = ((e.client.y + mapElement.scrollTop - 10)/TILE_SIZE).ceil() -1;
-    EditorMap curMap = maps.elementAt(0);
-    curMap.setTile(x, y, tileSelected.x, tileSelected.y, currentLayer);
-    curMap.reDraw();
+    if(currentTool == "pencil"){
+      EditorMap curMap = maps.elementAt(0);
+      curMap.setTile(x, y, tileSelected.x, tileSelected.y, currentLayer);
+      curMap.reDraw();
+    }else if(currentTool == "rectangle"){
+      
+    }else{ //Eraser
+      
+    }
   });
 }
 
 void loadTileSet(){
-  tilesetCanvas = _doc.query("#tileset");
+  tilesetCanvas = _doc.querySelector("#tileset");
   _ctx = tilesetCanvas.getContext("2d");
   _ctx.strokeStyle = '#000';
   _ctx.lineWidth   = 1;
   tilesetCanvas.width = 1024;//384;
   tilesetCanvas.height = 2016;//15096;
-  tileElement = _doc.query("#tilesetCont");
+  tileElement = _doc.querySelector("#tilesetCont");
   image = new ImageElement(src:'assets/tileset/tileset.png', width:tilesetCanvas.width, height:tilesetCanvas.height);
   image.onLoad.listen((value) => loadTileset());
 }
 
 void loadTileSelection(){
-  tileCanvas = _doc.query("#tile");
+  tileCanvas = _doc.querySelector("#tile");
   _ctxTile = tileCanvas.getContext("2d");
   _ctxTile.strokeStyle = '#000';
   _ctxTile.lineWidth   = 1;

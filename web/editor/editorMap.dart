@@ -63,6 +63,10 @@ class EditorMap{
     Tile t = new Tile(tx, ty);
     if(layer == 1){
       layer1.set(x, y, t);
+    }else if(layer == 2){
+      layer2.set(x, y, t);
+    }else if(layer == 3){
+      layer3.set(x, y, t);
     }
   }
   
