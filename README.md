@@ -22,7 +22,7 @@ An HTML5 2D game engine using dart and canvas. Movements and interactions are li
 * Tile selector utility, click on any tile of the tileset to retrieve the x,y coordinates.
 * Initial version of the map editor.
 
-### TODO
+### TO-DO
 
 * ~~Create visual elements~~
 * ~~Create complex visual elements~~
