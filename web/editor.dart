@@ -25,6 +25,7 @@ var windows;
 int currentLayer;
 String currentTool;
 List<EditorMap> maps;
+var toolSubscription;
 
 void main() {
   _doc = window.document;
@@ -68,6 +69,7 @@ void initTabs(){
   });
 }
 
+// Listener for the layer selector
 void layerSelection(){
   var layers = _doc.querySelector("#ulLayers");
   layers.onClick.listen((MouseEvent e){
@@ -81,6 +83,7 @@ void layerSelection(){
   });
 }
 
+// Listener for the tool selected
 void toolSelection(){
   var tools = _doc.querySelector("#toolset ");
   tools.onClick.listen((MouseEvent e){
@@ -103,6 +106,7 @@ void navigationHideAll(){
   }
 }
 
+// Draw the editor map
 void loadMap(){
   maps = new List<EditorMap>();
   EditorMap m1 = new EditorMap("Map 001", 30, 20);
@@ -123,6 +127,7 @@ void drawMapsList(){
   }
 }
 
+//Listener for the map 
 void loadMapSelection(){
   mapCanvas.onMouseDown.listen((MouseEvent e){
     int x = ((e.client.x + mapElement.scrollLeft - 360)/TILE_SIZE).ceil() -1;
@@ -136,6 +141,15 @@ void loadMapSelection(){
     }else{ //Eraser
       
     }
+  });
+  
+  //Update the selector position
+  mapCanvas.onMouseMove.listen((MouseEvent e){
+    int x = ((e.client.x + mapElement.scrollLeft - 360)/TILE_SIZE).ceil() -1;
+    int y = ((e.client.y + mapElement.scrollTop - 10)/TILE_SIZE).ceil() -1;
+    EditorMap curMap = maps.elementAt(0);
+    curMap.updateSelector(x, y);
+    curMap.reDraw(true);
   });
 }
 
@@ -151,6 +165,7 @@ void loadTileSet(){
   image.onLoad.listen((value) => loadTileset());
 }
 
+// Listener for the tile selection
 void loadTileSelection(){
   tileCanvas = _doc.querySelector("#tile");
   _ctxTile = tileCanvas.getContext("2d");

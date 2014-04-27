@@ -6,6 +6,7 @@ library editorMap;
 import 'dart:html';
 import '../core/tile.dart';
 import '../helpers/matrix.dart';
+import '../helpers/coordinate.dart';
 import '../core/globals.dart';
 
 class EditorMap{
@@ -19,6 +20,7 @@ class EditorMap{
   Matrix layer1;
   Matrix layer2;
   Matrix layer3;
+  Coordinate mouseSelector;
   
   EditorMap(String name, int width, int height){
     this.name = name;
@@ -27,6 +29,7 @@ class EditorMap{
     layer1 = new Matrix(width, height);
     layer2 = new Matrix(width, height);
     layer3 = new Matrix(width, height);
+    this.mouseSelector = new Coordinate(0, 0);
     initLayers();
   }
   
@@ -59,6 +62,11 @@ class EditorMap{
     }
   }
   
+  void updateSelector(int x, int y){
+    this.mouseSelector.x = x;
+    this.mouseSelector.y = y;
+  }
+  
   void setTile(int x, int y, int tx, int ty, [int layer=1,int type=TILE_SOIL]){
     Tile t = new Tile(tx, ty);
     if(layer == 1){
@@ -70,8 +78,9 @@ class EditorMap{
     }
   }
   
-  void reDraw(){
+  void reDraw([bool drawSelector = false]){
     _ctx.strokeRect(0,  0, widthTiles* TILE_SIZE, heightTiles* TILE_SIZE);
+    
     for (var e = 0; e < (heightTiles); e++){
       for (var i = 0; i < (widthTiles); i++){
         Tile tile = layer1.get( i, e);
@@ -90,5 +99,12 @@ class EditorMap{
         }
       }
     }
+    if(drawSelector){
+      //Draw of the map selector icon
+      _ctx.strokeStyle = '#FFF';
+      _ctx.lineWidth   = 1;
+      _ctx.strokeRect(this.mouseSelector.x * TILE_SIZE,  this.mouseSelector.y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+    }
+    
   }
 }
