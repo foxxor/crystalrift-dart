@@ -129,15 +129,34 @@ void drawMapsList(){
 
 //Listener for the map 
 void loadMapSelection(){
+  int dragX, dragY;
+  mapCanvas.onMouseUp.listen((MouseEvent e){
+    int x = ((e.client.x + mapElement.scrollLeft - 360)/TILE_SIZE).ceil();
+    int y = ((e.client.y + mapElement.scrollTop - 10)/TILE_SIZE).ceil();
+    if(dragX != x || dragY != y ){
+      int iX = (dragX > x ? x: dragX );
+      int iY = (dragY > y ? y: dragY );
+      int fX = (dragX > x ? dragX: x );
+      int fY = (dragX > x ? dragY: y );
+      EditorMap curMap = maps.elementAt(0);
+      for(num e = iX; e < fX; e++){
+        for(num i = iY; i < fY; i++){
+          curMap.setTile(e, i, tileSelected.x, tileSelected.y, currentLayer);
+        }
+      }
+      curMap.reDraw();
+    }
+  });
+  
   mapCanvas.onMouseDown.listen((MouseEvent e){
     int x = ((e.client.x + mapElement.scrollLeft - 360)/TILE_SIZE).ceil() -1;
     int y = ((e.client.y + mapElement.scrollTop - 10)/TILE_SIZE).ceil() -1;
+    dragX = x;
+    dragY = y;
     if(currentTool == "pencil"){
       EditorMap curMap = maps.elementAt(0);
       curMap.setTile(x, y, tileSelected.x, tileSelected.y, currentLayer);
       curMap.reDraw();
-    }else if(currentTool == "rectangle"){
-      
     }else{ //Eraser
       
     }
