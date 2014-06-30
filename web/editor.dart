@@ -141,7 +141,11 @@ void loadMapSelection(){
       EditorMap curMap = maps.elementAt(0);
       for(num e = iX; e < fX; e++){
         for(num i = iY; i < fY; i++){
-          curMap.setTile(e, i, tileSelected.x, tileSelected.y, currentLayer);
+          if(currentTool == "pencil"){
+            curMap.setTile(e, i, tileSelected.x, tileSelected.y, currentLayer);
+          }else{ //Eraser
+            curMap.setTile(e, i, 0, 0, currentLayer);
+          }
         }
       }
       curMap.reDraw();
@@ -153,13 +157,13 @@ void loadMapSelection(){
     int y = ((e.client.y + mapElement.scrollTop - 10)/TILE_SIZE).ceil() -1;
     dragX = x;
     dragY = y;
+    EditorMap curMap = maps.elementAt(0);
     if(currentTool == "pencil"){
-      EditorMap curMap = maps.elementAt(0);
       curMap.setTile(x, y, tileSelected.x, tileSelected.y, currentLayer);
-      curMap.reDraw();
     }else{ //Eraser
-      
+      curMap.setTile(x, y, 0, 0, currentLayer);
     }
+    curMap.reDraw();
   });
   
   //Update the selector position
