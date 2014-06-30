@@ -120,10 +120,10 @@ void loadMap(){
 }
 
 void drawMapsList(){
-  var ul = _doc.querySelector('#mapWindow .list-group');
-  for (var m in maps) {
+  var ul = _doc.querySelector('#mapWindow ul.list-group');
+  for (var m in maps){
     var li = new Element.html('<li class="list-group-item"><span class="badge">'+m.widthTiles.toString()+' x ' +m.heightTiles.toString()+'</span>'+m.name+'</li>');
-    ul.children.add(li);
+      ul.children.add(li);
   }
 }
 

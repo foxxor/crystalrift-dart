@@ -18,14 +18,14 @@ int TILE_SIZE;
 
 void main() {
   _doc = window.document;
-  canvas = _doc.query("#canvas");
+  canvas = _doc.querySelector("#canvas");
   _ctx = canvas.getContext("2d");
   canvas.width = 1024;//384;
   canvas.height = 2016;//15096;
   
   TILE_SIZE = 32;//24;
   
-  tileCanvas = _doc.query("#tile");
+  tileCanvas = _doc.querySelector("#tile");
   _ctxTile = canvas.getContext("2d");
   tileCanvas.width = TILE_SIZE;
   tileCanvas.height = TILE_SIZE;
@@ -39,8 +39,8 @@ void main() {
   imageTile = _doc.createElement('img'); 
   imageTile.src = 'assets/tileset/tileset.png';//'assets/iconset.png';
   
-  divX = _doc.query('#divX');
-  divY = _doc.query('#divY');
+  divX = _doc.querySelector('#divX');
+  divY = _doc.querySelector('#divY');
   
   document.onMouseDown.listen(mousePressed);
 }

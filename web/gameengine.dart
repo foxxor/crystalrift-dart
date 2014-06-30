@@ -37,7 +37,7 @@ void update(num delta) {
 
 void setupCanvas(){
   _doc = window.document;
-  canvas = _doc.query("#canvas");
+  canvas = _doc.querySelector("#canvas");
   canvas.width = SCREEN_WIDTH;
   canvas.height = SCREEN_HEIGHT;
   _ctx = canvas.getContext("2d");
