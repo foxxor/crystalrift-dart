@@ -6,6 +6,7 @@ import 'dart:html';
 import 'editor/editorMap.dart';
 import 'core/globals.dart';
 import 'core/tile.dart';
+import 'dart:convert';
 
 //System vars
 HtmlDocument _doc;
@@ -63,7 +64,7 @@ void initTabs(){
         //windows.querySelector('#drawWindow').classes.remove('hide');
         break;
       case "io":
-        //windows.querySelector('#drawWindow').classes.remove('hide');
+        windows.querySelector('#ioWindow').classes.remove('hide');
         break;
     }
   });
@@ -85,15 +86,23 @@ void layerSelection(){
 
 // Listener for the tool selected
 void toolSelection(){
-  var tools = _doc.querySelector("#toolset ");
-  tools.onClick.listen((MouseEvent e){
+  var toolsButtons = _doc.querySelector("#toolset");
+  toolsButtons.onClick.listen((MouseEvent e){
     e.preventDefault();
-    for (var layer in tools.children) {
+    for (var layer in toolsButtons.children) {
       layer.classes.remove('active');
     }
     Element elem = e.toElement;
     elem.classes.add('active');
     currentTool = elem.dataset['tool'];
+  });
+  
+  var genJsonButton = _doc.querySelector("#generateMap");
+  genJsonButton.onClick.listen((MouseEvent e){
+    EditorMap curMap = maps.elementAt(0);
+    String jsonData = JSON.encode(curMap.toJson());
+    var jsonTextArea = _doc.querySelector("#genJsonTextArea");
+    jsonTextArea.setInnerHtml(jsonData);
   });
 }
 

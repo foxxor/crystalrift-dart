@@ -28,4 +28,20 @@ class Matrix {
     m[x][y] = value;
   }
   
+  //Method to serialize a matrix in something dart understands 
+  Map toJson() { 
+    Map map = new Map();
+    for (var i = 0; i < cols; i++) {
+      map[i.toString()] = new Map();
+      for (var e = 0; e < rows; e++) {
+        if(m[i][e] is int){
+          map[i.toString()][e.toString()] = m[i][e].toString();
+        }else{
+          map[i.toString()][e.toString()] = m[i][e].toJson();
+        }
+      }
+    }
+    return map;
+  }
+  
 }

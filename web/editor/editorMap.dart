@@ -107,4 +107,12 @@ class EditorMap{
     }
     
   }
+  
+  Map toJson() { 
+    Map map = new Map();
+    map['layer1'] = this.layer1.toJson();
+    map['layer2'] = this.layer2.toJson();
+    map['layer3'] = this.layer3.toJson();
+    return map;
+  }
 }

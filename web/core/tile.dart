@@ -19,4 +19,15 @@ class Tile {
     this.y = y;
     this.type = type;
   }
+  
+  //Method to serialize a matrix in something dart understands 
+  Map toJson() { 
+    Map map = new Map();
+    map['xImg'] = this.xImg;
+    map['yImg'] = this.yImg;
+    map['type'] = this.type;
+    map['x'] = this.x;
+    map['y'] = this.y;
+    return map;
+  }
 }
