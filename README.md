@@ -2,7 +2,8 @@
 
 An HTML5 2D game engine using dart and canvas. Movements and interactions are like Zelda.
 
-[Live demo here](http://foxxor.github.io/crystalrift-dart/gameengine.html)
+[Game live demo here](http://foxxor.github.io/crystalrift-dart/gameengine.html)
+[Editor live demo here](http://foxxor.github.io/crystalrift-dart/editor.html)
 
 ## What is working?
 
@@ -16,6 +17,7 @@ An HTML5 2D game engine using dart and canvas. Movements and interactions are li
 * Actions handling. (On-screen text, framed-animations)
 * Particle effects like fire, poison, smoke.
 * Text boxes for long texts. (Enter to skip)
+* Basic particles and animations.
 
 ## Additional Utils in the repository
 
@@ -24,19 +26,16 @@ An HTML5 2D game engine using dart and canvas. Movements and interactions are li
 
 ### TO-DO
 
-* ~~Create visual elements~~
-* ~~Create complex visual elements~~
-* ~~Camera movement with main character~~
-* ~~Text boxes for characters~~
-* ~~Character interactions~~
-* ~~Fix particles~~
+* ~~Camera movement with main character~~ Buggy!
 * Different maps handling
 * Character special actions (Jump, teleport, flip?)
 * Lots of things...Dropable items, Battles, Menus.
-
+* Finish the map editor.
+* Fix bugs of the map editor.
+* Try to enable multithread processing to improve performance.
 
 ### Want to help?
 
 Do you think you can do something better or improve the existing?
 
-Go ahead! I just started with Dart and I'm not a Dart jedi, any help is appreciated.
+Go ahead! Any help is greatly appreciated.
