@@ -8461,7 +8461,7 @@ var $$ = {};
         if (t3)
           fX = t2;
         else
-          fX = x + 1;
+          fX = x;
         if (t4)
           fY = t1;
         else
