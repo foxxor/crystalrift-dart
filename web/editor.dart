@@ -104,6 +104,15 @@ void toolSelection(){
     var jsonTextArea = _doc.querySelector("#genJsonTextArea");
     jsonTextArea.setInnerHtml(jsonData);
   });
+  
+  var loadJsonButton = _doc.querySelector("#loadJson");
+  loadJsonButton.onClick.listen((MouseEvent e){
+    var jsonTextArea = _doc.querySelector("#genJsonTextArea");
+    String jsonData = jsonTextArea.value;
+    Map parsedJson = JSON.decode(jsonData);
+    EditorMap curMap = maps.elementAt(0);
+    curMap.loadMap(parsedJson);
+  });
 }
 
 void navigationHideAll(){

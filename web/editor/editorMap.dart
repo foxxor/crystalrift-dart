@@ -108,11 +108,33 @@ class EditorMap{
     
   }
   
+  //Method to serialize a matrix in something dart understands
   Map toJson() { 
     Map map = new Map();
     map['layer1'] = this.layer1.toJson();
     map['layer2'] = this.layer2.toJson();
     map['layer3'] = this.layer3.toJson();
     return map;
+  }
+  
+  void loadMap(Map mapData){
+    Map nLayer1 = mapData['layer1'];
+    Map nLayer2 = mapData['layer2'];
+    Map nLayer3 = mapData['layer3'];
+    for (var i = 0; i < nLayer1.length; i++){
+      for (var e = 0; e < nLayer1[i.toString()].length; e++){
+        Tile t1 = new Tile(nLayer1[i.toString()][e.toString()]['x'], nLayer1[i.toString()][e.toString()]['y']);
+        var t2 = (nLayer2[i.toString()][e.toString()] is Map ?
+          new Tile(nLayer2[i.toString()][e.toString()]['x'], nLayer2[i.toString()][e.toString()]['y']) :
+          0 );
+        var t3 = (nLayer3[i.toString()][e.toString()] is Map?
+          new Tile(nLayer3[i.toString()][e.toString()]['x'], nLayer3[i.toString()][e.toString()]['y']) :
+          0 );
+        layer1.set(i, e, t1);
+        layer2.set(i, e, t2);
+        layer3.set(i, e, t3);
+      }
+    }
+    reDraw();
   }
 }
