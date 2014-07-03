@@ -154,7 +154,7 @@ void loadMapSelection(){
     if(dragX != x || dragY != y ){
       int iX = (dragX > x ? x: dragX );
       int iY = (dragY > y ? y: dragY );
-      int fX = (dragX > x ? dragX: x+1 );
+      int fX = (dragX > x ? dragX: x );
       int fY = (dragY > y ? dragY: y );
       EditorMap curMap = maps.elementAt(0);
       for(num e = iX; e < fX; e++){
