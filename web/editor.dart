@@ -166,6 +166,7 @@ void loadMapSelection(){
           }
         }
       }
+      curMap.stopSelection();
       curMap.reDraw();
     }
   });
@@ -176,6 +177,7 @@ void loadMapSelection(){
     dragX = x;
     dragY = y;
     EditorMap curMap = maps.elementAt(0);
+    curMap.beginSelection();
     if(currentTool == "pencil"){
       curMap.setTile(x, y, tileSelected.x, tileSelected.y, currentLayer);
     }else{ //Eraser

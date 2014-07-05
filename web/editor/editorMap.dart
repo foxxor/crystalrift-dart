@@ -21,6 +21,8 @@ class EditorMap{
   Matrix layer2;
   Matrix layer3;
   Coordinate mouseSelector;
+  Coordinate initialSelection;
+  bool mouseSelecting;
   
   EditorMap(String name, int width, int height){
     this.name = name;
@@ -30,6 +32,7 @@ class EditorMap{
     layer2 = new Matrix(width, height);
     layer3 = new Matrix(width, height);
     this.mouseSelector = new Coordinate(0, 0);
+    this.mouseSelecting = false;
     initLayers();
   }
   
@@ -103,9 +106,24 @@ class EditorMap{
       //Draw of the map selector icon
       _ctx.strokeStyle = '#FFF';
       _ctx.lineWidth   = 1;
-      _ctx.strokeRect(this.mouseSelector.x * TILE_SIZE,  this.mouseSelector.y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+      if(this.mouseSelecting){
+        int difWidth = (this.initialSelection.x - this.mouseSelector.x) * TILE_SIZE;
+        int difHeight = (this.initialSelection.y - this.mouseSelector.y) * TILE_SIZE;
+        _ctx.strokeRect(this.mouseSelector.x * TILE_SIZE,  this.mouseSelector.y * TILE_SIZE, difWidth, difHeight);
+      }else{
+        _ctx.strokeRect(this.mouseSelector.x * TILE_SIZE,  this.mouseSelector.y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+      }
+      
     }
-    
+  }
+  
+  void beginSelection(){
+    this.initialSelection = new Coordinate(this.mouseSelector.x, this.mouseSelector.y);
+    this.mouseSelecting = true;
+  }
+  
+  void stopSelection(){
+    this.mouseSelecting = false;
   }
   
   //Method to serialize a matrix in something dart understands
