@@ -43,7 +43,13 @@ class MapSet implements Graphic{
     this.mapsetImage = new Element.tag('img'); 
     this.mapsetImage = _doc.createElement('img'); 
     this.mapsetImage.src = src;
-    this.mapsetImage.onLoad.listen((value) => update());
+    this.mapsetImage.onLoad.listen((value) => hideLoading());
+  }
+  
+  void hideLoading(){
+    _doc.querySelector("#loading").classes.add('hidden');
+    _doc.querySelector("#canvas").classes.remove('hidden');
+    update();
   }
   
   void initValues(){
