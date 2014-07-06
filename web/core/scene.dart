@@ -175,9 +175,9 @@ class Scene{
   
   void centerCamera(int type){
     if(type == 1){
-      displayX = Math.max(Math.min(mainCharacter.curPos.x - (CAMERA_WIDTH_TILES / 2).floor(), MAP_WIDTH_TILES), 0);
+      displayX = Math.max(Math.min(mainCharacter.curPos.x - (CAMERA_WIDTH_TILES / 2).ceil(), MAP_WIDTH_TILES), 0);
     }else{
-      displayY = Math.max(Math.min(mainCharacter.curPos.y - (CAMERA_HEIGHT_TILES / 2).floor(), MAP_HEIGHT_TILES), 0);
+      displayY = Math.max(Math.min(mainCharacter.curPos.y - (CAMERA_HEIGHT_TILES / 2).ceil(), MAP_HEIGHT_TILES), 0);
     }
   }
   

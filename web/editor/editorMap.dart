@@ -107,9 +107,10 @@ class EditorMap{
       _ctx.strokeStyle = '#FFF';
       _ctx.lineWidth   = 1;
       if(this.mouseSelecting){
-        int difWidth = (this.initialSelection.x - this.mouseSelector.x) * TILE_SIZE;
-        int difHeight = (this.initialSelection.y - this.mouseSelector.y) * TILE_SIZE;
-        _ctx.strokeRect(this.mouseSelector.x * TILE_SIZE,  this.mouseSelector.y * TILE_SIZE, difWidth, difHeight);
+        int selectWidth = (this.initialSelection.x - this.mouseSelector.x) * TILE_SIZE;
+        int selectHeight = (this.initialSelection.y - this.mouseSelector.y) * TILE_SIZE;
+        _ctx.strokeRect((this.mouseSelector.x) * TILE_SIZE,  (this.mouseSelector.y) * TILE_SIZE, 
+            selectWidth, selectHeight);
       }else{
         _ctx.strokeRect(this.mouseSelector.x * TILE_SIZE,  this.mouseSelector.y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
       }
@@ -118,7 +119,7 @@ class EditorMap{
   }
   
   void beginSelection(){
-    this.initialSelection = new Coordinate(this.mouseSelector.x, this.mouseSelector.y);
+    this.initialSelection = new Coordinate(this.mouseSelector.x-1, this.mouseSelector.y-1);
     this.mouseSelecting = true;
   }
   
