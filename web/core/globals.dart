@@ -43,3 +43,7 @@ const int WINDOWSET_BORDER_PADDING = 9;
 const int WINDOWSET_BG_TILE = 64;
 const int WINDOWSET_FG_TILE = 64;
 const int WINDOWSET_TEXT_PADDING = 20;
+
+//Centering type
+const int CENTER_TYPE_VERTICAL = 1;
+const int CENTER_TYPE_HORIZONTAL = 2;
