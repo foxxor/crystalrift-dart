@@ -109,7 +109,7 @@ class EditorMap{
       if(this.mouseSelecting){
         int selectWidth = (this.initialSelection.x - this.mouseSelector.x) * TILE_SIZE;
         int selectHeight = (this.initialSelection.y - this.mouseSelector.y) * TILE_SIZE;
-        _ctx.strokeRect((this.mouseSelector.x) * TILE_SIZE,  (this.mouseSelector.y) * TILE_SIZE, 
+        _ctx.strokeRect((this.mouseSelector.x +1) * TILE_SIZE,  (this.mouseSelector.y +1) * TILE_SIZE, 
             selectWidth, selectHeight);
       }else{
         _ctx.strokeRect(this.mouseSelector.x * TILE_SIZE,  this.mouseSelector.y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
