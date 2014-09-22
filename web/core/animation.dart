@@ -22,12 +22,8 @@ class Animation implements Graphic{
   Coordinate curPosPx;
   int animationFrame;
   
-  Animation(HtmlDocument _doc, CanvasRenderingContext2D _ctx, CanvasElement canvas, Scene scene, Coordinate curPosPx, String file){
-    this._doc = _doc;
-    this._ctx = _ctx;
-    this.canvas = canvas;
-    this.scene = scene;
-    this.curPosPx = curPosPx;
+  Animation(HtmlDocument this._doc, CanvasRenderingContext2D this._ctx, CanvasElement this.canvas, 
+       Scene this.scene, Coordinate this.curPosPx, String file){
     this.animationFrame = 0;
     loadGraphic('assets/animations/'+ file +'.png');
   }

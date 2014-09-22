@@ -27,11 +27,8 @@ class MapSet implements Graphic{
 // The map matrix that represent the third visual terrain layer 
   Matrix mapset3;
   
-  MapSet(HtmlDocument _doc, CanvasRenderingContext2D _ctx, CanvasElement canvas, Scene scene) {
-    this._doc = _doc;
-    this._ctx = _ctx;
-    this.canvas = canvas;
-    this.scene = scene;
+  MapSet(HtmlDocument this._doc, CanvasRenderingContext2D this._ctx, CanvasElement this.canvas, 
+      Scene this.scene) {
     mapset = new Matrix(MAP_WIDTH_TILES, MAP_HEIGHT_TILES);
     mapset2 = new Matrix(MAP_WIDTH_TILES, MAP_HEIGHT_TILES);
     mapset3 = new Matrix(MAP_WIDTH_TILES, MAP_HEIGHT_TILES);

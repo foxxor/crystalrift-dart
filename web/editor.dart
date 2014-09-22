@@ -61,7 +61,7 @@ void initTabs(){
         windows.querySelector('#mapWindow').classes.remove('hide');
         break;
       case "events":
-        //windows.querySelector('#drawWindow').classes.remove('hide');
+        windows.querySelector('#eventWindow').classes.remove('hide');
         break;
       case "io":
         windows.querySelector('#ioWindow').classes.remove('hide');
@@ -214,23 +214,78 @@ void loadTileSelection(){
   _ctxTile = tileCanvas.getContext("2d");
   _ctxTile.strokeStyle = '#000';
   _ctxTile.lineWidth   = 1;
-  tileCanvas.width = TILE_SIZE;
-  tileCanvas.height = TILE_SIZE;
+  resetTileSelector(TILE_SIZE, TILE_SIZE);
   imageTile = new ImageElement(src:'assets/tileset/tileset.png', width:TILE_SIZE, height:TILE_SIZE);
   _ctxTile.strokeRect(0,  0, TILE_SIZE, TILE_SIZE);
   tileSelected = new Tile(0, 0);
-  tilesetCanvas.onMouseDown.listen(tilesetPressed);
+  tileSelectorBinds();
 }
 
-void tilesetPressed(MouseEvent e){
-  int x = ((e.client.x + tileElement.scrollLeft)/TILE_SIZE).ceil() -1;
-  int y = ((e.client.y + tileElement.scrollTop)/TILE_SIZE).ceil() -1;
-  tileSelected = new Tile(x, y);
-  _ctxTile.clearRect(0, 0, TILE_SIZE, TILE_SIZE);
-  _ctxTile.drawImageToRect(imageTile , new Rectangle(0, 0, TILE_SIZE, TILE_SIZE), //Rect to paint the image
-      sourceRect: new Rectangle( x * TILE_SIZE, y* TILE_SIZE, TILE_SIZE, TILE_SIZE)); //Size of the image
-  _ctxTile.strokeRect(0,  0, TILE_SIZE, TILE_SIZE);
+void resetTileSelector(int width, int height){
+  tileCanvas.width = width;
+   tileCanvas.height = height;
 }
+
+void tileSelectorBinds(){
+  tilesetCanvas.onMouseDown.listen((MouseEvent e){
+    int x = ((e.client.x + tileElement.scrollLeft)/TILE_SIZE).ceil() -1;
+    int y = ((e.client.y + tileElement.scrollTop)/TILE_SIZE).ceil() -1;
+    tileSelected = new Tile(x, y);
+    _ctxTile.clearRect(0, 0, TILE_SIZE, TILE_SIZE);
+    _ctxTile.drawImageToRect(imageTile , new Rectangle(0, 0, TILE_SIZE, TILE_SIZE), //Rect to paint the image
+        sourceRect: new Rectangle( x * TILE_SIZE, y* TILE_SIZE, TILE_SIZE, TILE_SIZE)); //Size of the image
+    _ctxTile.strokeRect(0,  0, TILE_SIZE, TILE_SIZE);
+  });
+  
+  int dragX, dragY;
+  tilesetCanvas.onMouseUp.listen((MouseEvent e){
+    int x = ((e.client.x + mapElement.scrollLeft - 360)/TILE_SIZE).ceil();
+    int y = ((e.client.y + mapElement.scrollTop - 10)/TILE_SIZE).ceil();
+    if(dragX != x || dragY != y ){
+      int iX = (dragX > x ? x: dragX );
+      int iY = (dragY > y ? y: dragY );
+      int fX = (dragX > x ? dragX: x );
+      int fY = (dragY > y ? dragY: y );
+      EditorMap curMap = maps.elementAt(0);
+      for(num e = iX; e < fX; e++){
+        for(num i = iY; i < fY; i++){
+          if(currentTool == "pencil"){
+            curMap.setTile(e, i, tileSelected.x, tileSelected.y, currentLayer);
+          }else{ //Eraser
+            curMap.setTile(e, i, 0, 0, currentLayer);
+          }
+        }
+      }
+      curMap.stopSelection();
+      curMap.reDraw();
+    }
+  });
+    
+  tilesetCanvas.onMouseDown.listen((MouseEvent e){
+    int x = ((e.client.x + mapElement.scrollLeft - 360)/TILE_SIZE).ceil() -1;
+    int y = ((e.client.y + mapElement.scrollTop - 10)/TILE_SIZE).ceil() -1;
+    dragX = x;
+    dragY = y;
+    EditorMap curMap = maps.elementAt(0);
+    curMap.beginSelection();
+    if(currentTool == "pencil"){
+      curMap.setTile(x, y, tileSelected.x, tileSelected.y, currentLayer);
+    }else{ //Eraser
+      curMap.setTile(x, y, 0, 0, currentLayer);
+    }
+    curMap.reDraw();
+  });
+    
+  //Update the selector position
+  tilesetCanvas.onMouseMove.listen((MouseEvent e){
+    int x = ((e.client.x + mapElement.scrollLeft - 360)/TILE_SIZE).ceil() -1;
+    int y = ((e.client.y + mapElement.scrollTop - 10)/TILE_SIZE).ceil() -1;
+    EditorMap curMap = maps.elementAt(0);
+    curMap.updateSelector(x, y);
+    curMap.reDraw(true);
+  });
+}
+
 
 void loadTileset(){
   num cols = image.width / TILE_SIZE;

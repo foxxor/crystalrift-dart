@@ -50,7 +50,7 @@ void setupKeys(){
     reactKey(e);
   });
   canvas.onKeyUp.listen((e) {
-    scene.mainCharacter.stopMove();
+    scene.player.stopMove();
   });
 }
 
@@ -71,7 +71,7 @@ void reactKey(var evt) {
       if(!c.trigger){
         c.trigger = true;
         //scene.createMessage(c);
-        //scene.createAnimation(scene.mainCharacter);
+        //scene.createAnimation(scene.player);
       }
     }
   }

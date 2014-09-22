@@ -27,15 +27,10 @@ class WindowSet implements Graphic{
   // Flag to mark if text ended
   bool endOfLine;
   
-  WindowSet(HtmlDocument _doc, CanvasRenderingContext2D _ctx, CanvasElement canvas, int x, int y, int width, int height, String text ){
-    this._doc = _doc;
-    this._ctx = _ctx;
-    this.canvas = canvas;
-    this.width = width;
-    this.height = height;
+  WindowSet(HtmlDocument this._doc, CanvasRenderingContext2D this._ctx, CanvasElement this.canvas, 
+      int x, int y, int this.width, int this.height, String this.text ){
     this.curPos = new Coordinate(x, y);
     this.startLine = 0;
-    this.text = text;
     this.endOfLine = false;
     loadGraphic('assets/window/BlueGloss.png');
   }

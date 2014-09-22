@@ -32,16 +32,11 @@ class Particle implements Graphic{
   String blendType;
   String color;
   
-  Particle(HtmlDocument _doc, CanvasRenderingContext2D _ctx, CanvasElement canvas, Scene scene, Coordinate curPosPx, String effect){
-    this._doc = _doc;
-    this._ctx = _ctx;
-    this.canvas = canvas;
-    this.scene = scene;
-    this.curPosPx = curPosPx;
+  Particle(HtmlDocument this._doc, CanvasRenderingContext2D this._ctx, CanvasElement this.canvas, 
+      Scene this.scene, Coordinate this.curPosPx, String this.effect){
     this.particles = new List<ImageElement>();
     this.particlesCoords = new List<Coordinate>();
     this.particlesAlpha = new List<num>();
-    this.effect = effect;
     this.frame = 0;
     initEffect();
   }

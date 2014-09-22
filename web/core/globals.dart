@@ -47,3 +47,8 @@ const int WINDOWSET_TEXT_PADDING = 20;
 //Centering type
 const int CENTER_TYPE_VERTICAL = 1;
 const int CENTER_TYPE_HORIZONTAL = 2;
+
+//Types of actors
+const int ACTOR_BEHAVIOUR_GOOD = 1;
+const int ACTOR_BEHAVIOUR_NEUTRAL = 2;
+const int ACTOR_BEHAVIOUR_BAD = 3;

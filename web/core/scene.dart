@@ -11,6 +11,7 @@ import '../helpers/coordinate.dart';
 import '../lib/message.dart';
 import 'mapset.dart';
 import 'character.dart';
+import 'actor.dart';
 import 'entity.dart';
 import 'tile.dart';
 import 'action.dart';
@@ -24,8 +25,8 @@ class Scene{
   CanvasElement canvas;
   
   MapSet gameMap;
-  List<Character> chars; //List of current characters
-  Character mainCharacter;
+  List<Actor> actors; //List of current characters
+  Actor player;
   List<Entity> entities;
   List<Action> activeEvents;
   List<Animation> activeAnimations;
@@ -53,9 +54,9 @@ class Scene{
     particle.start();
     activeAnimations = new List<Animation>();
     activeAnimations.add(animation);
-    mainCharacter = new Character(_doc, _ctx, canvas, initCoor, 0, this, ""); //Main Player
-    //mainCharacter.moveTo( 13, 4);
-    chars = new List<Character>();
+    player = new Actor(_doc, _ctx, canvas, initCoor, 0, this, ""); //Main Player
+    //player.moveTo( 13, 4);
+    actors = new List<Actor>();
     entities = new List<Entity>();
     displayX = 0;
     displayY = 0;
@@ -67,15 +68,15 @@ class Scene{
   
   void update(){
     //The order of rendering here controls the priority of visualization
-    if(isMoving() && mainCharacter.isMoving()){
+    if(isMoving() && player.isMoving()){
       updateMove();
     }else{
       stopMove();
     }
     gameMap.update();
-    Iterator<Character> charas = chars.iterator;
+    Iterator<Actor> charas = actors.iterator;
     while(charas.moveNext()){
-      Character c = charas.current;
+      Actor c = charas.current;
       c.update();
     }
     Iterator<Entity> entitiesIte = entities.iterator;
@@ -83,7 +84,7 @@ class Scene{
       Entity i = entitiesIte.current;
       i.update();
     }
-    mainCharacter.update();  
+    player.update();  
     Iterator<Animation> animationsIte = activeAnimations.iterator;
     while(animationsIte.moveNext()){
       Animation a = animationsIte.current;
@@ -98,7 +99,7 @@ class Scene{
   }
   
   void updateMove(){
-    var distance = 2 * mainCharacter.speed;
+    var distance = 2 * player.speed;
     if(displayY * TILE_SIZE > displayPxY){
       displayPxY = Math.min(displayPxY + distance, displayY * TILE_SIZE);
     }
@@ -139,34 +140,34 @@ class Scene{
   void move(int direction){
     switch (direction){
       case UP:
-        mainCharacter.move(UP);
-        if(mainCharacter.curPos.y > (CAMERA_HEIGHT_TILES / 2 )
-            && mainCharacter.curPos.y < (MAP_HEIGHT_TILES - displayY)
-            && mainCharacter.curPos.y < MAP_HEIGHT_TILES - (CAMERA_HEIGHT_TILES / 2)){
+        player.move(UP);
+        if(player.curPos.y > (CAMERA_HEIGHT_TILES / 2 )
+            && player.curPos.y < (MAP_HEIGHT_TILES - displayY)
+            && player.curPos.y < MAP_HEIGHT_TILES - (CAMERA_HEIGHT_TILES / 2)){
           centerCamera(CENTER_TYPE_VERTICAL);
         }
         break;
       case DOWN:
-        mainCharacter.move(DOWN);
-        if(mainCharacter.curPos.y > (CAMERA_HEIGHT_TILES / 2 )
-            && mainCharacter.curPos.y < (MAP_HEIGHT_TILES - displayY)
-            && mainCharacter.curPos.y < MAP_HEIGHT_TILES - (CAMERA_HEIGHT_TILES / 2)){
+        player.move(DOWN);
+        if(player.curPos.y > (CAMERA_HEIGHT_TILES / 2 )
+            && player.curPos.y < (MAP_HEIGHT_TILES - displayY)
+            && player.curPos.y < MAP_HEIGHT_TILES - (CAMERA_HEIGHT_TILES / 2)){
           centerCamera(CENTER_TYPE_VERTICAL);
         }
         break;
       case LEFT:
-        mainCharacter.move(LEFT);
-        if(mainCharacter.curPos.x < (MAP_WIDTH_TILES - displayX)
-            && mainCharacter.curPos.x < MAP_WIDTH_TILES - (CAMERA_WIDTH_TILES / 2)
-            && mainCharacter.curPos.x < MAP_WIDTH_TILES - (CAMERA_WIDTH_TILES / 2)){
+        player.move(LEFT);
+        if(player.curPos.x < (MAP_WIDTH_TILES - displayX)
+            && player.curPos.x < MAP_WIDTH_TILES - (CAMERA_WIDTH_TILES / 2)
+            && player.curPos.x < MAP_WIDTH_TILES - (CAMERA_WIDTH_TILES / 2)){
           centerCamera(CENTER_TYPE_HORIZONTAL);
         }
         break;
       case RIGHT:
-        mainCharacter.move(RIGHT);
-        if(mainCharacter.curPos.x < (MAP_WIDTH_TILES - displayX)
-            && mainCharacter.curPos.x < MAP_WIDTH_TILES - (CAMERA_WIDTH_TILES / 2)
-            && mainCharacter.curPos.x < MAP_WIDTH_TILES - (CAMERA_WIDTH_TILES / 2)){
+        player.move(RIGHT);
+        if(player.curPos.x < (MAP_WIDTH_TILES - displayX)
+            && player.curPos.x < MAP_WIDTH_TILES - (CAMERA_WIDTH_TILES / 2)
+            && player.curPos.x < MAP_WIDTH_TILES - (CAMERA_WIDTH_TILES / 2)){
           centerCamera(CENTER_TYPE_HORIZONTAL);
         }
         break;  
@@ -176,10 +177,11 @@ class Scene{
   // This have to be adjusted depending if the window size is odd or even
   void centerCamera(int type){
     if(type == CENTER_TYPE_HORIZONTAL){
-      displayX = Math.max(Math.min(mainCharacter.curPos.x - ((CAMERA_WIDTH_TILES / 2) - 1).floor(), 
+      // Adjusted with -1 because the window width is odd
+      displayX = Math.max(Math.min(player.curPos.x - ((CAMERA_WIDTH_TILES / 2) - 1).floor(), 
         MAP_WIDTH_TILES), 0);
     }else{
-      displayY = Math.max(Math.min(mainCharacter.curPos.y - (CAMERA_HEIGHT_TILES / 2).floor(), 
+      displayY = Math.max(Math.min(player.curPos.y - (CAMERA_HEIGHT_TILES / 2).floor(), 
         MAP_HEIGHT_TILES), 0);
     }
   }
@@ -208,11 +210,11 @@ class Scene{
     while(characters.moveNext()){
       Map m = characters.current;
       Coordinate coords = new Coordinate(m['x'], m['y']);
-      Character character = new Character(_doc, _ctx, canvas, coords, m['characterId'], this, m['message']);
+      Actor character = new Actor(_doc, _ctx, canvas, coords, m['characterId'], this, m['message']);
       if(m['moveRandom']){
         character.moveRandom();
       }
-      chars.add(character);
+      actors.add(character);
     }
   }
   
@@ -222,7 +224,7 @@ class Scene{
     gameMap.addRandomDetails();
   }
   
-  void createMessage(Character char){
+  void createMessage(Actor char){
     Message msg = new Message(_ctx, char.message, char.curPosPx.x, char.curPosPx.y, 100, 20);
     const ms = const Duration(milliseconds: 5000);
     Timer t = new Timer( ms, removeEvent);
@@ -230,7 +232,7 @@ class Scene{
     activeEvents.add(event);
   }
   
-  void createAnimation(Character char){
+  void createAnimation(Actor char){
     Coordinate coord = new Coordinate(0,0);
     Animation animation = new Animation(_doc, _ctx, canvas, this, coord, 'light_002');
     animation.startAnimation();
@@ -243,7 +245,7 @@ class Scene{
   void removeEvent(){
     Action event = activeEvents.elementAt(0);
     if(event.type == EVENT_TYPE_MESSAGE){
-      Character char = event.object;
+      Actor char = event.object;
       char.trigger = false;
     }
     activeEvents.removeAt(0);
@@ -264,17 +266,17 @@ class Scene{
     if(gameMap.nextToTile(c.curPos.x, c.curPos.y, face)){
       return false;
     }
-    Iterator<Character> charas = chars.iterator;
+    Iterator<Actor> charas = actors.iterator;
     while(charas.moveNext()){
-      Character char = charas.current;
+      Actor char = charas.current;
       bool nextTo = char.curPos.nextToThis2(newCoords);
       if(!char.phasable && nextTo){
         return false;
       }
     }
-    if(c != mainCharacter){
-      bool nextTo = mainCharacter.curPos.nextToThis2(newCoords);
-      if(!mainCharacter.phasable && nextTo){
+    if(c != player){
+      bool nextTo = player.curPos.nextToThis2(newCoords);
+      if(!player.phasable && nextTo){
         return false;
       }
     }
@@ -294,11 +296,11 @@ class Scene{
     return true;
   }
   
-  Character getCharacterInFront(){
-    Iterator<Character> charas = chars.iterator;
+  Actor getCharacterInFront(){
+    Iterator<Actor> charas = actors.iterator;
     while(charas.moveNext()){
-      Character char = charas.current;
-      int charFace = char.curPosPx.facingThis(mainCharacter.getCurrentDirection(), mainCharacter.curPosPx);
+      Actor char = charas.current;
+      int charFace = char.curPosPx.facingThis(player.getCurrentDirection(), player.curPosPx);
       if(charFace >= 0){
         char.faceDirection(charFace);
         return char;

@@ -33,18 +33,10 @@ class Entity implements Graphic{
   //Parent scene
   Scene scene;
   
-  Entity(HtmlDocument _doc, CanvasRenderingContext2D _ctx, CanvasElement canvas, 
-      Coordinate curPos, Tile tile, Scene scene, [bool pushable=false, int speed = 1]){
-    this._doc = _doc;
-    this._ctx = _ctx;
-    this.canvas = canvas;
-    this.curPos = curPos;
-    this.tile = tile;
-    this.speed = speed;
+  Entity(HtmlDocument this._doc, CanvasRenderingContext2D this._ctx, CanvasElement this.canvas, 
+      Coordinate this.curPos, Tile this.tile, Scene this.scene, [bool this.pushable=false, int this.speed = 1]){
     this.curPosPx = new Coordinate(curPos.x *TILE_SIZE, curPos.y *TILE_SIZE);
     this.moving = false;
-    this.pushable = pushable;
-    this.scene = scene;
     loadGraphic("assets/tileset/tileset.png");
   }
   

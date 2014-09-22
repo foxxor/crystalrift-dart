@@ -14,7 +14,7 @@ import 'dart:math' as Math;
 
 class Character implements Graphic{
   
-  //Graphical vars
+  //Graphic vars
   HtmlDocument _doc;
   CanvasRenderingContext2D _ctx;
   CanvasElement canvas;
@@ -40,8 +40,6 @@ class Character implements Graphic{
   bool trigger;
   //Parent scene calling this objetc
   Scene scene;
-  //Message of the character
-  String message;
 
   int offsetX;
   int offsetY;
@@ -49,22 +47,14 @@ class Character implements Graphic{
   var acDelta = 0; //Deprecated 
   var lastUpdateTime = 0; //Deprecated
   
-  Character(HtmlDocument _doc, CanvasRenderingContext2D _ctx, CanvasElement canvas, 
-      Coordinate curPos, int charSprite, Scene scene, String message, [int speed = 1]) {
-    this._doc = _doc;
-    this._ctx = _ctx;
-    this.canvas = canvas;
+  Character(HtmlDocument this._doc, CanvasRenderingContext2D this._ctx, CanvasElement this.canvas, 
+      Coordinate this.curPos, int this.selectedChar, Scene this.scene, [int this.speed = 1]) {
     this.randomMovement = false;
     this.phasable = false;
-    this.selectedChar = charSprite;
-    this.speed = speed;
-    this.curPos = curPos;
     this.curPosPx = new Coordinate(curPos.x *TILE_SIZE, curPos.y *TILE_SIZE);
     this.frame = INITIAL_FRAME;
     this.faceDir = INITIAL_FACE;
     this.trigger = false;
-    this.scene = scene;
-    this.message = message;
     offsetX = 0;
     offsetY = 0;
     loadGraphic("assets/character/characters.png");
