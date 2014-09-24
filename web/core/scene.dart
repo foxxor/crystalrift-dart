@@ -235,12 +235,11 @@ class Scene{
   
   void createAnimation(Actor char){
     Coordinate coord = new Coordinate(0,0);
-    Animation animation = new Animation(_doc, _ctx, canvas, this, coord, 'light_002');
-    animation.startAnimation();
-    const ms = const Duration(milliseconds: 10000);
-    Timer t = new Timer( ms, removeEvent);
+    Animation animation = new Animation(_doc, _ctx, canvas, this, coord, 'light_001');
     Action event = new Action(char, animation, EVENT_TYPE_ANIMATION);
     activeEvents.add(event);
+    animation.startAnimation();
+    Timer t = new Timer( const Duration(milliseconds: 500), removeEvent);
   }
   
   void removeEvent(){

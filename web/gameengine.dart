@@ -71,7 +71,7 @@ void reactKey(var evt) {
       if(!c.trigger){
         c.trigger = true;
         //scene.createMessage(c);
-        //scene.createAnimation(scene.player);
+        scene.createAnimation(c);
       }
     }
   }

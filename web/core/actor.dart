@@ -41,4 +41,6 @@ class Actor extends Character{
     this.maxEnergy = maxEnergy;
     this.energy = maxEnergy;
   }
+  
+  
 }
