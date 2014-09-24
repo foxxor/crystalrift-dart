@@ -28,8 +28,10 @@ class Character implements Graphic{
   int frame;
   // Facing direction
   int faceDir;
-  // Current selected chart
+  // Current selected char
   int selectedChar;
+  // Current selected char row
+  int characterRow;
   // Move this guy like crazy
   bool randomMovement;
   // Is this object pasable?
@@ -48,7 +50,7 @@ class Character implements Graphic{
   var lastUpdateTime = 0; //Deprecated
   
   Character(HtmlDocument this._doc, CanvasRenderingContext2D this._ctx, CanvasElement this.canvas, 
-      Coordinate this.curPos, int this.selectedChar, Scene this.scene, [int this.speed = 1]) {
+      Coordinate this.curPos, int selectedChar, int characterRow, Scene this.scene, String imageSource, [int this.speed = 1]) {
     this.randomMovement = false;
     this.phasable = false;
     this.curPosPx = new Coordinate(curPos.x *TILE_SIZE, curPos.y *TILE_SIZE);
@@ -57,7 +59,9 @@ class Character implements Graphic{
     this.trigger = false;
     offsetX = 0;
     offsetY = 0;
-    loadGraphic("assets/character/characters.png");
+    this.selectedChar = selectedChar * 3; //This calculation is cached for performance 
+    this.characterRow = (characterRow - 1 ) * (TILE_SIZE * 4); //This calculation is cached for performance 
+    loadGraphic("assets/character/" + imageSource);
   }
   
   void moveRandom(){
@@ -219,6 +223,8 @@ class Character implements Graphic{
     
     _ctx.drawImageToRect(this.characterImage , new Rectangle(curPosPx.x - scene.displayPxX, curPosPx.y - scene.displayPxY,
         TILE_SIZE, TILE_SIZE), //Rect to paint the image
-        sourceRect: new Rectangle(((selectedChar *3) + frame) * TILE_SIZE, TILE_SIZE * faceDir, TILE_SIZE, TILE_SIZE)); //Size of the image
+        sourceRect: new Rectangle(((selectedChar) + frame) * TILE_SIZE, 
+            (TILE_SIZE * faceDir) + this.characterRow, 
+            TILE_SIZE, TILE_SIZE)); //Size of the image
   }
 }

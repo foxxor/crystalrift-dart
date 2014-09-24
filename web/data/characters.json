@@ -2,37 +2,52 @@
     {
       "x":3,
       "y": 3,
-      "characterId":2,
+      "characterId": 2,
+      "characterRow": 1,
       "moveRandom" : true,
-      "message": "Estoy de guardia"
+      "message": "Estoy de guardia",
+      "behaviour" : 1,
+      "imageSource" : "characters.png"
     },
     {
       "x":6,
       "y": 8,
       "characterId":1,
+      "characterRow": 1,
       "moveRandom" : true,
-      "message": "Muevete!"
+      "message": "Muevete!",
+      "behaviour" : 1,
+      "imageSource" : "characters.png"
     },
     {
       "x":13,
       "y": 9,
       "characterId":3,
+      "characterRow": 1,
       "moveRandom" : false,
-      "message": "Por el rey!"
+      "message": "Por el rey!",
+      "behaviour" : 1,
+      "imageSource" : "characters.png"
     },
     {
       "x":10,
       "y": 15,
       "characterId":2,
+      "characterRow": 1,
       "moveRandom" : true,
-      "message": "Por el rey!"
+      "message": "Por el rey!",
+      "behaviour" : 1,
+      "imageSource" : "characters.png"
     },
     {
       "x":7,
       "y": 12,
-      "characterId":2,
+      "characterId":1,
+      "characterRow": 2,
       "moveRandom" : true,
-      "message": "Por el rey!"
+      "message": "blergh!",
+      "behaviour" : 2,
+      "imageSource" : "monsters1.png"
     }
   ]
 }

@@ -30,8 +30,8 @@ class Actor extends Character{
   bool combatable; 
   
   Actor(HtmlDocument _doc, CanvasRenderingContext2D _ctx, CanvasElement canvas, 
-        Coordinate curPos, int charSprite, Scene scene, [String message, int speed = 1]) : 
-          super( _doc, _ctx, canvas, curPos, charSprite, scene, speed);
+        Coordinate curPos, int charSprite, int charRow, Scene scene, String imageSource, [String message, int speed = 1]) : 
+          super( _doc, _ctx, canvas, curPos, charSprite, charRow, scene, imageSource, speed);
   
   void initializeActor( bool combatable, int behaviour, [int maxLife = 0, int maxEnergy = 0]){
     this.combatable = combatable;
