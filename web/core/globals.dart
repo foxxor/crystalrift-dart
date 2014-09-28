@@ -53,5 +53,3 @@ const int ACTOR_BEHAVIOUR_GOOD = 1;
 const int ACTOR_BEHAVIOUR_NEUTRAL = 2;
 const int ACTOR_BEHAVIOUR_FOE = 3;
 
-
-const int ACTOR_BEHAVIOUR_BAD = 3;

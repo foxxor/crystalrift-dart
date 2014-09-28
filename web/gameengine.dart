@@ -5,6 +5,7 @@
 import 'dart:html';
 import 'core/globals.dart';
 import 'core/character.dart';
+import 'core/actor.dart';
 import 'core/scene.dart';
 import 'core/windowset.dart';
 
@@ -66,12 +67,16 @@ void reactKey(var evt) {
   }else if(evt.keyCode == 13 ){ //Action
     windowInfo.moveLines();
     //Character message if in front
-    Character c = scene.getCharacterInFront();
+    Actor c = scene.getCharacterInFront();
     if(c != null){
-      if(!c.trigger){
-        c.trigger = true;
-        //scene.createMessage(c);
+      if(c.combatable){
+        c.life = c.life - 10;
         scene.createAnimation(c);
+      }else if(!c.trigger){
+        c.trigger = true;
+        if(c.message.isNotEmpty){
+          scene.createMessage(c);
+        }
       }
     }
   }

@@ -15,8 +15,8 @@ import 'dart:math' as Math;
 class Character implements Graphic{
   
   //Graphic vars
-  HtmlDocument _doc;
-  CanvasRenderingContext2D _ctx;
+  HtmlDocument doc;
+  CanvasRenderingContext2D ctx;
   CanvasElement canvas;
   ImageElement characterImage;
   
@@ -24,6 +24,8 @@ class Character implements Graphic{
   Coordinate curPos;
   // Current position in pixels
   Coordinate curPosPx;
+// Current position relative to screen in pixels
+  Coordinate screenPosPx;
   // Current animation frame
   int frame;
   // Facing direction
@@ -49,11 +51,12 @@ class Character implements Graphic{
   var acDelta = 0; //Deprecated 
   var lastUpdateTime = 0; //Deprecated
   
-  Character(HtmlDocument this._doc, CanvasRenderingContext2D this._ctx, CanvasElement this.canvas, 
+  Character(HtmlDocument this.doc, CanvasRenderingContext2D this.ctx, CanvasElement this.canvas, 
       Coordinate this.curPos, int selectedChar, int characterRow, Scene this.scene, String imageSource, [int this.speed = 1]) {
     this.randomMovement = false;
     this.phasable = false;
-    this.curPosPx = new Coordinate(curPos.x *TILE_SIZE, curPos.y *TILE_SIZE);
+    this.curPosPx = new Coordinate(curPos.x * TILE_SIZE, curPos.y * TILE_SIZE);
+    this.screenPosPx = new Coordinate(0, 0);
     this.frame = INITIAL_FRAME;
     this.faceDir = INITIAL_FACE;
     this.trigger = false;
@@ -63,7 +66,7 @@ class Character implements Graphic{
     this.characterRow = (characterRow - 1 ) * (TILE_SIZE * 4); //This calculation is cached for performance 
     loadGraphic("assets/character/" + imageSource);
   }
-  
+
   void moveRandom(){
     const ms = const Duration(milliseconds: 3000);
     Timer t = new Timer( ms, doMoveRandom);
@@ -156,9 +159,9 @@ class Character implements Graphic{
   
   void loadGraphic(String src){
     this.characterImage = new Element.tag('img'); 
-    this.characterImage = _doc.createElement('img'); 
+    this.characterImage = doc.createElement('img'); 
     this.characterImage.src = src;
-    this.characterImage.onLoad.listen((value) => update());
+    //this.characterImage.onLoad.listen((value) => update());
   }
   
   bool isMoving(){
@@ -220,11 +223,12 @@ class Character implements Graphic{
     }else{
       stopMove();
     }
-    
-    _ctx.drawImageToRect(this.characterImage , new Rectangle(curPosPx.x - scene.displayPxX, curPosPx.y - scene.displayPxY,
+    screenPosPx.x = curPosPx.x - scene.displayPxX;
+    screenPosPx.y = curPosPx.y - scene.displayPxY;
+    ctx.drawImageToRect(this.characterImage , new Rectangle(screenPosPx.x, screenPosPx.y,
         TILE_SIZE, TILE_SIZE), //Rect to paint the image
         sourceRect: new Rectangle(((selectedChar) + frame) * TILE_SIZE, 
-            (TILE_SIZE * faceDir) + this.characterRow, 
+            (TILE_SIZE * faceDir) + characterRow, 
             TILE_SIZE, TILE_SIZE)); //Size of the image
   }
 }

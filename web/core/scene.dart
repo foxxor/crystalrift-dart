@@ -54,7 +54,8 @@ class Scene{
     particle.start();
     activeAnimations = new List<Animation>();
     activeAnimations.add(animation);
-    player = new Actor(_doc, _ctx, canvas, initCoor, 0, 1, this, "characters.png", ""); //Main Player
+    player = new Actor(_doc, _ctx, canvas, initCoor, 0, 1, this, "characters.png"); //Main Player
+    player.initializeActor( true, ACTOR_BEHAVIOUR_GOOD, 100, 100);
     //player.moveTo( 13, 4);
     actors = new List<Actor>();
     entities = new List<Entity>();
@@ -211,7 +212,8 @@ class Scene{
       Map m = characters.current;
       Coordinate coords = new Coordinate(m['x'], m['y']);
       Actor character = new Actor(_doc, _ctx, canvas, coords, m['characterId'], m['characterRow'], 
-          this, m['imageSource'], m['message']);
+          this, m['imageSource']);
+      character.initializeActor( m['combatable'], m['behaviour'], 100, 100, m['message']);
       if(m['moveRandom']){
         character.moveRandom();
       }

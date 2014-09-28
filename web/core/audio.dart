@@ -9,5 +9,22 @@ import 'dart:math';
 import 'dart:web_audio';
 
 class Audio {
+  // Url of the audio file
+  String fileUrl;
   
+  Audio(){
+    
+  }
+  
+  void playSound(){
+    
+  }
+  
+  void pauseSound(){
+    
+  }
+  
+  void stopSound(){
+    
+  }
 }
