@@ -237,6 +237,8 @@ void tileSelectorBinds(){
     _ctxTile.strokeRect(0,  0, TILE_SIZE, TILE_SIZE);
   });
   
+  /*
+  This is to multiple select tiles in the tileset area, not working yet 
   int dragX, dragY;
   tilesetCanvas.onMouseUp.listen((MouseEvent e){
     int x = ((e.client.x + mapElement.scrollLeft - 360)/TILE_SIZE).ceil();
@@ -262,8 +264,8 @@ void tileSelectorBinds(){
   });
     
   tilesetCanvas.onMouseDown.listen((MouseEvent e){
-    int x = ((e.client.x + mapElement.scrollLeft - 360)/TILE_SIZE).ceil() -1;
-    int y = ((e.client.y + mapElement.scrollTop - 10)/TILE_SIZE).ceil() -1;
+    int x = ((e.client.x + mapElement.scrollLeft - 360)/TILE_SIZE).ceil() - 1;
+    int y = ((e.client.y + mapElement.scrollTop - 10)/TILE_SIZE).ceil() - 1;
     dragX = x;
     dragY = y;
     EditorMap curMap = maps.elementAt(0);
@@ -274,7 +276,7 @@ void tileSelectorBinds(){
       curMap.setTile(x, y, 0, 0, currentLayer);
     }
     curMap.reDraw();
-  });
+  });*/
     
   //Update the selector position
   tilesetCanvas.onMouseMove.listen((MouseEvent e){

@@ -24,14 +24,17 @@ class MapSet implements Graphic{
   Matrix mapset;
   // The map matrix that represent the second visual terrain layer 
   Matrix mapset2;
-// The map matrix that represent the third visual terrain layer 
+  // The map matrix that represent the third visual terrain layer 
   Matrix mapset3;
+  // The map matrix that represent the third visual terrain layer 
+  Matrix eventMapset;
   
   MapSet(HtmlDocument this._doc, CanvasRenderingContext2D this._ctx, CanvasElement this.canvas, 
       Scene this.scene) {
     mapset = new Matrix(MAP_WIDTH_TILES, MAP_HEIGHT_TILES);
     mapset2 = new Matrix(MAP_WIDTH_TILES, MAP_HEIGHT_TILES);
     mapset3 = new Matrix(MAP_WIDTH_TILES, MAP_HEIGHT_TILES);
+    eventMapset = new Matrix(MAP_WIDTH_TILES, MAP_HEIGHT_TILES);
     initValues();
     loadGraphic("assets/tileset/tileset.png");
   }
@@ -56,6 +59,7 @@ class MapSet implements Graphic{
         mapset.set(x, y, t);
         mapset2.set(x, y, 0);
         mapset3.set(x, y, 0);
+        eventMapset.set(x, y, null);
       }
     }
   }
@@ -71,6 +75,9 @@ class MapSet implements Graphic{
       while(blocks.moveNext()){
         Map block = blocks.current;
         mapset.set(x +block['x'].toInt() , y + block['y'].toInt(), t);
+        if(m['type'] == TILE_BUILDING_UNPASSABLE){
+          occupyTile(x +block['x'].toInt() , y + block['y'].toInt(), t);
+        }
       }
     }
     
@@ -83,6 +90,9 @@ class MapSet implements Graphic{
       while(blocks.moveNext()){
         Map block = blocks.current;
         mapset2.set(x +block['x'].toInt() , y + block['y'].toInt(), t);
+        if(m['type'] == TILE_BUILDING_UNPASSABLE){
+          occupyTile(x +block['x'].toInt() , y + block['y'].toInt(), t);
+        }
       }
     }
   }
@@ -131,32 +141,17 @@ class MapSet implements Graphic{
     }
   }
   
-  bool nextToTile(int x, int y, int face){
-    if(x >= 1){
-      Tile t1 = mapset.get(x-1, y);
-      if( t1.type == TILE_BUILDING_UNPASSABLE && face == LEFT){
-        return true;
-      }
-    }
-    if(y >= 1){
-      Tile t2 = mapset.get(x, y-1);
-      if( t2.type == TILE_BUILDING_UNPASSABLE && face == UP){
-        return true;
-      }
-    }
-    if(x < mapset.cols -1){
-      Tile t3 = mapset.get(x+1, y);
-      if( t3.type == TILE_BUILDING_UNPASSABLE && face == RIGHT){
-        return true;
-      }
-    }
-    if(y < mapset.rows -1){
-      Tile t4 = mapset.get(x, y+1);
-      if( t4.type == TILE_BUILDING_UNPASSABLE && face == DOWN){
-        return true;
-      }
-    }
-    return false;
+  void occupyTile(int x, int y, var tileObject){
+    eventMapset.set(x, y, tileObject);
+  }
+  
+  void freeTile(int x, int y){
+    eventMapset.set(x, y, null);
+  }
+  
+  void moveToTile(int xi, int yi, int xf, int yf, var tileObject){
+    occupyTile(xf, yf, tileObject);
+    freeTile(xi, yi);
   }
   
   void update(){

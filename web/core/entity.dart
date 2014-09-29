@@ -51,7 +51,9 @@ class Entity implements Graphic{
     if(!scene.shallPass(face, this)){
       return false;
     }
-    
+    bool moved = false;
+    int initX = curPos.x;
+    int initY = curPos.y;
     int deltaY = (curPos.y * TILE_SIZE - curPosPx.y).abs();
     int deltaX = (curPos.x * TILE_SIZE - curPosPx.x).abs();
     
@@ -59,27 +61,32 @@ class Entity implements Graphic{
       case 0: //up
         if(curPos.y > 0 && deltaY < TILE_SIZE){
           curPos.y -= 1;
-          return true;
+          moved = true;
         }
         break;
       case 1: //down
         if((curPos.y *TILE_SIZE)  < (canvas.height - TILE_SIZE) && deltaY < TILE_SIZE ){
           curPos.y += 1;
-          return true;
+          moved = true;
         }
         break;
       case 2: //left
         if(curPos.x > 0 && deltaX < TILE_SIZE ){
           curPos.x -= 1;
-          return true;
+          moved = true;
         }
         break;
       case 3: //right
         if((curPos.x* TILE_SIZE)< (canvas.width - TILE_SIZE) && deltaX < TILE_SIZE){
           curPos.x += 1;
-          return true;
+          moved = true;
         }
         break;
+    }
+    
+    if(moved){
+      scene.gameMap.moveToTile(initX, initY, curPos.x, curPos.y, this);
+      return true;
     }
     return false;
   }

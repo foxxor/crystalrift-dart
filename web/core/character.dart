@@ -52,7 +52,8 @@ class Character implements Graphic{
   var lastUpdateTime = 0; //Deprecated
   
   Character(HtmlDocument this.doc, CanvasRenderingContext2D this.ctx, CanvasElement this.canvas, 
-      Coordinate this.curPos, int selectedChar, int characterRow, Scene this.scene, String imageSource, [int this.speed = 1]) {
+      Coordinate this.curPos, int selectedChar, int characterRow, Scene this.scene, String imageSource, 
+      [int this.speed = 1]) {
     this.randomMovement = false;
     this.phasable = false;
     this.curPosPx = new Coordinate(curPos.x * TILE_SIZE, curPos.y * TILE_SIZE);
@@ -68,7 +69,7 @@ class Character implements Graphic{
   }
 
   void moveRandom(){
-    const ms = const Duration(milliseconds: 3000);
+    const ms = const Duration(milliseconds: 2000);
     Timer t = new Timer( ms, doMoveRandom);
   }
   
@@ -89,6 +90,9 @@ class Character implements Graphic{
   }
   
   bool move(int face){
+    bool moved = false;
+    int initX = curPos.x;
+    int initY = curPos.y;
     if(!scene.shallPass(face, this)){
       faceDirection(face);
       return false;
@@ -99,30 +103,35 @@ class Character implements Graphic{
         faceDirection(UP);
         if(curPos.y > 0){
           curPos.y --;
-          return true;
+          moved = true;
         }
         break;
       case 1: //down
         faceDirection(DOWN);
         if((curPos.y)  < MAP_HEIGHT_TILES - 1){
           curPos.y ++;
-          return true;
+          moved = true;
         }
         break;
       case 2: //left
         faceDirection(LEFT);
         if(curPos.x > 0){
           curPos.x --;
-          return true;
+          moved = true;
         }
         break;
       case 3: //right
         faceDirection(RIGHT);
         if((curPos.x) < MAP_WIDTH_TILES - 1){
           curPos.x ++;
-          return true;
+          moved = true;
         }
         break;
+    }
+    
+    if(moved){
+      scene.gameMap.moveToTile(initX, initY, curPos.x, curPos.y, this);
+      return true;
     }
     return false;
   }

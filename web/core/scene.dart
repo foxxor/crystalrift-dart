@@ -202,6 +202,7 @@ class Scene{
       Tile tile = new Tile(i['xTile'], i['yTile']);
       Entity item = new Entity(_doc, _ctx, canvas, coords, tile, this, i['pushable']);
       entities.add(item);
+      gameMap.occupyTile(i['x'], i['y'], item);
     }
   }
   
@@ -218,6 +219,7 @@ class Scene{
         character.moveRandom();
       }
       actors.add(character);
+      gameMap.occupyTile(m['x'], m['y'], character);
     }
   }
   
@@ -228,7 +230,7 @@ class Scene{
   }
   
   void createMessage(Actor char){
-    Message msg = new Message(_ctx, char.message, char.curPosPx.x, char.curPosPx.y, 100, 20);
+    Message msg = new Message(_ctx, char.message, char.screenPosPx.x, char.screenPosPx.y, 100, 20);
     const ms = const Duration(milliseconds: 5000);
     Timer t = new Timer( ms, removeEvent);
     Action event = new Action(char, msg, EVENT_TYPE_MESSAGE);
@@ -255,27 +257,33 @@ class Scene{
   
   bool shallPass(int face, var c){
     Coordinate newCoords;
-    if(face == UP){
+    if(face == UP && c.curPos.y >= 1){
       newCoords = new Coordinate(c.curPos.x, c.curPos.y - 1);
-    }else if(face == DOWN){
+    }else if(face == DOWN && c.curPos.y < gameMap.eventMapset.rows -1){
       newCoords = new Coordinate(c.curPos.x, c.curPos.y + 1);
-    }else if(face == LEFT){
-      newCoords = new Coordinate(c.curPos.x -1, c.curPos.y);
-    }else if(face == RIGHT){
-      newCoords = new Coordinate(c.curPos.x +1, c.curPos.y);
-    }
-    
-    if(gameMap.nextToTile(c.curPos.x, c.curPos.y, face)){
+    }else if(face == LEFT && c.curPos.x >= 1){
+      newCoords = new Coordinate(c.curPos.x - 1, c.curPos.y);
+    }else if(face == RIGHT && c.curPos.x < gameMap.eventMapset.cols -1){
+      newCoords = new Coordinate(c.curPos.x + 1, c.curPos.y);
+    }else{
       return false;
     }
-    Iterator<Actor> charas = actors.iterator;
-    while(charas.moveNext()){
-      Actor char = charas.current;
-      bool nextTo = char.curPos.nextToThis2(newCoords);
-      if(!char.phasable && nextTo){
+    
+    var tileObject = gameMap.eventMapset.get(newCoords.x, newCoords.y);
+    if(!identical(tileObject, c) && tileObject != null){
+      if(tileObject is Actor && !tileObject.phasable ){
         return false;
+      }else if(tileObject is Tile){
+        return false;
+      }else if(tileObject is Entity && !tileObject.pushable){
+        return false;
+      }else if(tileObject is Entity && tileObject.pushable){
+        if(!tileObject.move(face)){
+          return false;
+        }
       }
     }
+    
     if(c != player){
       bool nextTo = player.curPos.nextToThis2(newCoords);
       if(!player.phasable && nextTo){
@@ -283,18 +291,6 @@ class Scene{
       }
     }
     
-    Iterator<Entity> entitiesIte = entities.iterator;
-    while(entitiesIte.moveNext()){
-      Entity item = entitiesIte.current;
-      bool itemFace = item.curPos.nextToThis2(newCoords);
-      if(!item.pushable && itemFace){
-          return false;
-      }else if(itemFace){
-        if(!item.move(face)){
-          return false;
-        }
-      }
-    }
     return true;
   }
   
