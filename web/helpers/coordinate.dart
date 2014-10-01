@@ -17,8 +17,8 @@ class Coordinate {
   }
   
   bool nextToThis(int face, Coordinate coor){
-    num deltaX = ((coor.x - x)/TILE_SIZE);
-    num deltaY = ((coor.y - y)/TILE_SIZE);
+    num deltaX = coor.x - x;
+    num deltaY = coor.y - y;
     
     if( deltaX == 0 && deltaY.ceil() == 1 && face == UP){
       return true;
@@ -60,8 +60,8 @@ class Coordinate {
     return -1;
   }
   
-  bool isTheSame(Coordinate coordCompare){
-    if(coordCompare.x == x && coordCompare.y == y){
+  bool isTheSame(Coordinate c){
+    if(c.x == x && c.y == y){
       return true;
     }
     return false;

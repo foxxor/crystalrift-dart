@@ -42,6 +42,8 @@ class Character implements Graphic{
   int speed;
   // Character is chasing?
   bool chasing;
+  // Who is this chasing?
+  Character chased;
   // Event is executing?
   bool trigger;
   //Parent scene calling this objetc
@@ -63,6 +65,7 @@ class Character implements Graphic{
     this.frame = INITIAL_FRAME;
     this.faceDir = INITIAL_FACE;
     this.trigger = false;
+    this.chasing = false;
     offsetX = 0;
     offsetY = 0;
     this.selectedChar = selectedChar * 3; //This calculation is cached for performance 
@@ -84,6 +87,11 @@ class Character implements Graphic{
     var random = new Math.Random();
     var number = random.nextInt(4);
     move(number);
+  }
+  
+  void chaseCharacter(Character chased){
+    chasing = true;
+    this.chased = chased;
   }
   
   void moveTo(int x, int y){
@@ -134,7 +142,8 @@ class Character implements Graphic{
   }
   
   bool insideArray(Coordinate coord, List<Coordinate> coords){
-    Iterator<Coordinate> coordsIte = coords.iterator;
+    Iterable coordsIterable = coords.reversed;
+    Iterator<Coordinate> coordsIte = coordsIterable.iterator;
     while(coordsIte.moveNext()){
       Coordinate node = coordsIte.current;
       if(node.isTheSame(coord)){
@@ -271,7 +280,6 @@ class Character implements Graphic{
     this.characterImage = new Element.tag('img'); 
     this.characterImage = doc.createElement('img'); 
     this.characterImage.src = src;
-    //this.characterImage.onLoad.listen((value) => update());
   }
   
   bool isMoving(){
@@ -279,7 +287,7 @@ class Character implements Graphic{
   }
   
   void updateMove(){
-    var distance = 2 * speed;
+    num distance = 2 * speed;
     if(curPos.y * TILE_SIZE > curPosPx.y){
       faceDirection(DOWN);
       curPosPx.y = Math.min(curPosPx.y + distance, curPos.y * TILE_SIZE);
@@ -301,7 +309,7 @@ class Character implements Graphic{
   
   void animate(){
     frame ++;
-    if(frame>2){
+    if(frame > 2 * ANIMATION_SPEED){
       frame = 0;
     }
   }
@@ -323,8 +331,7 @@ class Character implements Graphic{
       num dx = (curPosPx.x + (TILE_SIZE - (curPosPx.x % TILE_SIZE))) / TILE_SIZE;
       curPos.x = Math.max(dx.floor(), curPos.x) -1;
     }
-    
-    frame = 1;
+    frame = 1 * ANIMATION_SPEED;
   }
 
   void update(){
@@ -333,11 +340,17 @@ class Character implements Graphic{
     }else{
       stopMove();
     }
+    if(chasing){
+      if(!curPos.nextToThis(faceDir, chased.curPos) && !isMoving()){
+        moveTo(chased.curPos.x, chased.curPos.y);
+      }
+      
+    }
     screenPosPx.x = curPosPx.x - scene.displayPxX;
     screenPosPx.y = curPosPx.y - scene.displayPxY;
     ctx.drawImageToRect(this.characterImage , new Rectangle(screenPosPx.x, screenPosPx.y,
         TILE_SIZE, TILE_SIZE), //Rect to paint the image
-        sourceRect: new Rectangle(((selectedChar) + frame) * TILE_SIZE, 
+        sourceRect: new Rectangle(((selectedChar) + (frame / ANIMATION_SPEED).floor() ) * TILE_SIZE, 
             (TILE_SIZE * faceDir) + characterRow, 
             TILE_SIZE, TILE_SIZE)); //Size of the image
   }

@@ -72,7 +72,7 @@ void reactKey(var evt) {
       if(c.combatable){
         c.life = c.life - 10;
         scene.createAnimation(c);
-        c.moveTo(10, 5);
+        c.chaseCharacter(scene.player);
       }else if(!c.trigger){
         c.trigger = true;
         if(c.message.isNotEmpty){
