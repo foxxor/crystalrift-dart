@@ -26,7 +26,7 @@ class MapSet implements Graphic{
   Matrix mapset2;
   // The map matrix that represent the third visual terrain layer 
   Matrix mapset3;
-  // The map matrix that represent the third visual terrain layer 
+  // The map matrix that represent the event layer, to track movement correctly
   Matrix eventMapset;
   
   MapSet(HtmlDocument this._doc, CanvasRenderingContext2D this._ctx, CanvasElement this.canvas, 

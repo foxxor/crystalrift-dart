@@ -48,7 +48,7 @@
       "y": 12,
       "characterId":1,
       "characterRow": 2,
-      "moveRandom" : true,
+      "moveRandom" : false,
       "message": "blergh!",
       "behaviour" : 2,
       "imageSource" : "monsters1.png",

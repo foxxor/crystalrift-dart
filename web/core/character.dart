@@ -40,6 +40,8 @@ class Character implements Graphic{
   bool phasable;
   // Character movement speed
   int speed;
+  // Character is chasing?
+  bool chasing;
   // Event is executing?
   bool trigger;
   //Parent scene calling this objetc
@@ -85,8 +87,107 @@ class Character implements Graphic{
   }
   
   void moveTo(int x, int y){
-    curPos.y = y;
-    curPos.x = x;
+    Coordinate goal = new Coordinate(x, y);
+    if(identical(curPos, goal)){
+      return;
+    }
+    List<Coordinate> closed = new List();
+    List<Coordinate> open = new List();
+    open.add(curPos);
+    int iterations = 0;
+    bool goalReached = false;
+    
+    
+    while(!goalReached){
+      iterations++ ;
+      if(MAX_PATHFINDING_ITERATIONS == iterations){
+        return;
+      }
+      Coordinate current = open.last;
+      if(current == null){
+        return;
+      }
+      List neighbours = getNeighbours(current, goal);
+      Iterator<Coordinate> neighboursIte = neighbours.iterator;
+      Coordinate bestNode;
+      num bestDistance = 999999;
+      while(neighboursIte.moveNext()){
+        Coordinate node = neighboursIte.current;
+        if(node.isTheSame(goal)){
+          recreatePath(open);
+          return;
+        }
+        if(insideArray(node, closed)){
+          continue;
+        }
+        num nodeDistance = goal.distanceToThis(node);
+        if(bestDistance > nodeDistance){
+          bestDistance = nodeDistance;
+          bestNode = node;
+        }
+      }
+      if(!insideArray(bestNode, open)){
+        open.add(bestNode);
+      }
+      closed.add(current);
+    }
+  }
+  
+  bool insideArray(Coordinate coord, List<Coordinate> coords){
+    Iterator<Coordinate> coordsIte = coords.iterator;
+    while(coordsIte.moveNext()){
+      Coordinate node = coordsIte.current;
+      if(node.isTheSame(coord)){
+        return true;
+      }
+    }
+    return false;
+  }
+  
+  void recreatePath(List<Coordinate> open){
+    Iterator<Coordinate> openIte = open.iterator;
+    while(openIte.moveNext()){
+      Coordinate node = openIte.current;
+      if(node.x > curPos.x){
+        move(RIGHT);
+      }else if(node.x < curPos.x){
+        move(LEFT);
+      }else if(node.y > curPos.y){
+        move(DOWN);
+      }else if(node.y < curPos.y){
+        move(UP);
+      }
+    }
+  }
+  
+  List getNeighbours(Coordinate node, Coordinate goal){
+    List neighbours = new List();
+    if(node.y - 1 >= 0){
+      Coordinate neighbour1 = new Coordinate(node.x, node.y - 1);
+      if(scene.objectIsPassable(this, neighbour1, UP) || neighbour1.isTheSame(goal) ){
+        neighbours.add(neighbour1);
+      }
+    }
+    if(node.y + 1 < scene.gameMap.eventMapset.rows){
+      Coordinate neighbour2 = new Coordinate(node.x, node.y + 1);
+      if(scene.objectIsPassable(this, neighbour2, DOWN) || neighbour2.isTheSame(goal)){
+        neighbours.add(neighbour2);
+      }
+    }
+    if(node.x - 1 >= 0){
+      Coordinate neighbour3 = new Coordinate(node.x - 1, node.y);
+      if(scene.objectIsPassable(this, neighbour3, LEFT)  || neighbour3.isTheSame(goal)){
+          neighbours.add(neighbour3);
+        }
+    }
+    if(node.x + 1 < scene.gameMap.eventMapset.cols){
+       Coordinate neighbour4 = new Coordinate(node.x +1, node.y);
+       if(scene.objectIsPassable(this, neighbour4, RIGHT) || neighbour4.isTheSame(goal)){
+         neighbours.add(neighbour4);
+       }
+    }
+    
+    return neighbours;
   }
   
   bool move(int face){

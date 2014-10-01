@@ -5,6 +5,7 @@
 library coordinate;
 
 import '../core/globals.dart';
+import 'dart:math' as Math;
 
 class Coordinate {
   int x;
@@ -38,6 +39,10 @@ class Coordinate {
     return false;
   }
   
+  num distanceToThis(Coordinate c){
+    return (x- c.x).abs() + (y-c.y).abs();
+  }
+  
   int facingThis(int face, Coordinate coor){
     num deltaX = ((coor.x - x)/TILE_SIZE);
     num deltaY = ((coor.y - y)/TILE_SIZE);
@@ -53,6 +58,13 @@ class Coordinate {
     }
     
     return -1;
+  }
+  
+  bool isTheSame(Coordinate coordCompare){
+    if(coordCompare.x == x && coordCompare.y == y){
+      return true;
+    }
+    return false;
   }
 
 }

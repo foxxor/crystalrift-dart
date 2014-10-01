@@ -269,6 +269,10 @@ class Scene{
       return false;
     }
     
+    return objectIsPassable(c, newCoords, face);
+  }
+  
+  bool objectIsPassable( var c, Coordinate newCoords, int face){
     var tileObject = gameMap.eventMapset.get(newCoords.x, newCoords.y);
     if(!identical(tileObject, c) && tileObject != null){
       if(tileObject is Actor && !tileObject.phasable ){
@@ -290,7 +294,6 @@ class Scene{
         return false;
       }
     }
-    
     return true;
   }
   
