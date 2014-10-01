@@ -19,6 +19,8 @@ An HTML5 2D game engine using dart and canvas. Movements and interactions are li
 * Particle effects like fire, poison, smoke.
 * Text boxes for long texts. (Enter to skip)
 * Basic particles and animations.
+* Character pathfinding.
+* Very basic action battle system.
 
 ## Additional Utils in the repository
 
