@@ -56,5 +56,7 @@ const int ACTOR_BEHAVIOUR_FOE = 3;
 
 const int MAX_PATHFINDING_ITERATIONS = 800;
 
-
+//Selection modes for the editor
+const int SINGLE_TILE_SELECTION = 1;
+const int MULTI_TILE_SELECTION = 2;
 

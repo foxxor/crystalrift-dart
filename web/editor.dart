@@ -4,9 +4,11 @@
 
 import 'dart:html';
 import 'editor/editorMap.dart';
+import 'editor/menuTileset.dart';
 import 'core/globals.dart';
 import 'core/tile.dart';
 import 'dart:convert';
+import 'helpers/matrix.dart';
 
 //System vars
 HtmlDocument _doc;
@@ -19,6 +21,8 @@ CanvasElement mapCanvas;
 ImageElement image;
 ImageElement imageTile;
 Tile tileSelected;
+Matrix selectionMatrix;
+int selectionMode;
 var tileElement;
 var mapElement;
 var navigation;
@@ -26,6 +30,7 @@ var windows;
 int currentLayer;
 String currentTool;
 List<EditorMap> maps;
+MenuTileset menuTileset;
 var toolSubscription;
 
 void main() {
@@ -45,6 +50,7 @@ void initMenuInteraction(){
 void initTabs(){
   currentLayer = 1;
   currentTool = "pencil";
+  selectionMode = SINGLE_TILE_SELECTION;
   navigation = _doc.querySelector("#navigation");
   windows = _doc.querySelector("#windows");
   navigation.onClick.listen((MouseEvent e){
@@ -204,8 +210,9 @@ void loadTileSet(){
   tilesetCanvas.width = 1024;//384;
   tilesetCanvas.height = 2016;//15096;
   tileElement = _doc.querySelector("#tilesetCont");
-  image = new ImageElement(src:'assets/tileset/tileset.png', width:tilesetCanvas.width, height:tilesetCanvas.height);
-  image.onLoad.listen((value) => loadTileset());
+  menuTileset = new MenuTileset(_doc, _ctx, tilesetCanvas, tileElement);
+  //image = new ImageElement(src:'assets/tileset/tileset.png', width:tilesetCanvas.width, height:tilesetCanvas.height);
+  //image.onLoad.listen((value) => loadTileset());
 }
 
 // Listener for the tile selection
@@ -237,9 +244,9 @@ void tileSelectorBinds(){
     _ctxTile.strokeRect(0,  0, TILE_SIZE, TILE_SIZE);
   });
   
-  /*
-  This is to multiple select tiles in the tileset area, not working yet 
-  int dragX, dragY;
+  
+  //This is to multiple select tiles in the tileset area, not working yet 
+  /*int dragX, dragY;
   tilesetCanvas.onMouseUp.listen((MouseEvent e){
     int x = ((e.client.x + mapElement.scrollLeft - 360)/TILE_SIZE).ceil();
     int y = ((e.client.y + mapElement.scrollTop - 10)/TILE_SIZE).ceil();
@@ -248,16 +255,15 @@ void tileSelectorBinds(){
       int iY = (dragY > y ? y: dragY );
       int fX = (dragX > x ? dragX: x );
       int fY = (dragY > y ? dragY: y );
+      
+      
       EditorMap curMap = maps.elementAt(0);
       for(num e = iX; e < fX; e++){
         for(num i = iY; i < fY; i++){
-          if(currentTool == "pencil"){
-            curMap.setTile(e, i, tileSelected.x, tileSelected.y, currentLayer);
-          }else{ //Eraser
-            curMap.setTile(e, i, 0, 0, currentLayer);
-          }
+          curMap.setTile(e, i, tileSelected.x, tileSelected.y, currentLayer);
         }
       }
+      selectionMode = MULTI_TILE_SELECTION;
       curMap.stopSelection();
       curMap.reDraw();
     }
@@ -270,11 +276,7 @@ void tileSelectorBinds(){
     dragY = y;
     EditorMap curMap = maps.elementAt(0);
     curMap.beginSelection();
-    if(currentTool == "pencil"){
-      curMap.setTile(x, y, tileSelected.x, tileSelected.y, currentLayer);
-    }else{ //Eraser
-      curMap.setTile(x, y, 0, 0, currentLayer);
-    }
+    curMap.setTile(x, y, tileSelected.x, tileSelected.y, currentLayer);
     curMap.reDraw();
   });*/
     
@@ -286,22 +288,4 @@ void tileSelectorBinds(){
     curMap.updateSelector(x, y);
     curMap.reDraw(true);
   });
-}
-
-
-void loadTileset(){
-  num cols = image.width / TILE_SIZE;
-  num rows = image.height / TILE_SIZE;
-  _ctx.drawImage( image,0,0);
-  
-  for(num x = 1; x < cols; x++){
-    _ctx.moveTo(x*TILE_SIZE, 0);
-    _ctx.lineTo(x*TILE_SIZE, image.height);
-    _ctx.stroke();
-  }
-  for(int y=1; y < rows; y++){
-    _ctx.moveTo(0, y*TILE_SIZE);
-    _ctx.lineTo(image.width, y*TILE_SIZE);
-    _ctx.stroke();
-  }
 }

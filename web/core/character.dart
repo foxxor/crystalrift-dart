@@ -10,6 +10,7 @@ import 'globals.dart';
 import 'scene.dart';
 import 'graphic.dart';
 import '../helpers/coordinate.dart';
+import '../helpers/matrix.dart';
 import 'dart:math' as Math;
 
 class Character implements Graphic{
@@ -94,6 +95,11 @@ class Character implements Graphic{
     this.chased = chased;
   }
   
+  void stopChasing(){
+    chasing = false;
+    chased = null;
+  }
+  
   void moveTo(int x, int y){
     Coordinate goal = new Coordinate(x, y);
     if(identical(curPos, goal)){
@@ -101,7 +107,10 @@ class Character implements Graphic{
     }
     List<Coordinate> closed = new List();
     List<Coordinate> open = new List();
+    Matrix openUsed = new Matrix(scene.gameMap.eventMapset.cols, scene.gameMap.eventMapset.rows);
+    Matrix closedUsed = new Matrix(scene.gameMap.eventMapset.cols, scene.gameMap.eventMapset.rows);
     open.add(curPos);
+    openUsed.set(curPos.x, curPos.y, true);
     int iterations = 0;
     bool goalReached = false;
     
@@ -125,7 +134,7 @@ class Character implements Graphic{
           recreatePath(open);
           return;
         }
-        if(insideArray(node, closed)){
+        if(closedUsed.get(node.x, node.y) == true){
           continue;
         }
         num nodeDistance = goal.distanceToThis(node);
@@ -134,10 +143,12 @@ class Character implements Graphic{
           bestNode = node;
         }
       }
-      if(!insideArray(bestNode, open)){
+      if(openUsed.get(bestNode.x, bestNode.y) == null || openUsed.get(bestNode.x, bestNode.y) == false){
         open.add(bestNode);
+        openUsed.set(bestNode.x, bestNode.y, true);
       }
       closed.add(current);
+      closedUsed.set(current.x, current.y, true);
     }
   }
   

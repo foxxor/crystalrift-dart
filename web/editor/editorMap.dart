@@ -1,5 +1,5 @@
 /*
-  Copyright (C) 2013 Jorge Vargas <vargasjorgeluis@gmail.com>
+  Copyright (C) 2014 Jorge Vargas <vargasjorgeluis@gmail.com>
 */
 library editorMap;
 
