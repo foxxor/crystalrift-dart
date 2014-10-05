@@ -13,30 +13,37 @@ class MenuTileset{
   HtmlDocument doc;
   CanvasRenderingContext2D ctx;
   CanvasElement canvas;
-  ImageElement tilesetImage;
-  var tileElement;
+  ImageElement image;
+  var tilesetContainer;
+  bool mouseSelecting;
+  Coordinate initialSelection;
+  Coordinate mouseSelector;
   
-  MenuTileset(HtmlDocument doc, CanvasRenderingContext2D ctx, CanvasElement canvas, var tileElement){
+  MenuTileset(HtmlDocument doc, CanvasRenderingContext2D ctx, CanvasElement canvas, var tilesetContainer){
     this.doc = doc;
     this.ctx = ctx;
     this.canvas = canvas;
-    this.tileElement = tileElement;
+    this.tilesetContainer = tilesetContainer;
     this.canvas.width = 1024;
     this.canvas.height = 2016;
+    this.mouseSelector = new Coordinate(0, 0);
+    this.mouseSelecting = false;  
     loadGraphic('tileset.png');
   }
   
   void loadGraphic(String src){
-    tileElement = doc.querySelector("#tilesetCont");
-    tilesetImage = new ImageElement(src:'assets/tileset/'+src, width:canvas.width, height:canvas.height);
-    tilesetImage.onLoad.listen((value) => loadTileset());
+    image = new ImageElement(src:'assets/tileset/'+src, width:canvas.width, height:canvas.height);
+    image.onLoad.listen((value) => loadTileset());
   }
   
   void loadTileset(){
-    num cols = tilesetImage.width / TILE_SIZE;
-    num rows = tilesetImage.height / TILE_SIZE;
-    ctx.drawImage( tilesetImage, 0, 0);
-    
+    num cols = image.width / TILE_SIZE;
+    num rows = image.height / TILE_SIZE;
+    ctx.drawImage( image, 0, 0);
+    /*ctx.save();
+    ctx.globalAlpha = 0.1;
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth   = 1;
     for(num x = 1; x < cols; x++){
       ctx.moveTo(x * TILE_SIZE, 0);
       ctx.lineTo(x * TILE_SIZE, tilesetImage.height);
@@ -47,5 +54,36 @@ class MenuTileset{
       ctx.lineTo(tilesetImage.width, y * TILE_SIZE);
       ctx.stroke();
     }
+    ctx.restore();*/
+  }
+  
+  void updateSelector(int x, int y){
+    mouseSelector.x = x;
+    mouseSelector.y = y;
+  }
+  
+  void beginSelection(){
+    initialSelection = new Coordinate(mouseSelector.x-1, mouseSelector.y-1);
+    mouseSelecting = true;
+  }
+  
+  void stopSelection(){
+    mouseSelecting = false;
+  }
+  
+  void update(){
+    loadTileset();
+    //Draw of the map selector icon
+    ctx.strokeStyle = '#FFF';
+    ctx.lineWidth   = 1;
+    if(mouseSelecting){
+      int selectWidth = (initialSelection.x - mouseSelector.x) * TILE_SIZE;
+      int selectHeight = (initialSelection.y - mouseSelector.y) * TILE_SIZE;
+      ctx.strokeRect((mouseSelector.x +1) * TILE_SIZE,  (mouseSelector.y +1) * TILE_SIZE, 
+          selectWidth, selectHeight);
+    }else{
+      ctx.strokeRect(mouseSelector.x * TILE_SIZE,  mouseSelector.y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+    }
+          
   }
 }

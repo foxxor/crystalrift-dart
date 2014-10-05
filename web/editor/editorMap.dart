@@ -23,6 +23,8 @@ class EditorMap{
   Coordinate mouseSelector;
   Coordinate initialSelection;
   bool mouseSelecting;
+  var selection;
+  int selectionMode;
   
   EditorMap(String name, int width, int height){
     this.name = name;
@@ -51,7 +53,7 @@ class EditorMap{
     this.mapImage = new Element.tag('img'); 
     this.mapImage = _doc.createElement('img'); 
     this.mapImage.src = src;
-    this.mapImage.onLoad.listen((value) => reDraw());
+    this.mapImage.onLoad.listen((value) => update());
   }
   
   void initLayers(){
@@ -66,8 +68,8 @@ class EditorMap{
   }
   
   void updateSelector(int x, int y){
-    this.mouseSelector.x = x;
-    this.mouseSelector.y = y;
+    mouseSelector.x = x;
+    mouseSelector.y = y;
   }
   
   void setTile(int x, int y, int tx, int ty, [int layer=1,int type=TILE_SOIL]){
@@ -81,7 +83,11 @@ class EditorMap{
     }
   }
   
-  void reDraw([bool drawSelector = false]){
+  void setSelection(var selection){
+    this.selection = selection;
+  }
+  
+  void update([bool drawSelector = false]){
     _ctx.strokeRect(0,  0, widthTiles* TILE_SIZE, heightTiles* TILE_SIZE);
     
     for (var e = 0; e < (heightTiles); e++){
@@ -106,25 +112,29 @@ class EditorMap{
       //Draw of the map selector icon
       _ctx.strokeStyle = '#FFF';
       _ctx.lineWidth   = 1;
-      if(this.mouseSelecting){
-        int selectWidth = (this.initialSelection.x - this.mouseSelector.x) * TILE_SIZE;
-        int selectHeight = (this.initialSelection.y - this.mouseSelector.y) * TILE_SIZE;
-        _ctx.strokeRect((this.mouseSelector.x +1) * TILE_SIZE,  (this.mouseSelector.y +1) * TILE_SIZE, 
+      if(mouseSelecting){
+        int selectWidth = (initialSelection.x - mouseSelector.x) * TILE_SIZE;
+        int selectHeight = (initialSelection.y - mouseSelector.y) * TILE_SIZE;
+        _ctx.strokeRect((mouseSelector.x +1) * TILE_SIZE,  (mouseSelector.y +1) * TILE_SIZE, 
             selectWidth, selectHeight);
       }else{
-        _ctx.strokeRect(this.mouseSelector.x * TILE_SIZE,  this.mouseSelector.y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+        if(selectionMode == MULTI_TILE_SELECTION){
+            _ctx.strokeRect(mouseSelector.x * TILE_SIZE,  mouseSelector.y * TILE_SIZE, 
+            selection.cols * TILE_SIZE, selection.rows * TILE_SIZE);
+        }else{
+          _ctx.strokeRect(mouseSelector.x * TILE_SIZE,  mouseSelector.y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+        }
       }
-      
     }
   }
   
   void beginSelection(){
-    this.initialSelection = new Coordinate(this.mouseSelector.x-1, this.mouseSelector.y-1);
-    this.mouseSelecting = true;
+    initialSelection = new Coordinate(mouseSelector.x-1, mouseSelector.y-1);
+    mouseSelecting = true;
   }
   
   void stopSelection(){
-    this.mouseSelecting = false;
+    mouseSelecting = false;
   }
   
   //Method to serialize a matrix in something dart understands
@@ -154,6 +164,6 @@ class EditorMap{
         layer3.set(i, e, t3);
       }
     }
-    reDraw();
+    update();
   }
 }
