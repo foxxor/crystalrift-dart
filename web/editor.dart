@@ -60,7 +60,7 @@ void initTabs(){
   windows = _doc.querySelector("#windows");
   navigation.onClick.listen((MouseEvent e){
     e.preventDefault();
-    Element elem = e.toElement;
+    Element elem = e.target;
     String option = elem.dataset['option'];
     navigationHideAll();
     elem.parent.classes.add('active');
@@ -86,26 +86,42 @@ void layerSelection(){
   var layers = _doc.querySelector("#ulLayers");
   layers.onClick.listen((MouseEvent e){
     e.preventDefault();
-    for (var layer in layers.children) {
-      layer.classes.remove('active');
+    Element elem = e.target;
+    if(elem.dataset['layer'] != null){
+      for (var layer in layers.children) {
+        layer.classes.remove('active');
+      }
+      elem.parent.classes.add('active');
+      currentLayer = int.parse(elem.dataset['layer']);
     }
-    Element elem = e.toElement;
-    elem.parent.classes.add('active');
-    currentLayer = int.parse(elem.dataset['layer']);
   });
 }
 
 // Listener for the tool selected
 void toolSelection(){
   var toolsButtons = _doc.querySelector("#toolset");
-  toolsButtons.onClick.listen((MouseEvent e){
+  var toolPencil = _doc.querySelector("#toolPencil");
+  toolPencil.onClick.listen((MouseEvent e){
     e.preventDefault();
-    for (var layer in toolsButtons.children) {
-      layer.classes.remove('active');
+    for (var button in toolsButtons.children) {
+      button.classes.remove('active');
     }
-    Element elem = e.toElement;
-    elem.classes.add('active');
-    currentTool = elem.dataset['tool'];
+    toolPencil.classes.add('active');
+    currentTool = toolPencil.dataset['tool'];
+    EditorMap curMap = maps.elementAt(0);
+    curMap.selectionMode = tileSelector.selectionMode;
+  });
+  
+  var toolEraser = _doc.querySelector("#toolEraser");
+  toolEraser.onClick.listen((MouseEvent e){
+    e.preventDefault();
+    for (var button in toolsButtons.children) {
+      button.classes.remove('active');
+    }
+    toolEraser.classes.add('active');
+    currentTool = toolEraser.dataset['tool'];
+    EditorMap curMap = maps.elementAt(0);
+    curMap.selectionMode = SINGLE_TILE_SELECTION;
   });
   
   var genJsonButton = _doc.querySelector("#generateMap");
