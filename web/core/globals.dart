@@ -60,3 +60,8 @@ const int MAX_PATHFINDING_ITERATIONS = 800;
 const int SINGLE_TILE_SELECTION = 1;
 const int MULTI_TILE_SELECTION = 2;
 
+// Editor map area size in tiles
+const int EDITOR_MAP_TILES_SIZE_WIDTH = 32;
+const int EDITOR_MAP_TILES_SIZE_HEIGHT = 22;
+
+

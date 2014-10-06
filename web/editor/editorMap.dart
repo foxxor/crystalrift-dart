@@ -25,6 +25,7 @@ class EditorMap{
   bool mouseSelecting;
   var selection;
   int selectionMode;
+  bool active;
   
   EditorMap(String name, int width, int height){
     this.name = name;
@@ -35,6 +36,7 @@ class EditorMap{
     layer3 = new Matrix(width, height);
     this.mouseSelector = new Coordinate(0, 0);
     this.mouseSelecting = false;
+    active = false;
     initLayers();
   }
   
@@ -42,8 +44,8 @@ class EditorMap{
     this._doc = _doc;
     this._ctx = _ctx;
     this.canvas = canvas;
-    this.canvas.width = widthTiles* TILE_SIZE;
-    this.canvas.height = heightTiles* TILE_SIZE;
+    //this.canvas.width = widthTiles* TILE_SIZE;
+    //this.canvas.height = heightTiles* TILE_SIZE;
     _ctx.strokeStyle = '#000';
     _ctx.lineWidth   = 1;
     loadGraphic('assets/tileset/tileset.png');
@@ -88,41 +90,42 @@ class EditorMap{
   }
   
   void update([bool drawSelector = false]){
-    _ctx.strokeRect(0,  0, widthTiles* TILE_SIZE, heightTiles* TILE_SIZE);
-    
-    for (var e = 0; e < (heightTiles); e++){
-      for (var i = 0; i < (widthTiles); i++){
-        Tile tile = layer1.get( i, e);
-        _ctx.drawImageToRect(this.mapImage , new Rectangle(i * TILE_SIZE, e * TILE_SIZE, TILE_SIZE, TILE_SIZE), //Rect to paint the image
-            sourceRect: new Rectangle( tile.xImg, tile.yImg, TILE_SIZE, TILE_SIZE)); //Size of the image
-        
-        if(layer2.get(i, e) != 0){
-          Tile tile2 = layer2.get(i, e);
+    if(active){
+      _ctx.strokeRect(0,  0, widthTiles* TILE_SIZE, heightTiles* TILE_SIZE);
+      for (var e = 0; e < (heightTiles); e++){
+        for (var i = 0; i < (widthTiles); i++){
+          Tile tile = layer1.get( i, e);
           _ctx.drawImageToRect(this.mapImage , new Rectangle(i * TILE_SIZE, e * TILE_SIZE, TILE_SIZE, TILE_SIZE), //Rect to paint the image
-              sourceRect: new Rectangle( tile2.xImg, tile2.yImg, TILE_SIZE, TILE_SIZE)); //Size of the image
-        }
-        if(layer3.get(i, e) != 0){
-          Tile tile3 = layer3.get(i, e);
-          _ctx.drawImageToRect(this.mapImage , new Rectangle(i * TILE_SIZE, e * TILE_SIZE, TILE_SIZE, TILE_SIZE), //Rect to paint the image
-              sourceRect: new Rectangle( tile3.xImg, tile3.yImg, TILE_SIZE, TILE_SIZE)); //Size of the image
+              sourceRect: new Rectangle( tile.xImg, tile.yImg, TILE_SIZE, TILE_SIZE)); //Size of the image
+          
+          if(layer2.get(i, e) != 0){
+            Tile tile2 = layer2.get(i, e);
+            _ctx.drawImageToRect(this.mapImage , new Rectangle(i * TILE_SIZE, e * TILE_SIZE, TILE_SIZE, TILE_SIZE), //Rect to paint the image
+                sourceRect: new Rectangle( tile2.xImg, tile2.yImg, TILE_SIZE, TILE_SIZE)); //Size of the image
+          }
+          if(layer3.get(i, e) != 0){
+            Tile tile3 = layer3.get(i, e);
+            _ctx.drawImageToRect(this.mapImage , new Rectangle(i * TILE_SIZE, e * TILE_SIZE, TILE_SIZE, TILE_SIZE), //Rect to paint the image
+                sourceRect: new Rectangle( tile3.xImg, tile3.yImg, TILE_SIZE, TILE_SIZE)); //Size of the image
+          }
         }
       }
-    }
-    if(drawSelector){
-      //Draw of the map selector icon
-      _ctx.strokeStyle = '#FFF';
-      _ctx.lineWidth   = 1;
-      if(mouseSelecting){
-        int selectWidth = (initialSelection.x - mouseSelector.x) * TILE_SIZE;
-        int selectHeight = (initialSelection.y - mouseSelector.y) * TILE_SIZE;
-        _ctx.strokeRect((mouseSelector.x +1) * TILE_SIZE,  (mouseSelector.y +1) * TILE_SIZE, 
-            selectWidth, selectHeight);
-      }else{
-        if(selectionMode == MULTI_TILE_SELECTION){
-            _ctx.strokeRect(mouseSelector.x * TILE_SIZE,  mouseSelector.y * TILE_SIZE, 
-            selection.cols * TILE_SIZE, selection.rows * TILE_SIZE);
+      if(drawSelector){
+        //Draw of the map selector icon
+        _ctx.strokeStyle = '#FFF';
+        _ctx.lineWidth   = 1;
+        if(mouseSelecting){
+          int selectWidth = (initialSelection.x - mouseSelector.x) * TILE_SIZE;
+          int selectHeight = (initialSelection.y - mouseSelector.y) * TILE_SIZE;
+          _ctx.strokeRect((mouseSelector.x +1) * TILE_SIZE,  (mouseSelector.y +1) * TILE_SIZE, 
+              selectWidth, selectHeight);
         }else{
-          _ctx.strokeRect(mouseSelector.x * TILE_SIZE,  mouseSelector.y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+          if(selectionMode == MULTI_TILE_SELECTION){
+              _ctx.strokeRect(mouseSelector.x * TILE_SIZE,  mouseSelector.y * TILE_SIZE, 
+              selection.cols * TILE_SIZE, selection.rows * TILE_SIZE);
+          }else{
+            _ctx.strokeRect(mouseSelector.x * TILE_SIZE,  mouseSelector.y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+          }
         }
       }
     }

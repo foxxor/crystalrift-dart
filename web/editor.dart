@@ -3,6 +3,7 @@
 */
 
 import 'dart:html';
+import 'dart:js';
 import 'editor/editorMap.dart';
 import 'editor/menuTileset.dart';
 import 'editor/tileSelector.dart';
@@ -51,6 +52,7 @@ void initMenuInteraction(){
   loadTileSelection();
   layerSelection();
   toolSelection();
+  bindMapOptions();
 }
 
 void initTabs(){
@@ -153,23 +155,29 @@ void navigationHideAll(){
 
 // Draw the editor map
 void loadMap(){
-  maps = new List<EditorMap>();
-  EditorMap m1 = new EditorMap("Map 001", 30, 20);
   mapCanvas = _doc.querySelector("#map");
   mapCtx = mapCanvas.getContext("2d");
   mapElement = _doc.querySelector('#mapContainer');
-  m1.initContext(_doc, mapCtx, mapCanvas);
-  m1.selectionMode = SINGLE_TILE_SELECTION;
-  maps.add(m1);
+  
+  mapCanvas.width = EDITOR_MAP_TILES_SIZE_WIDTH * TILE_SIZE;
+  mapCanvas.height = EDITOR_MAP_TILES_SIZE_HEIGHT * TILE_SIZE;
+  maps = new List<EditorMap>();
+  EditorMap initialMap = new EditorMap("Map 001", EDITOR_MAP_TILES_SIZE_WIDTH, EDITOR_MAP_TILES_SIZE_HEIGHT);
+  initialMap.initContext(_doc, mapCtx, mapCanvas);
+  initialMap.selectionMode = SINGLE_TILE_SELECTION;
+  initialMap.active = true;
+  maps.add(initialMap);
   drawMapsList();
   loadMapSelection();
 }
 
 void drawMapsList(){
   var ul = _doc.querySelector('#mapWindow ul.list-group');
+  ul.innerHtml = "";
   for (var m in maps){
-    var li = new Element.html('<li class="list-group-item"><span class="badge">'+m.widthTiles.toString()+' x ' +m.heightTiles.toString()+'</span>'+m.name+'</li>');
-      ul.children.add(li);
+    var li = new Element.html('<li class="list-group-item"><span class="badge">'+m.widthTiles.toString()
+        +' x ' +m.heightTiles.toString()+'</span>'+m.name+'</li>');
+    ul.children.add(li);
   }
 }
 
@@ -322,3 +330,23 @@ void tileSelectorBinds(){
     menuTileset.update();
   });
 }
+
+void bindMapOptions(){
+  var addMapButton = _doc.querySelector('#addMapButton');
+  addMapButton.onMouseDown.listen((MouseEvent e){
+    e.preventDefault();
+    InputElement mapNameInput = _doc.querySelector('#mapNameInput');
+    InputElement widthInput = _doc.querySelector('#mapWidthInput');
+    InputElement heightInput = _doc.querySelector('#mapHeightInput');
+    String mapName = mapNameInput.value;
+    int width = int.parse(widthInput.value);
+    int height = int.parse(heightInput.value);
+    EditorMap map = new EditorMap(mapName, width, height);
+    map.initContext(_doc, mapCtx, mapCanvas);
+    map.selectionMode = SINGLE_TILE_SELECTION;
+    maps.add(map);
+    drawMapsList();
+    context.callMethod('jQuery', ['#addMapModal']).callMethod('modal', ['hide']);
+  });
+}
+

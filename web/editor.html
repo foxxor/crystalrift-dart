@@ -50,6 +50,35 @@
           <div id="mapWindow" class="hide">
             <ul class="list-group">
             </ul>
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addMapModal">Add map</button>
+            <div class="modal fade" id="addMapModal" tabindex="-1" role="dialog" aria-labelledby="addMapModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                  <h4 class="modal-title" id="addMapModalLabel">Add new map</h4>
+                </div>
+                <div class="modal-body">
+                  <div class="form-group">
+                    <label for="mapNameInput">Name</label>
+                    <input type="text" class="form-control" id="mapNameInput">
+                  </div>
+                  <div class="form-group">
+                    <label for="mapWidthInput">Width</label>
+                    <input type="text" class="form-control" id="mapWidthInput">
+                  </div>
+                  <div class="form-group">
+                    <label for="mapHeightInput">Height</label>
+                    <input type="text" class="form-control" id="mapHeightInput">
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                  <button type="button" class="btn btn-success" id="addMapButton">Add map</button>
+                </div>
+              </div>
+            </div>
+          </div>
           </div>
           <!-- Events -->
           <div id="eventWindow" class="hide">
@@ -63,6 +92,7 @@
                 </button>
               </li>
             </ul>
+            <button type="button" class="btn btn-success" id="addEvent">Add event</button>
           </div>
           <!-- I/O functions -->
           <div id="ioWindow" class="hide">
@@ -79,6 +109,8 @@
         </div>
   	  </div>
   	</div>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
     <script type="application/dart" src="editor.dart"></script>
     <!-- for this next line to work, your pubspec.yaml file must have a dependency on 'browser' -->
     <script src="packages/browser/dart.js"></script>
