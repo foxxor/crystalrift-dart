@@ -44,11 +44,14 @@ class EditorMap{
     this._doc = _doc;
     this._ctx = _ctx;
     this.canvas = canvas;
-    //this.canvas.width = widthTiles* TILE_SIZE;
-    //this.canvas.height = heightTiles* TILE_SIZE;
     _ctx.strokeStyle = '#000';
     _ctx.lineWidth   = 1;
     loadGraphic('assets/tileset/tileset.png');
+  }
+  
+  void canvasReDraw(){
+    this.canvas.width = widthTiles* TILE_SIZE;
+    this.canvas.height = heightTiles* TILE_SIZE;
   }
   
   void loadGraphic(String src){

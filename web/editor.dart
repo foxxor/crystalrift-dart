@@ -39,6 +39,8 @@ MenuTileset menuTileset;
 TileSelector tileSelector;
 // Current tool in use
 var toolSubscription;
+// Current map visible
+EditorMap currentMap;
 
 void main() {
   _doc = window.document;
@@ -110,8 +112,7 @@ void toolSelection(){
     }
     toolPencil.classes.add('active');
     currentTool = toolPencil.dataset['tool'];
-    EditorMap curMap = maps.elementAt(0);
-    curMap.selectionMode = tileSelector.selectionMode;
+    currentMap.selectionMode = tileSelector.selectionMode;
   });
   
   var toolEraser = _doc.querySelector("#toolEraser");
@@ -122,14 +123,12 @@ void toolSelection(){
     }
     toolEraser.classes.add('active');
     currentTool = toolEraser.dataset['tool'];
-    EditorMap curMap = maps.elementAt(0);
-    curMap.selectionMode = SINGLE_TILE_SELECTION;
+    currentMap.selectionMode = SINGLE_TILE_SELECTION;
   });
   
   var genJsonButton = _doc.querySelector("#generateMap");
   genJsonButton.onClick.listen((MouseEvent e){
-    EditorMap curMap = maps.elementAt(0);
-    String jsonData = JSON.encode(curMap.toJson());
+    String jsonData = JSON.encode(currentMap.toJson());
     var jsonTextArea = _doc.querySelector("#genJsonTextArea");
     jsonTextArea.setInnerHtml(jsonData);
   });
@@ -139,8 +138,7 @@ void toolSelection(){
     var jsonTextArea = _doc.querySelector("#genJsonTextArea");
     String jsonData = jsonTextArea.value;
     Map parsedJson = JSON.decode(jsonData);
-    EditorMap curMap = maps.elementAt(0);
-    curMap.loadMap(parsedJson);
+    currentMap.loadMap(parsedJson);
   });
 }
 
@@ -167,18 +165,10 @@ void loadMap(){
   initialMap.selectionMode = SINGLE_TILE_SELECTION;
   initialMap.active = true;
   maps.add(initialMap);
+  currentMap = maps.elementAt(0);
+  currentMap.canvasReDraw();
   drawMapsList();
   loadMapSelection();
-}
-
-void drawMapsList(){
-  var ul = _doc.querySelector('#mapWindow ul.list-group');
-  ul.innerHtml = "";
-  for (var m in maps){
-    var li = new Element.html('<li class="list-group-item"><span class="badge">'+m.widthTiles.toString()
-        +' x ' +m.heightTiles.toString()+'</span>'+m.name+'</li>');
-    ul.children.add(li);
-  }
 }
 
 //Listener for the map 
@@ -187,8 +177,7 @@ void loadMapSelection(){
   mapCanvas.onMouseUp.listen((MouseEvent e){
     int x = ((e.client.x + mapElement.scrollLeft - 360)/TILE_SIZE).ceil();
     int y = ((e.client.y + mapElement.scrollTop - 10)/TILE_SIZE).ceil();
-    EditorMap curMap = maps.elementAt(0);
-    if(curMap.selectionMode == SINGLE_TILE_SELECTION){
+    if(currentMap.selectionMode == SINGLE_TILE_SELECTION){
       if(dragX != x || dragY != y ){
         int iX = (dragX > x ? x: dragX );
         int iY = (dragY > y ? y: dragY );
@@ -198,28 +187,28 @@ void loadMapSelection(){
           for(num e = iX; e < fX; e++){
             for(num i = iY; i < fY; i++){
               if(currentTool == "pencil"){
-                curMap.setTile(e, i, tileSelector.selection.x, tileSelector.selection.y, currentLayer);
+                currentMap.setTile(e, i, tileSelector.selection.x, tileSelector.selection.y, currentLayer);
               }else{ //Eraser
-                curMap.setTile(e, i, 0, 0, currentLayer);
+                currentMap.setTile(e, i, 0, 0, currentLayer);
               }
             }
           }
-        curMap.stopSelection();
-        curMap.update();
+          currentMap.stopSelection();
+          currentMap.update();
       }
     }else{
       int xTile = 0;
-      for(num e = x - 1; e < x + curMap.selection.cols - 1; e++){
+      for(num e = x - 1; e < x + currentMap.selection.cols - 1; e++){
         int yTile = 0;
-        for(num i = y - 1; i < y + curMap.selection.rows - 1; i++){
-          Tile curTile = curMap.selection.get(xTile, yTile);
-          curMap.setTile(e, i, curTile.x, curTile.y, currentLayer);
+        for(num i = y - 1; i < y + currentMap.selection.rows - 1; i++){
+          Tile curTile = currentMap.selection.get(xTile, yTile);
+          currentMap.setTile(e, i, curTile.x, curTile.y, currentLayer);
           yTile++;
         }
         xTile++;
       }
-      curMap.stopSelection();
-      curMap.update();
+      currentMap.stopSelection();
+      currentMap.update();
     }
   });
   
@@ -228,25 +217,23 @@ void loadMapSelection(){
     int y = ((e.client.y + mapElement.scrollTop - 10)/TILE_SIZE).ceil() -1;
     dragX = x;
     dragY = y;
-    EditorMap curMap = maps.elementAt(0);
-    curMap.beginSelection();
-    if(curMap.selectionMode == SINGLE_TILE_SELECTION){
+    currentMap.beginSelection();
+    if(currentMap.selectionMode == SINGLE_TILE_SELECTION){
       if(currentTool == "pencil"){
-        curMap.setTile(x, y, tileSelector.selection.x, tileSelector.selection.y, currentLayer);
+        currentMap.setTile(x, y, tileSelector.selection.x, tileSelector.selection.y, currentLayer);
       }else{ //Eraser
-        curMap.setTile(x, y, 0, 0, currentLayer);
+        currentMap.setTile(x, y, 0, 0, currentLayer);
       }
     }
-    curMap.update();
+    currentMap.update();
   });
   
   //Update the selector position
   mapCanvas.onMouseMove.listen((MouseEvent e){
     int x = ((e.client.x + mapElement.scrollLeft - 360)/TILE_SIZE).ceil() -1;
     int y = ((e.client.y + mapElement.scrollTop - 10)/TILE_SIZE).ceil() -1;
-    EditorMap curMap = maps.elementAt(0);
-    curMap.updateSelector(x, y);
-    curMap.update(true);
+    currentMap.updateSelector(x, y);
+    currentMap.update(true);
   });
 }
 
@@ -282,7 +269,6 @@ void tileSelectorBinds(){
   
   //This is to multiple select tiles in the tileset area
   tilesetCanvas.onMouseUp.listen((MouseEvent e){
-    EditorMap curMap = maps.elementAt(0);
     int x = ((e.client.x + tileElement.scrollLeft)/TILE_SIZE).ceil();
     int y = ((e.client.y + tileElement.scrollTop)/TILE_SIZE).ceil();
     if(dragX != x || dragY != y ){
@@ -297,8 +283,8 @@ void tileSelectorBinds(){
         Tile tileSelected = new Tile(x -1, y -1);
         tileSelector.setSelection(tileSelected);
         tileSelector.setSelectionMode(SINGLE_TILE_SELECTION);
-        curMap.setSelection(tileSelected);
-        curMap.selectionMode = SINGLE_TILE_SELECTION;
+        currentMap.setSelection(tileSelected);
+        currentMap.selectionMode = SINGLE_TILE_SELECTION;
       }else{
         Matrix tilesSelected = new Matrix(dX ,dY);
         int x = 0;
@@ -313,8 +299,8 @@ void tileSelectorBinds(){
         }
         tileSelector.setSelection(tilesSelected);
         tileSelector.setSelectionMode(MULTI_TILE_SELECTION);
-        curMap.setSelection(tilesSelected);
-        curMap.selectionMode = MULTI_TILE_SELECTION;
+        currentMap.setSelection(tilesSelected);
+        currentMap.selectionMode = MULTI_TILE_SELECTION;
       }
       tileSelector.update();
       menuTileset.stopSelection();
@@ -329,6 +315,52 @@ void tileSelectorBinds(){
     menuTileset.updateSelector(x, y);
     menuTileset.update();
   });
+}
+
+void drawMapsList(){
+  var ul = _doc.querySelector('#mapWindow ul.list-group');
+  ul.innerHtml = "";
+  int index = 0;
+  for (var m in maps){
+    String active = "";
+    if(currentMap == m){
+      active = "active";
+    }
+    var li = new Element.html('<a class="list-group-item map-item '+active+'"><span class="badge">'+m.widthTiles.toString()
+        +' x ' +m.heightTiles.toString()+'</span>'+m.name+'</a>');
+    li.dataset['id'] = index.toString();
+    ul.children.add(li);
+    index ++;
+  }
+}
+
+void bindMapItems(){
+  var mapList = _doc.querySelector('#mapList');
+  mapList.onClick.listen((MouseEvent e){
+      e.preventDefault();
+      Element elem = e.target;
+      if(elem.dataset['id'] != null){
+          for (var mapItems in mapList.children) {
+            mapItems.classes.remove('active');
+          }
+          elem.classes.add('active');
+          int mapId = int.parse(elem.dataset['id']);
+          currentMap.active = false;
+          currentMap = maps.elementAt(mapId);
+          currentMap.active = true;
+          currentMap.canvasReDraw();
+          currentMap.update();
+      }
+  });
+}
+
+void cleanInputs(){
+  InputElement mapNameInput = _doc.querySelector('#mapNameInput');
+  InputElement widthInput = _doc.querySelector('#mapWidthInput');
+  InputElement heightInput = _doc.querySelector('#mapHeightInput');
+  mapNameInput.value = '';
+  widthInput.value = '';
+  heightInput.value = '';
 }
 
 void bindMapOptions(){
@@ -346,6 +378,8 @@ void bindMapOptions(){
     map.selectionMode = SINGLE_TILE_SELECTION;
     maps.add(map);
     drawMapsList();
+    bindMapItems();
+    //cleanInputs(); Im getting an error is like stupid dart is passing variables by reference and not by value
     context.callMethod('jQuery', ['#addMapModal']).callMethod('modal', ['hide']);
   });
 }
