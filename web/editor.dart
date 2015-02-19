@@ -41,6 +41,8 @@ TileSelector tileSelector;
 var toolSubscription;
 // Current map visible
 EditorMap currentMap;
+// If the add event option was selected.
+bool addingEvent;
 
 void main() {
   _doc = window.document;
@@ -55,6 +57,7 @@ void initMenuInteraction(){
   layerSelection();
   toolSelection();
   bindMapOptions();
+  bindEventOptions();
 }
 
 void initTabs(){
@@ -382,5 +385,23 @@ void bindMapOptions(){
     //cleanInputs(); Im getting an error is like stupid dart is passing variables by reference and not by value
     context.callMethod('jQuery', ['#addMapModal']).callMethod('modal', ['hide']);
   });
+}
+
+void bindEventOptions(){
+  var addEventButton = _doc.querySelector('#addEvent');
+  addEventButton.onMouseDown.listen((MouseEvent e){
+    e.preventDefault();
+    _doc.querySelector('#eventAlert').classes.remove('hidden');
+    _doc.querySelector('#addEvent').classes.add('active');
+  });
+  
+  var confirmEventButton = _doc.querySelector('#addEventButton');
+  confirmEventButton.onMouseDown.listen((MouseEvent e){
+    e.preventDefault();
+    _doc.querySelector('#eventAlert').classes.add('hidden');
+    _doc.querySelector('#addEvent').classes.remove('active');
+    context.callMethod('jQuery', ['#addEventModal']).callMethod('modal', ['hide']);
+  });
+  
 }
 

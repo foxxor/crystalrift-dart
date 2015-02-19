@@ -2,8 +2,9 @@
 
 <html>
   <head>
-    <title>Crystal Rift map editor</title>
+    <title>Crystal Rift - Map editor</title>
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/editor.css">
   </head>
  
   <body>
@@ -51,7 +52,8 @@
           <div id="mapWindow" class="hide">
             <ul class="list-group" id="mapList">
             </ul>
-            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addMapModal">Add map</button>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addMapModal">Add map</button>
+            
             <div class="modal fade" id="addMapModal" tabindex="-1" role="dialog" aria-labelledby="addMapModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
@@ -80,11 +82,12 @@
               </div>
             </div>
           </div>
-          </div>
+          
+        </div>
           <!-- Events -->
           <div id="eventWindow" class="hide">
             <ul class="list-group">
-              <li class="list-group-item">Event 001 
+              <li class="list-group-item">Starting point 
                 <button class="btn btn-default" href="#" data-tool="1" class="deleteEvent">
                   <span class="glyphicon glyphicon-remove" style="vertical-align:middle;"></span>
                 </button>
@@ -93,7 +96,53 @@
                 </button>
               </li>
             </ul>
-            <button type="button" class="btn btn-success" id="addEvent">Add event</button>
+            <button type="button" class="btn btn-primary" id="addEvent" data-toggle="modal" data-target="#addEventModal">Add event</button>
+            <br/><br/>
+            <div class="alert alert-info hidden" role="alert" id="eventAlert">
+              <strong>You're adding an event.</strong> Select it's position in the map.
+            </div>
+            
+            <div class="modal fade" id="addEventModal" tabindex="-1" role="dialog" aria-labelledby="addMapModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                  <h4 class="modal-title" id="addMapModalLabel">Add new event</h4>
+                </div>
+                <div class="modal-body">
+                  <div class="form-group">
+                    <label for="eventNameInput">Name</label>
+                    <input type="text" class="form-control" id="eventNameInput">
+                  </div>
+                  <div class="form-group">
+                    <label for="radiosStarting">Type</label>
+                     <div class="radio">
+                      <label>
+                        <input type="radio" name="optionsRadios" id="radiosStarting" value="starting" checked>
+                        Starting point
+                      </label>
+                    </div>
+                    <div class="radio">
+                      <label>
+                        <input type="radio" name="optionsRadios" id="radioObject" value="object">
+                        Object
+                      </label>
+                    </div>
+                    <div class="radio">
+                      <label>
+                        <input type="radio" name="optionsRadios" id="radioCharacter" value="character">
+                        Character
+                      </label>
+                    </div>
+                  </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                  <button type="button" class="btn btn-success" id="addEventButton">Create event</button>
+                </div>
+              </div>
+            </div>
+          </div>
+           </div> 
           </div>
           <!-- I/O functions -->
           <div id="ioWindow" class="hide">
