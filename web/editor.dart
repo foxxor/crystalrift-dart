@@ -44,10 +44,6 @@ TileSelector tileSelector;
 var toolSubscription;
 // Current map visible
 EditorMap currentMap;
-// If the add event option was selected.
-bool addingEvent;
-// List of the events
-List<MapEvent> events;
 
 void main() {
   _doc = window.document;

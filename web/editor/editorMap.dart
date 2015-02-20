@@ -8,6 +8,7 @@ import '../core/tile.dart';
 import '../helpers/matrix.dart';
 import '../helpers/coordinate.dart';
 import '../core/globals.dart';
+import 'mapEvent.dart';
 
 class EditorMap{
   HtmlDocument _doc;
@@ -26,6 +27,10 @@ class EditorMap{
   var selection;
   int selectionMode;
   bool active;
+  // If the add event option was selected.
+  bool addingEvent;
+  // List of the events
+  List<MapEvent> events;
   
   EditorMap(String name, int width, int height){
     this.name = name;
@@ -37,6 +42,11 @@ class EditorMap{
     this.mouseSelector = new Coordinate(0, 0);
     this.mouseSelecting = false;
     active = false;
+    addingEvent = false;
+    events = new List<MapEvent>();
+    // Initial point event
+    MapEvent initPointEvent = new MapEvent(EVENT_TYPE_STARTING_POINT, 12, 10, 'Starting point');
+    events.add(initPointEvent);
     initLayers();
   }
   
@@ -113,6 +123,26 @@ class EditorMap{
           }
         }
       }
+      for (var event in events){
+        if(event.type == EVENT_TYPE_STARTING_POINT){
+          _ctx.strokeStyle = "rgba(235, 235, 235, 0.85)";
+          _ctx.fillStyle = "rgba(180, 180, 180, 0.6)";
+          _ctx.lineWidth   = 2;
+          _ctx.fillRect(event.currentPosition.x * TILE_SIZE,  event.currentPosition.y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+          _ctx.strokeRect(event.currentPosition.x * TILE_SIZE,  event.currentPosition.y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+          _ctx..save()
+          ..font = '12pt Verdana'
+          ..fillStyle = "rgba(255, 255, 255, 0.75)"
+          ..lineWidth = 3
+          ..strokeStyle = "rgba(0, 0, 0, 0.85)";
+          _ctx.strokeText("S", (event.currentPosition.x * TILE_SIZE) + (TILE_SIZE / 3).floor(), 
+            (event.currentPosition.y * TILE_SIZE) + (TILE_SIZE * 2 / 3).floor());
+          _ctx.fillText("S", (event.currentPosition.x * TILE_SIZE) + (TILE_SIZE / 3).floor(), 
+            (event.currentPosition.y * TILE_SIZE) + (TILE_SIZE * 2 / 3).floor());
+          _ctx.restore();
+        }
+      }
+      
       if(drawSelector){
         //Draw of the map selector icon
         _ctx.strokeStyle = '#FFF';

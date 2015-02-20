@@ -17,12 +17,15 @@ class MapEvent{
   String imageSource;
   String name;
   
-  MapEvent(int type, int x, int y, int imgX, int imgY, String imageSource, String name){
+  MapEvent(int type, int x, int y, String name){
     this.type = type;
     this.currentPositionPx = new Coordinate(x * TILE_SIZE, y * TILE_SIZE);
     this.currentPosition = new Coordinate(x, y);
+    this.name = name;
+  }
+  
+  void initGraphic(int imgX, int imgY, String imageSource){
     this.graphicPosition = new Coordinate(imgX, imgY);
     this.imageSource = imageSource;
-    this.name = name;
   }
 }
