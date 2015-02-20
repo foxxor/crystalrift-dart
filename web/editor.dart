@@ -1,5 +1,5 @@
 /*
-  Copyright (C) 2013 Jorge Vargas <vargasjorgeluis@gmail.com>
+  Copyright (C) 2015 Jorge Vargas <vargasjorgeluis@gmail.com>
 */
 
 import 'dart:html';
@@ -7,6 +7,9 @@ import 'dart:js';
 import 'editor/editorMap.dart';
 import 'editor/menuTileset.dart';
 import 'editor/tileSelector.dart';
+import 'editor/mapEvent.dart';
+import 'editor/eventCharacter.dart';
+import 'editor/eventObject.dart';
 import 'helpers/matrix.dart';
 import 'core/globals.dart';
 import 'core/tile.dart';
@@ -43,6 +46,8 @@ var toolSubscription;
 EditorMap currentMap;
 // If the add event option was selected.
 bool addingEvent;
+// List of the events
+List<MapEvent> events;
 
 void main() {
   _doc = window.document;
