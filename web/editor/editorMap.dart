@@ -45,7 +45,7 @@ class EditorMap{
     addingEvent = false;
     events = new List<MapEvent>();
     // Initial point event
-    MapEvent initPointEvent = new MapEvent(EVENT_TYPE_STARTING_POINT, 12, 10, 'Starting point');
+    MapEvent initPointEvent = new MapEvent(EVENT_TYPE_STARTING_POINT, 16, 11, 'Starting point');
     events.add(initPointEvent);
     initLayers();
   }
@@ -102,6 +102,11 @@ class EditorMap{
     this.selection = selection;
   }
   
+  // There should be just 1 starting point per map
+  void setStartingPoint(MapEvent initPointEvent){
+    events.insert(0, initPointEvent);
+  }
+  
   void update([bool drawSelector = false]){
     if(active){
       _ctx.strokeRect(0,  0, widthTiles* TILE_SIZE, heightTiles* TILE_SIZE);
@@ -124,22 +129,30 @@ class EditorMap{
         }
       }
       for (var event in events){
+        int realX = (event.currentPosition.x - 1) * TILE_SIZE;
+        int realY = (event.currentPosition.y - 1 ) * TILE_SIZE;
         if(event.type == EVENT_TYPE_STARTING_POINT){
           _ctx.strokeStyle = "rgba(235, 235, 235, 0.85)";
-          _ctx.fillStyle = "rgba(180, 180, 180, 0.6)";
+          _ctx.fillStyle = "rgba(180, 180, 180, 0.5)";
           _ctx.lineWidth   = 2;
-          _ctx.fillRect(event.currentPosition.x * TILE_SIZE,  event.currentPosition.y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-          _ctx.strokeRect(event.currentPosition.x * TILE_SIZE,  event.currentPosition.y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+          _ctx.fillRect(realX,  realY, TILE_SIZE, TILE_SIZE);
+          _ctx.strokeRect(realX,  realY, TILE_SIZE, TILE_SIZE);
           _ctx..save()
           ..font = '12pt Verdana'
           ..fillStyle = "rgba(255, 255, 255, 0.75)"
           ..lineWidth = 3
           ..strokeStyle = "rgba(0, 0, 0, 0.85)";
-          _ctx.strokeText("S", (event.currentPosition.x * TILE_SIZE) + (TILE_SIZE / 3).floor(), 
-            (event.currentPosition.y * TILE_SIZE) + (TILE_SIZE * 2 / 3).floor());
-          _ctx.fillText("S", (event.currentPosition.x * TILE_SIZE) + (TILE_SIZE / 3).floor(), 
-            (event.currentPosition.y * TILE_SIZE) + (TILE_SIZE * 2 / 3).floor());
+          _ctx.strokeText("S", realX + (TILE_SIZE / 3).floor(), 
+              realY + (TILE_SIZE * 2 / 3).floor());
+          _ctx.fillText("S", realX + (TILE_SIZE / 3).floor(), 
+              realY + (TILE_SIZE * 2 / 3).floor());
           _ctx.restore();
+        }else if(event.type == EVENT_TYPE_CHARACTER){
+          
+        }else if(event.type == EVENT_TYPE_OBJECT){
+          
+        }else if(event.type == EVENT_TYPE_ITEM){
+          //To-do
         }
       }
       
