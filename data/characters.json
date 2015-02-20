@@ -2,37 +2,57 @@
     {
       "x":3,
       "y": 3,
-      "characterId":2,
+      "characterId": 2,
+      "characterRow": 2,
       "moveRandom" : true,
-      "message": "Estoy de guardia"
+      "message": "I'm guarding this place",
+      "imageSource" : "characters.png",
+      "behaviour" : 1,
+      "combatable" : false
     },
     {
       "x":6,
       "y": 8,
       "characterId":1,
+      "characterRow": 1,
       "moveRandom" : true,
-      "message": "Muevete!"
+      "message": "Move!",
+      "behaviour" : 1,
+      "imageSource" : "characters.png",
+      "combatable" : false
     },
     {
       "x":13,
       "y": 9,
       "characterId":3,
+      "characterRow": 1,
       "moveRandom" : false,
-      "message": "Por el rey!"
+      "message": "For the king!",
+      "behaviour" : 1,
+      "imageSource" : "characters.png",
+      "combatable" : false
     },
     {
       "x":10,
       "y": 15,
       "characterId":2,
+      "characterRow": 1,
       "moveRandom" : true,
-      "message": "Por el rey!"
+      "message": "Hello there stranger!",
+      "behaviour" : 1,
+      "imageSource" : "characters.png",
+      "combatable" : false
     },
     {
       "x":7,
       "y": 12,
-      "characterId":2,
-      "moveRandom" : true,
-      "message": "Por el rey!"
+      "characterId":1,
+      "characterRow": 2,
+      "moveRandom" : false,
+      "message": "blergh!",
+      "behaviour" : 2,
+      "imageSource" : "monsters1.png",
+      "combatable" : true
     }
   ]
 }
