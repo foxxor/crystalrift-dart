@@ -88,16 +88,9 @@
           <!-- Events -->
           <div id="eventWindow" class="hide">
             <ul class="list-group">
-              <li class="list-group-item">Starting point   
-                <button class="btn btn-default" href="#" data-tool="1" class="deleteEvent">
-                  <span class="glyphicon glyphicon-remove" style="vertical-align:middle;"></span>
-                </button>
-                <button class="btn btn-default" href="#" data-tool="1" class="editEvent">
-                  <span class="glyphicon glyphicon-cog" style="vertical-align:middle;"></span>
-                </button>
-              </li>
+            
             </ul>
-            <button type="button" class="btn btn-primary" id="addEvent" data-toggle="modal" data-target="#addEventModal">Add event</button>
+            <button type="button" class="btn btn-primary" id="addEvent">Add event</button>
             <br/><br/>
             <div class="alert alert-info hidden" role="alert" id="eventAlert">
               <strong>You're adding an event.</strong> Select it's position in the map.
@@ -107,7 +100,6 @@
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                   <h4 class="modal-title" id="addMapModalLabel">Add new event</h4>
                 </div>
                 <div class="modal-body">
@@ -149,7 +141,7 @@
                   </div>
                   
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                  <button type="button" class="btn btn-danger" id="cancelEventButton">Cancel</button>
                   <button type="button" class="btn btn-success" id="addEventButton">Create event</button>
                 </div>
               </div>

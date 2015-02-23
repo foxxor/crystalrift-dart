@@ -172,6 +172,7 @@ void loadMap(){
   currentMap = maps.elementAt(0);
   currentMap.canvasReDraw();
   drawMapsList();
+  drawEventsList();
   loadMapSelection();
 }
 
@@ -181,55 +182,67 @@ void loadMapSelection(){
   mapCanvas.onMouseUp.listen((MouseEvent e){
     int x = ((e.client.x + mapElement.scrollLeft - 360)/TILE_SIZE).ceil();
     int y = ((e.client.y + mapElement.scrollTop - 10)/TILE_SIZE).ceil();
-    if(currentMap.selectionMode == SINGLE_TILE_SELECTION){
-      if(dragX != x || dragY != y ){
-        int iX = (dragX > x ? x: dragX );
-        int iY = (dragY > y ? y: dragY );
-        int fX = (dragX > x ? dragX: x );
-        int fY = (dragY > y ? dragY: y );
-        
-          for(num e = iX; e < fX; e++){
-            for(num i = iY; i < fY; i++){
-              if(currentTool == "pencil"){
-                currentMap.setTile(e, i, tileSelector.selection.x, tileSelector.selection.y, currentLayer);
-              }else{ //Eraser
-                currentMap.setTile(e, i, 0, 0, currentLayer);
+    if(!currentMap.addingEvent){
+      if(currentMap.selectionMode == SINGLE_TILE_SELECTION){
+        if(dragX != x || dragY != y ){
+          int iX = (dragX > x ? x: dragX );
+          int iY = (dragY > y ? y: dragY );
+          int fX = (dragX > x ? dragX: x );
+          int fY = (dragY > y ? dragY: y );
+          
+            for(num e = iX; e < fX; e++){
+              for(num i = iY; i < fY; i++){
+                if(currentTool == "pencil"){
+                  currentMap.setTile(e, i, tileSelector.selection.x, tileSelector.selection.y, currentLayer);
+                }else{ //Eraser
+                  currentMap.setTile(e, i, 0, 0, currentLayer);
+                }
               }
             }
-          }
-          currentMap.stopSelection();
-          currentMap.update();
-      }
-    }else{
-      int xTile = 0;
-      for(num e = x - 1; e < x + currentMap.selection.cols - 1; e++){
-        int yTile = 0;
-        for(num i = y - 1; i < y + currentMap.selection.rows - 1; i++){
-          Tile curTile = currentMap.selection.get(xTile, yTile);
-          currentMap.setTile(e, i, curTile.x, curTile.y, currentLayer);
-          yTile++;
+            currentMap.stopSelection();
+            currentMap.update();
         }
-        xTile++;
+      }else{
+        int xTile = 0;
+        for(num e = x - 1; e < x + currentMap.selection.cols - 1; e++){
+          int yTile = 0;
+          for(num i = y - 1; i < y + currentMap.selection.rows - 1; i++){
+            Tile curTile = currentMap.selection.get(xTile, yTile);
+            currentMap.setTile(e, i, curTile.x, curTile.y, currentLayer);
+            yTile++;
+          }
+          xTile++;
+        }
+        currentMap.stopSelection();
+        currentMap.update();
       }
-      currentMap.stopSelection();
-      currentMap.update();
     }
   });
   
   mapCanvas.onMouseDown.listen((MouseEvent e){
     int x = ((e.client.x + mapElement.scrollLeft - 360)/TILE_SIZE).ceil() -1;
     int y = ((e.client.y + mapElement.scrollTop - 10)/TILE_SIZE).ceil() -1;
-    dragX = x;
-    dragY = y;
-    currentMap.beginSelection();
-    if(currentMap.selectionMode == SINGLE_TILE_SELECTION){
-      if(currentTool == "pencil"){
-        currentMap.setTile(x, y, tileSelector.selection.x, tileSelector.selection.y, currentLayer);
-      }else{ //Eraser
-        currentMap.setTile(x, y, 0, 0, currentLayer);
+    if(!currentMap.addingEvent){
+      dragX = x;
+      dragY = y;
+      currentMap.beginSelection();
+      if(currentMap.selectionMode == SINGLE_TILE_SELECTION){
+        if(currentTool == "pencil"){
+          currentMap.setTile(x, y, tileSelector.selection.x, tileSelector.selection.y, currentLayer);
+        }else{ //Eraser
+          currentMap.setTile(x, y, 0, 0, currentLayer);
+        }
       }
+      currentMap.update();
+    // When an event is being added.
+    }else{
+      MapEvent newEvent = new MapEvent(EVENT_TYPE_NOT_SPECIFIED, x, y, "Event " + currentMap.events.length.toString().padLeft(3, '0') );
+      currentMap.events.add(newEvent);
+      InputElement eventNameInput = _doc.querySelector('#eventNameInput');
+      eventNameInput.value = newEvent.name;
+      context.callMethod('jQuery', ['#addEventModal']).callMethod('modal', ['show']);
+      drawEventsList();
     }
-    currentMap.update();
   });
   
   //Update the selector position
@@ -338,6 +351,25 @@ void drawMapsList(){
   }
 }
 
+void drawEventsList(){
+  var ul = _doc.querySelector('#eventWindow ul.list-group');
+  ul.innerHtml = "";
+  int index = 0;
+  for (var e in currentMap.events){
+    var li = new Element.html('<li class="list-group-item">' + e.name +
+      '&nbsp;&nbsp;&nbsp;<button class="btn btn-default" href="#" class="deleteEvent">' +
+        '<span class="glyphicon glyphicon-remove" style="vertical-align:middle;"></span>'+
+      '</button>'+
+      '<button class="btn btn-default" href="#" class="editEvent">'+
+        '<span class="glyphicon glyphicon-cog" style="vertical-align:middle;"></span>'+
+      '</button>'+
+    '</li>');
+    li.dataset['id'] = index.toString();
+    ul.children.add(li);
+    index ++;
+  }
+}
+
 void bindMapItems(){
   var mapList = _doc.querySelector('#mapList');
   mapList.onClick.listen((MouseEvent e){
@@ -394,6 +426,7 @@ void bindEventOptions(){
     e.preventDefault();
     _doc.querySelector('#eventAlert').classes.remove('hidden');
     _doc.querySelector('#addEvent').classes.add('active');
+    currentMap.addingEvent = true;
   });
   
   var confirmEventButton = _doc.querySelector('#addEventButton');
@@ -401,6 +434,20 @@ void bindEventOptions(){
     e.preventDefault();
     _doc.querySelector('#eventAlert').classes.add('hidden');
     _doc.querySelector('#addEvent').classes.remove('active');
+    currentMap.addingEvent = false;
+    context.callMethod('jQuery', ['#addEventModal']).callMethod('modal', ['hide']);
+  });
+  
+  
+  var cancelEventButton = _doc.querySelector('#cancelEventButton');
+  cancelEventButton.onMouseDown.listen((MouseEvent e){
+    e.preventDefault();
+    _doc.querySelector('#eventAlert').classes.add('hidden');
+    _doc.querySelector('#addEvent').classes.remove('active');
+    currentMap.addingEvent = false;
+    // Deletes the last event added since is discarded
+    currentMap.events.removeLast();
+    drawEventsList();
     context.callMethod('jQuery', ['#addEventModal']).callMethod('modal', ['hide']);
   });
   

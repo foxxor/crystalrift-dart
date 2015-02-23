@@ -14,6 +14,6 @@ class EventItem extends MapEvent{
   bool pushable;
 
   EventItem(int type, int x, int y, int imgX, int imgY, String imageSource, String name) : 
-    super( type, x, y, imgX, imgY, imageSource, name);
+    super( type, x, y, name);
   
 }
