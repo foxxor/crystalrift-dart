@@ -108,31 +108,13 @@
                     <input type="text" class="form-control" id="eventNameInput">
                   </div>
                   <div class="form-group">
-                    <label for="radiosStarting">Type</label>
-                     <div class="radio">
-                      <label>
-                        <input type="radio" name="optionsRadios" id="radiosStarting" value="starting" checked>
-                        Starting point
-                      </label>
-                    </div>
-                    <div class="radio">
-                      <label>
-                        <input type="radio" name="optionsRadios" id="radioItem" value="item">
-                        Item
-                      </label>
-                    </div>
-                    <div class="radio">
-                      <label>
-                        <input type="radio" name="optionsRadios" id="radioCharacter" value="character">
-                        Character
-                      </label>
-                    </div>
-                    <div class="radio">
-                      <label>
-                        <input type="radio" name="optionsRadios" id="radioObject" value="object">
-                        Object
-                      </label>
-                    </div>
+                    <label for="eventTypeSelect">Event type</label>
+                    <select class="form-control" id="eventTypeSelect">
+                      <option value="0">Starting point</option>
+                      <option value="1">Item</option>
+                      <option value="2">Character</option>
+                      <option value="3">Object</option>
+                    </select>
                   </div>
                   <div class="form-group hidden" id="additionalEventOptions">
                     <label for="fileNameInput">File route</label>

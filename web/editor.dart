@@ -435,6 +435,12 @@ void bindEventOptions(){
     _doc.querySelector('#eventAlert').classes.add('hidden');
     _doc.querySelector('#addEvent').classes.remove('active');
     currentMap.addingEvent = false;
+    MapEvent event = currentMap.events.elementAt(currentMap.events.length - 1);
+    InputElement nameInput = _doc.querySelector('#eventNameInput');
+    SelectElement typeSelect = _doc.querySelector('#eventTypeSelect');
+    event.name = nameInput.value;
+    event.type = int.parse(typeSelect.value);
+    currentMap.update();
     context.callMethod('jQuery', ['#addEventModal']).callMethod('modal', ['hide']);
   });
   

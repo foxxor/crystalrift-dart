@@ -129,31 +129,35 @@ class EditorMap{
         }
       }
       for (var event in events){
-        int realX = (event.currentPosition.x - 1) * TILE_SIZE;
-        int realY = (event.currentPosition.y - 1 ) * TILE_SIZE;
+        int realX = (event.currentPosition.x) * TILE_SIZE;
+        int realY = (event.currentPosition.y) * TILE_SIZE;
+        
+        _ctx.strokeStyle = "rgba(235, 235, 235, 0.85)";
+        _ctx.fillStyle = "rgba(180, 180, 180, 0.5)";
+        _ctx.lineWidth   = 2;
+        _ctx.fillRect(realX,  realY, TILE_SIZE, TILE_SIZE);
+        _ctx.strokeRect(realX,  realY, TILE_SIZE, TILE_SIZE);
+        _ctx..save()
+        ..font = '12pt Verdana'
+        ..fillStyle = "rgba(255, 255, 255, 0.75)"
+        ..lineWidth = 3
+        ..strokeStyle = "rgba(0, 0, 0, 0.85)";
+        
+        var eventTypeString = "";
         if(event.type == EVENT_TYPE_STARTING_POINT){
-          _ctx.strokeStyle = "rgba(235, 235, 235, 0.85)";
-          _ctx.fillStyle = "rgba(180, 180, 180, 0.5)";
-          _ctx.lineWidth   = 2;
-          _ctx.fillRect(realX,  realY, TILE_SIZE, TILE_SIZE);
-          _ctx.strokeRect(realX,  realY, TILE_SIZE, TILE_SIZE);
-          _ctx..save()
-          ..font = '12pt Verdana'
-          ..fillStyle = "rgba(255, 255, 255, 0.75)"
-          ..lineWidth = 3
-          ..strokeStyle = "rgba(0, 0, 0, 0.85)";
-          _ctx.strokeText("S", realX + (TILE_SIZE / 3).floor(), 
-              realY + (TILE_SIZE * 2 / 3).floor());
-          _ctx.fillText("S", realX + (TILE_SIZE / 3).floor(), 
-              realY + (TILE_SIZE * 2 / 3).floor());
-          _ctx.restore();
+          eventTypeString = "S";
         }else if(event.type == EVENT_TYPE_CHARACTER){
-          
+          eventTypeString = "C";
         }else if(event.type == EVENT_TYPE_OBJECT){
-          
+          eventTypeString = "O";
         }else if(event.type == EVENT_TYPE_ITEM){
-          //To-do
+          eventTypeString = "I";
         }
+        _ctx.strokeText(eventTypeString, realX + (TILE_SIZE / 3).floor(), 
+            realY + (TILE_SIZE * 2 / 3).floor());
+        _ctx.fillText(eventTypeString, realX + (TILE_SIZE / 3).floor(), 
+            realY + (TILE_SIZE * 2 / 3).floor());
+        _ctx.restore();
       }
       
       if(drawSelector){
