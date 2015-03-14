@@ -182,7 +182,7 @@ void loadMapSelection(){
   mapCanvas.onMouseUp.listen((MouseEvent e){
     int x = ((e.client.x + mapElement.scrollLeft - 360)/TILE_SIZE).ceil();
     int y = ((e.client.y + mapElement.scrollTop - 10)/TILE_SIZE).ceil();
-    if(!currentMap.addingEvent){
+    if(!currentMap.addingEvent && !windows.querySelector('#drawWindow').classes.contains('hide')){
       if(currentMap.selectionMode == SINGLE_TILE_SELECTION){
         if(dragX != x || dragY != y ){
           int iX = (dragX > x ? x: dragX );
@@ -202,7 +202,7 @@ void loadMapSelection(){
             currentMap.stopSelection();
             currentMap.update();
         }
-      }else{
+      }else if(currentMap.addingEvent && !windows.querySelector('#eventWindow').classes.contains('hide')){ 
         int xTile = 0;
         for(num e = x - 1; e < x + currentMap.selection.cols - 1; e++){
           int yTile = 0;
@@ -222,7 +222,7 @@ void loadMapSelection(){
   mapCanvas.onMouseDown.listen((MouseEvent e){
     int x = ((e.client.x + mapElement.scrollLeft - 360)/TILE_SIZE).ceil() -1;
     int y = ((e.client.y + mapElement.scrollTop - 10)/TILE_SIZE).ceil() -1;
-    if(!currentMap.addingEvent){
+    if(!currentMap.addingEvent && !windows.querySelector('#drawWindow').classes.contains('hide')){
       dragX = x;
       dragY = y;
       currentMap.beginSelection();
@@ -234,8 +234,7 @@ void loadMapSelection(){
         }
       }
       currentMap.update();
-    // When an event is being added.
-    }else{
+    }else if(currentMap.addingEvent && !windows.querySelector('#eventWindow').classes.contains('hide')){  
       MapEvent newEvent = new MapEvent(EVENT_TYPE_NOT_SPECIFIED, x, y, "Event " + currentMap.events.length.toString().padLeft(3, '0') );
       currentMap.events.add(newEvent);
       InputElement eventNameInput = _doc.querySelector('#eventNameInput');
