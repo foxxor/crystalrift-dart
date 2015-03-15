@@ -67,6 +67,6 @@ const int EDITOR_MAP_TILES_SIZE_HEIGHT = 22;
 // Type of events
 const int EVENT_TYPE_NOT_SPECIFIED = -1;
 const int EVENT_TYPE_STARTING_POINT = 0;
-const int EVENT_TYPE_CHARACTER = 1;
-const int EVENT_TYPE_ITEM = 2;
+const int EVENT_TYPE_CHARACTER = 2;
+const int EVENT_TYPE_ITEM = 1;
 const int EVENT_TYPE_OBJECT = 3;

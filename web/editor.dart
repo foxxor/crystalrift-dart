@@ -10,6 +10,7 @@ import 'editor/tileSelector.dart';
 import 'editor/mapEvent.dart';
 import 'editor/eventCharacter.dart';
 import 'editor/eventObject.dart';
+import 'editor/filescan.dart';
 import 'helpers/matrix.dart';
 import 'core/globals.dart';
 import 'core/tile.dart';
@@ -44,9 +45,12 @@ TileSelector tileSelector;
 var toolSubscription;
 // Current map visible
 EditorMap currentMap;
+// Object with files information
+FileScan files;
 
 void main() {
   _doc = window.document;
+  //files = new FileScan();
   loadTileSet();
   initMenuInteraction();
   loadMap();

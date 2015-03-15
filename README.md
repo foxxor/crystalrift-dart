@@ -25,7 +25,7 @@ An HTML5 2D game engine using dart and canvas. Movements and interactions are li
 ## Additional Utils in the repository
 
 * Tile selector utility, click on any tile of the tileset to retrieve the x,y coordinates.
-* Initial version of the map editor.
+* Map editor.
 
 ### TO-DO
 
@@ -34,7 +34,6 @@ An HTML5 2D game engine using dart and canvas. Movements and interactions are li
 * Character special actions (Jump, teleport, flip?)
 * Lots of things...Dropable items, Battles, Menus.
 * Finish the map editor.
-* Fix bugs of the map editor.
 * Try to enable multithread processing to improve performance.
 
 ### Want to help?

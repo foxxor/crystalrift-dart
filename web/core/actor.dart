@@ -53,10 +53,10 @@ class Actor extends Character{
   void loadBars(){
     barHpImage = new Element.tag('img'); 
     barHpImage = doc.createElement('img'); 
-    barHpImage.src = "assets/character/extra/hp_pixel.png";
+    barHpImage.src = "assets/particles/extra/hp_pixel.png";
     barMpImage = new Element.tag('img'); 
     barMpImage = doc.createElement('img'); 
-    barMpImage.src = "assets/character/extra/" + srcBarMp;
+    barMpImage.src = "assets/particles/extra/" + srcBarMp;
   }
   
   void update(){
