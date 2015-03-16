@@ -15,7 +15,7 @@ import 'actor.dart';
 import 'entity.dart';
 import 'tile.dart';
 import 'action.dart';
-import 'animation.dart';
+import 'mapAnimation.dart';
 import 'particle.dart';
 import 'dart:math' as Math;
 
@@ -29,7 +29,7 @@ class Scene{
   Actor player;
   List<Entity> entities;
   List<Action> activeEvents;
-  List<Animation> activeAnimations;
+  List<MapAnimation> activeAnimations;
   Particle particle;
   
   //Camera offset tiles
@@ -47,12 +47,12 @@ class Scene{
     gameMap = new MapSet(_doc, _ctx, canvas, this);
     Coordinate initCoor = new Coordinate(10, 6);
     Coordinate initCoor2 = new Coordinate(12 * TILE_SIZE, 4* TILE_SIZE);
-    Animation animation = new Animation(_doc, _ctx, canvas, this, initCoor2, 'fire_001');
+    MapAnimation animation = new MapAnimation(_doc, _ctx, canvas, this, initCoor2, 'fire_001');
     animation.startAnimation();
     Coordinate partCoor = new Coordinate(12 * TILE_SIZE, 7 * TILE_SIZE);
     particle = new Particle(_doc, _ctx, canvas, this, partCoor, "smoke");
     particle.start();
-    activeAnimations = new List<Animation>();
+    activeAnimations = new List<MapAnimation>();
     activeAnimations.add(animation);
     player = new Actor(_doc, _ctx, canvas, initCoor, 0, 1, this, "characters.png"); //Main Player
     player.initializeActor( true, ACTOR_BEHAVIOUR_GOOD, 100, 100);
@@ -86,9 +86,9 @@ class Scene{
       i.update();
     }
     player.update();  
-    Iterator<Animation> animationsIte = activeAnimations.iterator;
+    Iterator<MapAnimation> animationsIte = activeAnimations.iterator;
     while(animationsIte.moveNext()){
-      Animation a = animationsIte.current;
+      MapAnimation a = animationsIte.current;
       a.update();
     }
     particle.update();
@@ -239,7 +239,7 @@ class Scene{
   
   void createAnimation(Actor char){
     Coordinate coord = new Coordinate(0,0);
-    Animation animation = new Animation(_doc, _ctx, canvas, this, coord, 'light_001');
+    MapAnimation animation = new MapAnimation(_doc, _ctx, canvas, this, coord, 'light_001');
     Action event = new Action(char, animation, EVENT_TYPE_ANIMATION);
     activeEvents.add(event);
     animation.startAnimation();

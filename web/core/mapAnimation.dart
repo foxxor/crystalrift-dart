@@ -2,7 +2,7 @@
   Copyright (C) 2013 Jorge Vargas <vargasjorgeluis@gmail.com>
 */
 
-library animation;
+library mapAnimation;
 
 import 'dart:html';
 import 'dart:async';
@@ -11,7 +11,7 @@ import 'scene.dart';
 import '../helpers/coordinate.dart';
 import 'graphic.dart';
 
-class Animation implements Graphic{
+class MapAnimation implements Graphic{
   
   //Graphical vars
   HtmlDocument _doc;
@@ -22,7 +22,7 @@ class Animation implements Graphic{
   Coordinate curPosPx;
   int animationFrame;
   
-  Animation(HtmlDocument this._doc, CanvasRenderingContext2D this._ctx, CanvasElement this.canvas, 
+  MapAnimation(HtmlDocument this._doc, CanvasRenderingContext2D this._ctx, CanvasElement this.canvas, 
        Scene this.scene, Coordinate this.curPosPx, String file){
     this.animationFrame = 0;
     loadGraphic('assets/animations/'+ file +'.png');

@@ -15,6 +15,9 @@ class FileScan{
   List<String> icons;
 
   FileScan(){
+    characters = new List<String>();
+    tilesets = new List<String>();
+    icons = new List<String>();
     HttpRequest.getString("editor/data/files.json").then(generateTree);
   }
   
@@ -24,19 +27,16 @@ class FileScan{
     while(iteratorCharacters.moveNext()){
       String fileName = iteratorCharacters.current;
       characters.add(fileName);
-      print(fileName);
     }
     Iterator<String> iteratorTilesets = foldersData['folders']['tilesets'].iterator;
     while(iteratorTilesets.moveNext()){
       String fileName = iteratorTilesets.current;
       tilesets.add(fileName);
-      print(fileName);
     }
     Iterator<String> iteratorIcons = foldersData['folders']['icons'].iterator;
     while(iteratorIcons.moveNext()){
       String fileName = iteratorIcons.current;
       icons.add(fileName);
-      print(fileName);
     }
   }
 }

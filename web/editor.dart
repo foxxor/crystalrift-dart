@@ -50,7 +50,7 @@ FileScan files;
 
 void main() {
   _doc = window.document;
-  //files = new FileScan();
+  files = new FileScan();
   loadTileSet();
   initMenuInteraction();
   loadMap();

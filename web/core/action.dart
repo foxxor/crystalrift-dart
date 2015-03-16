@@ -6,7 +6,7 @@ library event;
 
 import '../core/globals.dart';
 import '../core/character.dart';
-import '../core/animation.dart';
+import '../core/mapAnimation.dart';
 import '../lib/message.dart';
 
 class Action {
@@ -29,7 +29,7 @@ class Action {
       m.update();
     }else if(type == EVENT_TYPE_ANIMATION){
       Character c = object;
-      Animation a = event;
+      MapAnimation a = event;
       a.curPosPx.x = c.curPosPx.x;
       a.curPosPx.y = c.curPosPx.y;
       a.update();
