@@ -28,4 +28,18 @@ class MapEvent{
     this.graphicPosition = new Coordinate(imgX, imgY);
     this.imageSource = imageSource;
   }
+  
+  String mapNameRender(){
+    String text = "";
+    if(this.type == EVENT_TYPE_STARTING_POINT){
+      text = "Starting point";
+    }else if(this.type == EVENT_TYPE_CHARACTER){
+      text = "Character";
+    }else if(this.type == EVENT_TYPE_ITEM){
+      text = "Item";
+    }else if(this.type == EVENT_TYPE_OBJECT){
+      text = "Object";
+    }
+    return text;
+  }
 }

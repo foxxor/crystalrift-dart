@@ -360,10 +360,11 @@ void drawEventsList(){
   int index = 0;
   for (var e in currentMap.events){
     var li = new Element.html('<li class="list-group-item">' + e.name +
-      '&nbsp;&nbsp;&nbsp;<button class="btn btn-default" href="#" class="deleteEvent">' +
+      '&nbsp;<span class="label label-warning">'+ e.mapNameRender() +'</span>'+
+      '<button class="btn btn-default deleteEvent float-right" href="#">' +
         '<span class="glyphicon glyphicon-remove" style="vertical-align:middle;"></span>'+
       '</button>'+
-      '<button class="btn btn-default" href="#" class="editEvent">'+
+      '<button class="btn btn-default editEvent float-right" href="#">'+
         '<span class="glyphicon glyphicon-cog" style="vertical-align:middle;"></span>'+
       '</button>'+
     '</li>');
@@ -444,6 +445,7 @@ void bindEventOptions(){
     event.name = nameInput.value;
     event.type = int.parse(typeSelect.value);
     currentMap.update();
+    drawEventsList();
     context.callMethod('jQuery', ['#addEventModal']).callMethod('modal', ['hide']);
   });
   
