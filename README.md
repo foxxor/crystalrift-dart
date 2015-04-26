@@ -1,3 +1,5 @@
+![Crystal Rift](https://github.com/foxxor/crystalrift-dart/blob/master/web/assets/web/CrystalRiftLogoTransparent.png?raw=true)
+
 # Crystal Rift - a dart 2D game engine
 
 An HTML5 2D game engine using dart and canvas. Movements and interactions are like Zelda.
