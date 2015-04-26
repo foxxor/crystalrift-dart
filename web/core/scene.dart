@@ -32,6 +32,10 @@ class Scene{
   List<MapAnimation> activeAnimations;
   Particle particle;
   
+  //Scene size
+  int width;
+  int height;
+  
   //Camera offset tiles
   int displayX;
   int displayY;

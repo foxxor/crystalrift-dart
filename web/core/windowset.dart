@@ -44,7 +44,7 @@ class WindowSet implements Graphic{
         width - (WINDOWSET_BORDER_PADDING * 2), height - (WINDOWSET_BORDER_PADDING * 2));
     //Draw foreground
     int y = curPos.y;
-    for(int x = curPos.x; x <= width * 2 ; x = x + WINDOWSET_FG_TILE){
+    for(int x = curPos.x; x <= width * 1.5; x = x + WINDOWSET_FG_TILE){
       _ctx.drawImageToRect(windowImage , new Rectangle(x, y, WINDOWSET_FG_TILE, WINDOWSET_FG_TILE), //Rect to paint the image
           sourceRect: new Rectangle(0, WINDOWSET_FG_TILE, WINDOWSET_FG_TILE, WINDOWSET_FG_TILE)); //Size of the image
       _ctx.drawImageToRect(windowImage , new Rectangle(x, y + WINDOWSET_FG_TILE , WINDOWSET_FG_TILE, WINDOWSET_FG_TILE),

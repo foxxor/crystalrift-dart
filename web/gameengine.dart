@@ -19,10 +19,30 @@ WindowSet windowInfo;
 void main() {
   setupCanvas();
   scene = new Scene(_doc, _ctx, canvas);
+  
+  int sceneWidth;
+  int sceneHeight;
+  Element title = _doc.querySelector("#title");
+  
+  if( (MAP_WIDTH_TILES * TILE_SIZE) < window.innerWidth){
+    sceneWidth = ((window.innerWidth - (MAP_WIDTH_TILES * TILE_SIZE)) / 2).floor();
+  }else{
+    sceneWidth = window.innerWidth;
+  }
+  if( (MAP_HEIGHT_TILES * TILE_SIZE) < (window.innerHeight - title.scrollHeight)){
+    sceneHeight = (((window.innerHeight - title.scrollHeight) - (MAP_HEIGHT_TILES * TILE_SIZE)) / 2).floor();
+  }else{
+    sceneHeight = window.innerHeight - title.scrollHeight;
+  }
+  scene.width = sceneWidth;
+  scene.height = sceneHeight;
+  
   setupKeys();
   String text = "Hi, welcome to this demo of Crystal Rift! \n Please use the A/S/D/W keys to move around. \n Use enter key to interact with characters and close this window. ";
-  windowInfo = new WindowSet(_doc, _ctx, canvas, (canvas.width / 2).floor() - (WINDOW_WIDTH / 2).floor(), canvas.height - WINDOW_HEIGHT - 50, 
-       WINDOW_WIDTH, WINDOW_HEIGHT, text);
+  windowInfo = new WindowSet(_doc, _ctx, canvas, 
+      ((canvas.width ) / 2).floor() - ((WINDOW_WIDTH / 2).floor() + (scene.width == window.innerWidth ? 0 : scene.width ) ), 
+      scene.height - WINDOW_HEIGHT - 50, 
+      WINDOW_WIDTH, WINDOW_HEIGHT, text);
   window.animationFrame.then(update);
 }
 
@@ -39,9 +59,13 @@ void update(num delta) {
 
 void setupCanvas(){
   _doc = window.document;
+  Element title = _doc.querySelector("#title");
   canvas = _doc.querySelector("#canvas");
   canvas.focus();
-  Element title = _doc.querySelector("#title");
+  if( (MAP_WIDTH_TILES * TILE_SIZE) < window.innerWidth){
+    int leftMargin = ((window.innerWidth - (MAP_WIDTH_TILES * TILE_SIZE)) / 2).floor();
+    canvas.style.marginLeft = leftMargin.toString() + 'px';
+  }
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight - title.scrollHeight;
   _ctx = canvas.getContext("2d");
