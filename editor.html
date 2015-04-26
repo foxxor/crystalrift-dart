@@ -5,7 +5,7 @@
     <title>Crystal Rift - Map editor</title>
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/editor.css">
-    <link rel="icon" type="image/png" href="assets/icon/favicon.png" />
+    <link rel="icon" type="image/png" href="assets/web/CrystalRiftIcon.png" />
   </head>
  
   <body>
@@ -88,16 +88,9 @@
           <!-- Events -->
           <div id="eventWindow" class="hide">
             <ul class="list-group">
-              <li class="list-group-item">Starting point   
-                <button class="btn btn-default" href="#" data-tool="1" class="deleteEvent">
-                  <span class="glyphicon glyphicon-remove" style="vertical-align:middle;"></span>
-                </button>
-                <button class="btn btn-default" href="#" data-tool="1" class="editEvent">
-                  <span class="glyphicon glyphicon-cog" style="vertical-align:middle;"></span>
-                </button>
-              </li>
+            
             </ul>
-            <button type="button" class="btn btn-primary" id="addEvent" data-toggle="modal" data-target="#addEventModal">Add event</button>
+            <button type="button" class="btn btn-primary" id="addEvent">Add event</button>
             <br/><br/>
             <div class="alert alert-info hidden" role="alert" id="eventAlert">
               <strong>You're adding an event.</strong> Select it's position in the map.
@@ -107,7 +100,6 @@
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                   <h4 class="modal-title" id="addMapModalLabel">Add new event</h4>
                 </div>
                 <div class="modal-body">
@@ -116,31 +108,13 @@
                     <input type="text" class="form-control" id="eventNameInput">
                   </div>
                   <div class="form-group">
-                    <label for="radiosStarting">Type</label>
-                     <div class="radio">
-                      <label>
-                        <input type="radio" name="optionsRadios" id="radiosStarting" value="starting" checked>
-                        Starting point
-                      </label>
-                    </div>
-                    <div class="radio">
-                      <label>
-                        <input type="radio" name="optionsRadios" id="radioItem" value="item">
-                        Item
-                      </label>
-                    </div>
-                    <div class="radio">
-                      <label>
-                        <input type="radio" name="optionsRadios" id="radioCharacter" value="character">
-                        Character
-                      </label>
-                    </div>
-                    <div class="radio">
-                      <label>
-                        <input type="radio" name="optionsRadios" id="radioObject" value="object">
-                        Object
-                      </label>
-                    </div>
+                    <label for="eventTypeSelect">Event type</label>
+                    <select class="form-control" id="eventTypeSelect">
+                      <option value="0">Starting point</option>
+                      <option value="1">Character</option>
+                      <option value="2">Item</option>
+                      <option value="3">Object</option>
+                    </select>
                   </div>
                   <div class="form-group hidden" id="additionalEventOptions">
                     <label for="fileNameInput">File route</label>
@@ -149,7 +123,7 @@
                   </div>
                   
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                  <button type="button" class="btn btn-danger" id="cancelEventButton">Cancel</button>
                   <button type="button" class="btn btn-success" id="addEventButton">Create event</button>
                 </div>
               </div>
