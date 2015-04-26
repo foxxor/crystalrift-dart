@@ -44,11 +44,11 @@ class WindowSet implements Graphic{
         width - (WINDOWSET_BORDER_PADDING * 2), height - (WINDOWSET_BORDER_PADDING * 2));
     //Draw foreground
     int y = curPos.y;
-    for(int x = curPos.x; x <= width ; x = x + WINDOWSET_FG_TILE){
+    for(int x = curPos.x; x <= width * 2 ; x = x + WINDOWSET_FG_TILE){
       _ctx.drawImageToRect(windowImage , new Rectangle(x, y, WINDOWSET_FG_TILE, WINDOWSET_FG_TILE), //Rect to paint the image
           sourceRect: new Rectangle(0, WINDOWSET_FG_TILE, WINDOWSET_FG_TILE, WINDOWSET_FG_TILE)); //Size of the image
-      _ctx.drawImageToRect(windowImage , new Rectangle(x, y + WINDOWSET_FG_TILE, WINDOWSET_FG_TILE, WINDOWSET_FG_TILE), //Rect to paint the image
-          sourceRect: new Rectangle(0, WINDOWSET_FG_TILE, WINDOWSET_FG_TILE, WINDOWSET_FG_TILE)); //Size of the image
+      _ctx.drawImageToRect(windowImage , new Rectangle(x, y + WINDOWSET_FG_TILE , WINDOWSET_FG_TILE, WINDOWSET_FG_TILE),
+          sourceRect: new Rectangle(0, WINDOWSET_FG_TILE, WINDOWSET_FG_TILE, WINDOWSET_FG_TILE)); 
     }
     _ctx.restore();
     //Draw border borders
@@ -89,25 +89,32 @@ class WindowSet implements Graphic{
         ..shadowOffsetY = 0
         ..shadowBlur    = 5
         ..shadowColor = 'rgba(0, 0, 0, 1)';
-    
+
     var words = text.split(" ");
     var line = "";
     var numLines = 0;
     for(var n = 0; n < words.length; n++) {
       var testLine = '${line}${words[n]} ';
       var metrics = _ctx.measureText(testLine);
-      if(metrics.width > (width - (WINDOWSET_TEXT_PADDING* 2))) {
+      if(metrics.width > (width - (WINDOWSET_TEXT_PADDING * 2)) || words[n] == '\n') {
         if(numLines >= startLine){
           _ctx.fillText(line, x, y);
           y += 30;
         }
-        line = '${words[n]} ';
+        if(words[n] == '\n'){
+          line = '';
+        }else{
+          line = '${words[n]} ';
+        }
         numLines ++;
       }else { 
-        line = testLine; 
+        line = testLine;
+      }
+      if(line != " " && n == words.length - 1){
+        _ctx.fillText(line, x, y);
       }
       
-      if(numLines >= (3 + startLine)){
+      if(numLines >= (startLine + 3)){
         drawArrow();
         break;
       }
@@ -115,6 +122,7 @@ class WindowSet implements Graphic{
     if(numLines < startLine){
       endOfLine = true;
     }
+    
     _ctx.restore();
   }
   

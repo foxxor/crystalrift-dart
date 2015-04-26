@@ -19,9 +19,10 @@ WindowSet windowInfo;
 void main() {
   setupCanvas();
   scene = new Scene(_doc, _ctx, canvas);
-  String text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas fermentum dictum lacus. Mauris metus urna, consectetur ut nulla in, ullamcorper vehicula mauris. Fusce aliquam sapien eu hendrerit euismod. Mauris dignissim non arcu sit amet egestas. Proin blandit nec tellus sit amet tristique. ";;
-  windowInfo = new WindowSet(_doc, _ctx, canvas, 0, SCREEN_HEIGHT - 128, SCREEN_WIDTH, 128, text);
   setupKeys();
+  String text = "Hi, welcome to this demo of Crystal Rift! \n Please use the A/S/D/W keys to move around. \n Use enter key to interact with characters and close this window. ";
+  windowInfo = new WindowSet(_doc, _ctx, canvas, (canvas.width / 2).floor() - (WINDOW_WIDTH / 2).floor(), canvas.height - WINDOW_HEIGHT - 50, 
+       WINDOW_WIDTH, WINDOW_HEIGHT, text);
   window.animationFrame.then(update);
 }
 
