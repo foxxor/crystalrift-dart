@@ -17,12 +17,13 @@ Scene scene;
 WindowSet windowInfo;
 
 void main() {
+  _doc = window.document;
   setupCanvas();
   scene = new Scene(_doc, _ctx, canvas);
   
   int sceneWidth;
   int sceneHeight;
-  Element title = _doc.querySelector("#title");
+  Element title = _doc.querySelector(".navbar");
   
   if( (MAP_WIDTH_TILES * TILE_SIZE) < window.innerWidth){
     sceneWidth = ((window.innerWidth - (MAP_WIDTH_TILES * TILE_SIZE)) / 2).floor();
@@ -58,8 +59,7 @@ void update(num delta) {
 }
 
 void setupCanvas(){
-  _doc = window.document;
-  Element title = _doc.querySelector("#title");
+  Element title = _doc.querySelector(".navbar");
   canvas = _doc.querySelector("#canvas");
   canvas.focus();
   if( (MAP_WIDTH_TILES * TILE_SIZE) < window.innerWidth){
