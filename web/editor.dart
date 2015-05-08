@@ -145,9 +145,11 @@ void toolSelection(){
   loadJsonButton.onClick.listen((MouseEvent e){
     var jsonTextArea = _doc.querySelector("#genJsonTextArea");
     String jsonData = jsonTextArea.value;
-    Map parsedJson = JSON.decode(jsonData);
-    currentMap.loadMap(parsedJson);
-    drawMapsList();
+    if(jsonData.trim() != ""){
+      Map parsedJson = JSON.decode(jsonData);
+      currentMap.loadMap(parsedJson);
+      drawMapsList();
+    }
   });
 }
 

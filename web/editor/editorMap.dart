@@ -193,6 +193,9 @@ class EditorMap{
   //Method to serialize a matrix in something dart understands
   Map toJson() { 
     Map map = new Map();
+    map['metadata'] = new Map();
+    map['metadata']['name'] = this.name;
+    map['metadata']['active'] = this.active.toString(); 
     map['layer1'] = this.layer1.toJson();
     map['layer2'] = this.layer2.toJson();
     map['layer3'] = this.layer3.toJson();
@@ -209,6 +212,9 @@ class EditorMap{
     layer1 = new Matrix(this.widthTiles, this.heightTiles);
     layer2 = new Matrix(this.widthTiles, this.heightTiles);
     layer3 = new Matrix(this.widthTiles, this.heightTiles);
+    this.name = mapData['metadata']['name'];
+    this.active = mapData['metadata']['active'].toLowerCase() == 'true';
+    
     canvasReDraw();
     
     for (var i = 0; i < nLayer1.length; i++){
