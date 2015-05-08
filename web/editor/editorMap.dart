@@ -203,6 +203,14 @@ class EditorMap{
     Map nLayer1 = mapData['layer1'];
     Map nLayer2 = mapData['layer2'];
     Map nLayer3 = mapData['layer3'];
+    
+    this.widthTiles = nLayer1.length;
+    this.heightTiles = nLayer1['0'].length;
+    layer1 = new Matrix(this.widthTiles, this.heightTiles);
+    layer2 = new Matrix(this.widthTiles, this.heightTiles);
+    layer3 = new Matrix(this.widthTiles, this.heightTiles);
+    canvasReDraw();
+    
     for (var i = 0; i < nLayer1.length; i++){
       for (var e = 0; e < nLayer1[i.toString()].length; e++){
         Tile t1 = new Tile(nLayer1[i.toString()][e.toString()]['x'], nLayer1[i.toString()][e.toString()]['y']);

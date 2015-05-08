@@ -147,6 +147,7 @@ void toolSelection(){
     String jsonData = jsonTextArea.value;
     Map parsedJson = JSON.decode(jsonData);
     currentMap.loadMap(parsedJson);
+    drawMapsList();
   });
 }
 
