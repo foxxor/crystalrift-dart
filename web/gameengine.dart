@@ -4,7 +4,6 @@
 
 import 'dart:html';
 import 'core/globals.dart';
-import 'core/character.dart';
 import 'core/actor.dart';
 import 'core/scene.dart';
 import 'core/windowset.dart';

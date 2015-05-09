@@ -160,8 +160,14 @@ class MapSet implements Graphic{
   }
   
   void update(){
-    for (var e = 0; e < (this.height); e++){
-      for (var i = 0; i < (this.width); i++){
+    int offsetInitX = (scene.displayPxX / TILE_SIZE).floor();
+    int offsetInitY = (scene.displayPxY / TILE_SIZE).floor();
+    
+    int offsetFinalX = (canvas.width / TILE_SIZE).ceil() + offsetInitX + 1; // Added 1 to prevent showing not loaded tiles
+    int offsetFinalY = (canvas.height / TILE_SIZE).ceil() + offsetInitY + 1; // Added 1 to prevent showing not loaded tiles
+    
+    for (var e = offsetInitY; e < offsetFinalY; e++){
+      for (var i = offsetInitX; i < offsetFinalX; i++){
         Tile tile = mapset.get( i , e);
         ctx.drawImageToRect(this.mapsetImage , new Rectangle(i * TILE_SIZE - scene.displayPxX, e * TILE_SIZE - scene.displayPxY, TILE_SIZE, TILE_SIZE), //Rect to paint the image
             sourceRect: new Rectangle( tile.xImg, tile.yImg, TILE_SIZE, TILE_SIZE)); //Size of the image

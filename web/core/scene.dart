@@ -10,7 +10,6 @@ import 'globals.dart';
 import '../helpers/coordinate.dart';
 import '../lib/message.dart';
 import 'mapset.dart';
-import 'character.dart';
 import 'actor.dart';
 import 'entity.dart';
 import 'tile.dart';
@@ -110,7 +109,7 @@ class Scene{
         p.update();
       }
     }
-      
+    
     Iterator<Action> eventIte = activeEvents.iterator;
     while(eventIte.moveNext()){
       Action e = eventIte.current;
@@ -124,7 +123,6 @@ class Scene{
         c.x < (displayPxX + canvas.width + TILE_SIZE) && c.y < (displayPxY + canvas.height + TILE_SIZE)){
       return true;
     }
-    
     return false;
   } 
   
@@ -217,9 +215,9 @@ class Scene{
   }
   
   void loadProperties(){
-    var request = HttpRequest.getString("data/characters.json").then(loadCharacters);
-    var request2 = HttpRequest.getString("data/structures.json").then(loadStructures);
-    var request3 = HttpRequest.getString("data/entities.json").then(loadEntities);
+    HttpRequest.getString("data/characters.json").then(loadCharacters);
+    HttpRequest.getString("data/structures.json").then(loadStructures);
+    HttpRequest.getString("data/entities.json").then(loadEntities);
   }
   
   void loadEntities(String responseText){
@@ -260,7 +258,7 @@ class Scene{
   void createMessage(Actor char){
     Message msg = new Message(ctx, char.message, char.screenPosPx.x, char.screenPosPx.y, 100, 20);
     const ms = const Duration(milliseconds: 5000);
-    Timer t = new Timer( ms, removeEvent);
+    new Timer( ms, removeEvent);
     Action event = new Action(char, msg, EVENT_TYPE_MESSAGE);
     activeEvents.add(event);
   }
@@ -271,7 +269,7 @@ class Scene{
     Action event = new Action(char, animation, EVENT_TYPE_ANIMATION);
     activeEvents.add(event);
     animation.startAnimation();
-    Timer t = new Timer( const Duration(milliseconds: 500), removeEvent);
+    new Timer( const Duration(milliseconds: 500), removeEvent);
   }
   
   void removeEvent(){

@@ -60,7 +60,7 @@ class Actor extends Character{
   
   void update(){
     super.update();
-    if(combatable){
+    if(combatable && life > 0){
       int barWeigth = (TILE_SIZE * (life / maxLife)).floor();
       ctx.drawImageScaled(barHpImage, screenPosPx.x, screenPosPx.y + TILE_SIZE + 3, 
           barWeigth, 3);
