@@ -30,7 +30,7 @@ class Scene{
   List<Entity> entities;
   List<Action> activeEvents;
   List<MapAnimation> activeAnimations;
-  Particle particle;
+  List<Particle> particles;
   
   //Scene size
   int width;
@@ -40,7 +40,7 @@ class Scene{
   int displayX;
   int displayY;
   
-//Camera offset tiles
+  //Camera offset tiles
   int displayPxX;
   int displayPxY;
   
@@ -51,14 +51,16 @@ class Scene{
     gameMap = new MapSet(this, MAP_WIDTH_TILES, MAP_HEIGHT_TILES);
     Coordinate initCoor = new Coordinate(15, 10);
     Coordinate initCoor2 = new Coordinate(12 * TILE_SIZE, 4* TILE_SIZE);
-    MapAnimation animation = new MapAnimation(doc, ctx, canvas, this, initCoor2, 'fire_001');
+    MapAnimation animation = new MapAnimation(this, initCoor2, 'fire_001');
     animation.startAnimation();
     Coordinate partCoor = new Coordinate(12 * TILE_SIZE, 7 * TILE_SIZE);
-    particle = new Particle(doc, ctx, canvas, this, partCoor, "smoke");
+    Particle particle = new Particle(this, partCoor, "smoke");
     particle.start();
+    particles = new List<Particle>();
+    particles.add(particle);
     activeAnimations = new List<MapAnimation>();
     activeAnimations.add(animation);
-    player = new Actor(doc, ctx, canvas, initCoor, 0, 1, this, "characters.png"); //Main Player
+    player = new Actor(initCoor, 0, 1, this, "characters.png"); //Main Player
     player.initializeActor( true, ACTOR_BEHAVIOUR_GOOD, 100, 100);
     //player.moveTo( 13, 4);
     actors = new List<Actor>();
@@ -79,29 +81,52 @@ class Scene{
       stopMove();
     }
     gameMap.update();
+    
     Iterator<Actor> charas = actors.iterator;
     while(charas.moveNext()){
       Actor c = charas.current;
       c.update();
     }
+    
     Iterator<Entity> entitiesIte = entities.iterator;
     while(entitiesIte.moveNext()){
       Entity i = entitiesIte.current;
       i.update();
     }
-    player.update();  
+    player.update();
+    
     Iterator<MapAnimation> animationsIte = activeAnimations.iterator;
     while(animationsIte.moveNext()){
       MapAnimation a = animationsIte.current;
-      a.update();
+      if(inCamera(a.curPosPx)){
+        a.update();
+      }
     }
-    particle.update();
+    
+    Iterator<Particle> particlesIte = particles.iterator;
+      while(particlesIte.moveNext()){
+      Particle p = particlesIte.current;
+      if(inCamera(p.curPosPx)){
+        p.update();
+      }
+    }
+      
     Iterator<Action> eventIte = activeEvents.iterator;
     while(eventIte.moveNext()){
       Action e = eventIte.current;
       e.update();
     }
   }
+  
+  // Verifies if a coordinate is displayed by the camera
+  bool inCamera(Coordinate c){
+    if(c.x >= (displayPxX - TILE_SIZE) && c.y >= (displayPxY - TILE_SIZE) &&
+        c.x < (displayPxX + canvas.width + TILE_SIZE) && c.y < (displayPxY + canvas.height + TILE_SIZE)){
+      return true;
+    }
+    
+    return false;
+  } 
   
   void updateMove(){
     var distance = 2 * player.speed;
@@ -216,8 +241,7 @@ class Scene{
     while(characters.moveNext()){
       Map m = characters.current;
       Coordinate coords = new Coordinate(m['x'], m['y']);
-      Actor character = new Actor(doc, ctx, canvas, coords, m['characterId'], m['characterRow'], 
-          this, m['imageSource']);
+      Actor character = new Actor(coords, m['characterId'], m['characterRow'], this, m['imageSource']);
       character.initializeActor( m['combatable'], m['behaviour'], 100, 100, m['message']);
       if(m['moveRandom']){
         character.moveRandom();
@@ -243,7 +267,7 @@ class Scene{
   
   void createAnimation(Actor char){
     Coordinate coord = new Coordinate(0,0);
-    MapAnimation animation = new MapAnimation(doc, ctx, canvas, this, coord, 'light_001');
+    MapAnimation animation = new MapAnimation(this, coord, 'light_001');
     Action event = new Action(char, animation, EVENT_TYPE_ANIMATION);
     activeEvents.add(event);
     animation.startAnimation();

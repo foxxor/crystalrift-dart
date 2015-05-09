@@ -35,9 +35,8 @@ class Actor extends Character{
   String srcBarHp = "hp_pixel.png";
   String srcBarMp = "mp_pixel.png";
   
-  Actor(HtmlDocument doc, CanvasRenderingContext2D ctx, CanvasElement canvas, 
-        Coordinate curPos, int charSprite, int charRow, Scene scene, String imageSource, [ int speed = 1]) : 
-          super( doc, ctx, canvas, curPos, charSprite, charRow, scene, imageSource, speed);
+  Actor(Coordinate curPos, int charSprite, int charRow, Scene scene, String imageSource, [ int speed = 1]) : 
+          super( curPos, charSprite, charRow, scene, imageSource, speed);
   
   void initializeActor( bool combatable, int behaviour, [int maxLife = 0, int maxEnergy = 0, String message = ""]){
     this.combatable = combatable;

@@ -56,9 +56,12 @@ class Character implements Graphic{
   var acDelta = 0; //Deprecated 
   var lastUpdateTime = 0; //Deprecated
   
-  Character(HtmlDocument this.doc, CanvasRenderingContext2D this.ctx, CanvasElement this.canvas, 
-      Coordinate this.curPos, int selectedChar, int characterRow, Scene this.scene, String imageSource, 
+  Character( Coordinate this.curPos, int selectedChar, int characterRow, Scene this.scene, String imageSource, 
       [int this.speed = 1]) {
+    this.doc = scene.doc;
+    this.ctx = scene.ctx;
+    this.canvas = scene.canvas;
+    
     this.randomMovement = false;
     this.phasable = false;
     this.curPosPx = new Coordinate(curPos.x * TILE_SIZE, curPos.y * TILE_SIZE);

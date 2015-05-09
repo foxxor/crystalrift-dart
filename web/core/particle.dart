@@ -15,8 +15,8 @@ import 'dart:math' as Math;
 class Particle implements Graphic{
   
   //Graphical vars
-  HtmlDocument _doc;
-  CanvasRenderingContext2D _ctx;
+  HtmlDocument doc;
+  CanvasRenderingContext2D ctx;
   CanvasElement canvas;
   List<ImageElement> particles;
   List<Coordinate> particlesCoords;
@@ -32,8 +32,11 @@ class Particle implements Graphic{
   String blendType;
   String color;
   
-  Particle(HtmlDocument this._doc, CanvasRenderingContext2D this._ctx, CanvasElement this.canvas, 
-      Scene this.scene, Coordinate this.curPosPx, String this.effect){
+  Particle(Scene this.scene, Coordinate this.curPosPx, String this.effect){
+    this.doc = scene.doc;
+    this.ctx = scene.ctx;
+    this.canvas = scene.canvas;
+    
     this.particles = new List<ImageElement>();
     this.particlesCoords = new List<Coordinate>();
     this.particlesAlpha = new List<num>();
@@ -136,29 +139,29 @@ class Particle implements Graphic{
       num nAlpha = alphaIte.current;
       coord.moveNext();
       Coordinate c = coord.current;
-      _ctx.save();
-      _ctx.globalAlpha = nAlpha;
+      ctx.save();
+      ctx.globalAlpha = nAlpha;
       if(blendType != null){
-        _ctx.globalCompositeOperation = blendType;
-        _ctx.fillStyle = color;
+        ctx.globalCompositeOperation = blendType;
+        ctx.fillStyle = color;
       }
-      _ctx.drawImageScaled(p, c.x - scene.displayPxX, c.y - scene.displayPxY, width, height);
-      _ctx.restore();      
+      ctx.drawImageScaled(p, c.x - scene.displayPxX, c.y - scene.displayPxY, width, height);
+      ctx.restore();      
     }
   }
   
   //This method doesnt work because is super slow :(
   void drawParticle(num x, num y){
     var radius = 2;
-    _ctx.arc(x, y, radius, 0, 
+    ctx.arc(x, y, radius, 0, 
         2 * Math.PI, false);
-    _ctx.fillStyle = 'orange';
-    _ctx.fill();
+    ctx.fillStyle = 'orange';
+    ctx.fill();
   }
   
   void loadGraphic(String src){
     ImageElement particleImage = new Element.tag('img'); 
-    particleImage = _doc.createElement('img'); 
+    particleImage = doc.createElement('img'); 
     particleImage.src = src;
     particleImage.onLoad.listen((value) => update());
     var random = new Math.Random();

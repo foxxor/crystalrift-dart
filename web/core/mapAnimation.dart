@@ -14,16 +14,19 @@ import 'graphic.dart';
 class MapAnimation implements Graphic{
   
   //Graphical vars
-  HtmlDocument _doc;
-  CanvasRenderingContext2D _ctx;
+  HtmlDocument doc;
+  CanvasRenderingContext2D ctx;
   CanvasElement canvas;
   ImageElement animationImage;
   Scene scene;
   Coordinate curPosPx;
   int animationFrame;
   
-  MapAnimation(HtmlDocument this._doc, CanvasRenderingContext2D this._ctx, CanvasElement this.canvas, 
-       Scene this.scene, Coordinate this.curPosPx, String file){
+  MapAnimation(Scene this.scene, Coordinate this.curPosPx, String file){
+    this.doc = scene.doc;
+    this.ctx = scene.ctx;
+    this.canvas = scene.canvas;
+    
     this.animationFrame = 0;
     loadGraphic('assets/animations/'+ file +'.png');
   }
@@ -45,13 +48,13 @@ class MapAnimation implements Graphic{
   void update(){
     num frameX = animationFrame % 5;
     num frameY = (animationFrame / 5).floor();
-    _ctx.drawImageScaledFromSource(animationImage, ANIMATION_FRAME_WIDTH * frameX, ANIMATION_FRAME_HEIGHT * frameY, 
+    ctx.drawImageScaledFromSource(animationImage, ANIMATION_FRAME_WIDTH * frameX, ANIMATION_FRAME_HEIGHT * frameY, 
         ANIMATION_FRAME_WIDTH, ANIMATION_FRAME_HEIGHT, curPosPx.x - scene.displayPxX, curPosPx.y - scene.displayPxY, TILE_SIZE, TILE_SIZE+10);
   }
   
   void loadGraphic(String src){
     this.animationImage = new Element.tag('img'); 
-    this.animationImage = _doc.createElement('img'); 
+    this.animationImage = doc.createElement('img'); 
     this.animationImage.src = src;
     this.animationImage.onLoad.listen((value) => update());
   }
