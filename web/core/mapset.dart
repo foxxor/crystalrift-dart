@@ -13,12 +13,14 @@ import 'tile.dart';
 import 'dart:math' as Math;
 
 class MapSet implements Graphic{
-  HtmlDocument _doc;
-  CanvasRenderingContext2D _ctx;
+  HtmlDocument doc;
+  CanvasRenderingContext2D ctx;
   CanvasElement canvas;
   ImageElement mapsetImage;
   Map structuresData;
   Scene scene;
+  int width;
+  int height;
   
   // The map matrix that represent the first visual terrain layer 
   Matrix mapset;
@@ -29,32 +31,35 @@ class MapSet implements Graphic{
   // The map matrix that represent the event layer, to track movement correctly
   Matrix eventMapset;
   
-  MapSet(HtmlDocument this._doc, CanvasRenderingContext2D this._ctx, CanvasElement this.canvas, 
-      Scene this.scene) {
-    mapset = new Matrix(MAP_WIDTH_TILES, MAP_HEIGHT_TILES);
-    mapset2 = new Matrix(MAP_WIDTH_TILES, MAP_HEIGHT_TILES);
-    mapset3 = new Matrix(MAP_WIDTH_TILES, MAP_HEIGHT_TILES);
-    eventMapset = new Matrix(MAP_WIDTH_TILES, MAP_HEIGHT_TILES);
+  MapSet(Scene this.scene, int this.width, int this.height) {
+    this.doc = scene.doc;
+    this.ctx = scene.ctx;
+    this.canvas = scene.canvas;
+    
+    mapset = new Matrix(this.width, this.height);
+    mapset2 = new Matrix(this.width, this.height);
+    mapset3 = new Matrix(this.width, this.height);
+    eventMapset = new Matrix(this.width, this.height);
     initValues();
     loadGraphic("assets/tileset/tileset.png");
   }
   
   void loadGraphic(String src){
     this.mapsetImage = new Element.tag('img'); 
-    this.mapsetImage = _doc.createElement('img'); 
+    this.mapsetImage = doc.createElement('img'); 
     this.mapsetImage.src = src;
     this.mapsetImage.onLoad.listen((value) => hideLoading());
   }
   
   void hideLoading(){
-    _doc.querySelector("#loading").classes.add('hidden');
-    _doc.querySelector("#canvas").classes.remove('hidden');
+    doc.querySelector("#loading").classes.add('hidden');
+    doc.querySelector("#canvas").classes.remove('hidden');
     update();
   }
   
   void initValues(){
-    for (var y = 0; y < ( MAP_HEIGHT_TILES); y++){
-      for (var x = 0; x < (MAP_WIDTH_TILES); x++){
+    for (var y = 0; y < ( this.height); y++){
+      for (var x = 0; x < (this.width); x++){
         Tile t = new Tile(8, 2, TILE_SOIL);
         mapset.set(x, y, t);
         mapset2.set(x, y, 0);
@@ -155,15 +160,15 @@ class MapSet implements Graphic{
   }
   
   void update(){
-    for (var e = 0; e < (MAP_HEIGHT_TILES); e++){
-      for (var i = 0; i < (MAP_WIDTH_TILES); i++){
+    for (var e = 0; e < (this.height); e++){
+      for (var i = 0; i < (this.width); i++){
         Tile tile = mapset.get( i , e);
-        _ctx.drawImageToRect(this.mapsetImage , new Rectangle(i * TILE_SIZE - scene.displayPxX, e * TILE_SIZE - scene.displayPxY, TILE_SIZE, TILE_SIZE), //Rect to paint the image
+        ctx.drawImageToRect(this.mapsetImage , new Rectangle(i * TILE_SIZE - scene.displayPxX, e * TILE_SIZE - scene.displayPxY, TILE_SIZE, TILE_SIZE), //Rect to paint the image
             sourceRect: new Rectangle( tile.xImg, tile.yImg, TILE_SIZE, TILE_SIZE)); //Size of the image
         
         if(mapset2.get(i, e) != 0){
           Tile tile2 = mapset2.get(i, e);
-          _ctx.drawImageToRect(this.mapsetImage , new Rectangle(i * TILE_SIZE - scene.displayPxX, e * TILE_SIZE - scene.displayPxY, TILE_SIZE, TILE_SIZE), //Rect to paint the image
+          ctx.drawImageToRect(this.mapsetImage , new Rectangle(i * TILE_SIZE - scene.displayPxX, e * TILE_SIZE - scene.displayPxY, TILE_SIZE, TILE_SIZE), //Rect to paint the image
               sourceRect: new Rectangle( tile2.xImg, tile2.yImg, TILE_SIZE, TILE_SIZE)); //Size of the image
         }
       }

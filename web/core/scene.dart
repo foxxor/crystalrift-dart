@@ -20,8 +20,8 @@ import 'particle.dart';
 import 'dart:math' as Math;
 
 class Scene{
-  HtmlDocument _doc;
-  CanvasRenderingContext2D _ctx;
+  HtmlDocument doc;
+  CanvasRenderingContext2D ctx;
   CanvasElement canvas;
   
   MapSet gameMap;
@@ -44,21 +44,21 @@ class Scene{
   int displayPxX;
   int displayPxY;
   
-  Scene(HtmlDocument _doc, CanvasRenderingContext2D _ctx, CanvasElement canvas) {
-    this._doc = _doc;
-    this._ctx = _ctx;
+  Scene(HtmlDocument doc, CanvasRenderingContext2D ctx, CanvasElement canvas) {
+    this.doc = doc;
+    this.ctx = ctx;
     this.canvas = canvas;
-    gameMap = new MapSet(_doc, _ctx, canvas, this);
+    gameMap = new MapSet(this, MAP_WIDTH_TILES, MAP_HEIGHT_TILES);
     Coordinate initCoor = new Coordinate(15, 10);
     Coordinate initCoor2 = new Coordinate(12 * TILE_SIZE, 4* TILE_SIZE);
-    MapAnimation animation = new MapAnimation(_doc, _ctx, canvas, this, initCoor2, 'fire_001');
+    MapAnimation animation = new MapAnimation(doc, ctx, canvas, this, initCoor2, 'fire_001');
     animation.startAnimation();
     Coordinate partCoor = new Coordinate(12 * TILE_SIZE, 7 * TILE_SIZE);
-    particle = new Particle(_doc, _ctx, canvas, this, partCoor, "smoke");
+    particle = new Particle(doc, ctx, canvas, this, partCoor, "smoke");
     particle.start();
     activeAnimations = new List<MapAnimation>();
     activeAnimations.add(animation);
-    player = new Actor(_doc, _ctx, canvas, initCoor, 0, 1, this, "characters.png"); //Main Player
+    player = new Actor(doc, ctx, canvas, initCoor, 0, 1, this, "characters.png"); //Main Player
     player.initializeActor( true, ACTOR_BEHAVIOUR_GOOD, 100, 100);
     //player.moveTo( 13, 4);
     actors = new List<Actor>();
@@ -204,7 +204,7 @@ class Scene{
       Map i = iteEntities.current;
       Coordinate coords = new Coordinate(i['x'], i['y']);
       Tile tile = new Tile(i['xTile'], i['yTile']);
-      Entity item = new Entity(_doc, _ctx, canvas, coords, tile, this, i['pushable']);
+      Entity item = new Entity(doc, ctx, canvas, coords, tile, this, i['pushable']);
       entities.add(item);
       gameMap.occupyTile(i['x'], i['y'], item);
     }
@@ -216,7 +216,7 @@ class Scene{
     while(characters.moveNext()){
       Map m = characters.current;
       Coordinate coords = new Coordinate(m['x'], m['y']);
-      Actor character = new Actor(_doc, _ctx, canvas, coords, m['characterId'], m['characterRow'], 
+      Actor character = new Actor(doc, ctx, canvas, coords, m['characterId'], m['characterRow'], 
           this, m['imageSource']);
       character.initializeActor( m['combatable'], m['behaviour'], 100, 100, m['message']);
       if(m['moveRandom']){
@@ -234,7 +234,7 @@ class Scene{
   }
   
   void createMessage(Actor char){
-    Message msg = new Message(_ctx, char.message, char.screenPosPx.x, char.screenPosPx.y, 100, 20);
+    Message msg = new Message(ctx, char.message, char.screenPosPx.x, char.screenPosPx.y, 100, 20);
     const ms = const Duration(milliseconds: 5000);
     Timer t = new Timer( ms, removeEvent);
     Action event = new Action(char, msg, EVENT_TYPE_MESSAGE);
@@ -243,7 +243,7 @@ class Scene{
   
   void createAnimation(Actor char){
     Coordinate coord = new Coordinate(0,0);
-    MapAnimation animation = new MapAnimation(_doc, _ctx, canvas, this, coord, 'light_001');
+    MapAnimation animation = new MapAnimation(doc, ctx, canvas, this, coord, 'light_001');
     Action event = new Action(char, animation, EVENT_TYPE_ANIMATION);
     activeEvents.add(event);
     animation.startAnimation();

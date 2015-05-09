@@ -45,7 +45,9 @@ class EditorMap{
     addingEvent = false;
     events = new List<MapEvent>();
     // Initial point event
-    MapEvent initPointEvent = new MapEvent(EVENT_TYPE_STARTING_POINT, 16, 11, 'Starting point');
+    int initX = (this.widthTiles / 2).floor();
+    int initY = (this.heightTiles / 2).floor();
+    MapEvent initPointEvent = new MapEvent(EVENT_TYPE_STARTING_POINT, initX, initY, 'Starting point');
     events.add(initPointEvent);
     initLayers();
   }
