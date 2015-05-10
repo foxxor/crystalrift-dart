@@ -81,6 +81,25 @@ void setupKeys(){
   });
 }
 
+// Function that generate the actions based in the context of the game.
+void doAction(){
+  windowInfo.moveLines();
+  //Character message if in front
+  Actor c = scene.getCharacterInFront();
+  if(c != null){
+    if(c.combatable){
+      c.damage(10);
+      scene.createAnimation(c);
+      c.chaseCharacter(scene.player);
+    }else if(!c.trigger){
+      c.trigger = true;
+      if(c.message.isNotEmpty){
+        //scene.createMessage(c);
+      }
+    }
+  }
+}
+
 void reactKey(var evt) {
   if(evt.keyCode == 37 || evt.keyCode == 65 ) { //left
       scene.move(LEFT);
@@ -91,21 +110,7 @@ void reactKey(var evt) {
   }else if(evt.keyCode == 40 || evt.keyCode == 83 ){ //down
       scene.move(DOWN);
   }else if(evt.keyCode == 13 ){ //Action
-    windowInfo.moveLines();
-    //Character message if in front
-    Actor c = scene.getCharacterInFront();
-    if(c != null){
-      if(c.combatable){
-        c.life = c.life - 10;
-        scene.createAnimation(c);
-        c.chaseCharacter(scene.player);
-      }else if(!c.trigger){
-        c.trigger = true;
-        if(c.message.isNotEmpty){
-          //scene.createMessage(c);
-        }
-      }
-    }
+    doAction();
   }
   
 }

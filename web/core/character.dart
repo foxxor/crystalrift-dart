@@ -40,7 +40,7 @@ class Character implements Graphic{
   // Is this object pasable?
   bool phasable;
   // Character movement speed
-  int speed;
+  num speed;
   // Character is chasing?
   bool chasing;
   // Who is this chasing?
@@ -57,7 +57,7 @@ class Character implements Graphic{
   var lastUpdateTime = 0; //Deprecated
   
   Character( Coordinate this.curPos, int selectedChar, int characterRow, Scene this.scene, String imageSource, 
-      [int this.speed = 1]) {
+      [num this.speed = 1]) {
     this.doc = scene.doc;
     this.ctx = scene.ctx;
     this.canvas = scene.canvas;
@@ -79,7 +79,7 @@ class Character implements Graphic{
 
   void moveRandom(){
     const ms = const Duration(milliseconds: 2000);
-    Timer t = new Timer( ms, doMoveRandom);
+    new Timer( ms, doMoveRandom);
   }
   
   void doMoveRandom(){
@@ -301,7 +301,7 @@ class Character implements Graphic{
   }
   
   void updateMove(){
-    num distance = 2 * speed;
+    num distance = 2 * this.speed ;
     if(curPos.y * TILE_SIZE > curPosPx.y){
       faceDirection(DOWN);
       curPosPx.y = Math.min(curPosPx.y + distance, curPos.y * TILE_SIZE);

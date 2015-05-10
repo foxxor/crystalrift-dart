@@ -5,7 +5,6 @@
 library actor;
 
 import 'dart:html';
-import 'dart:async';
 import 'globals.dart';
 import 'scene.dart';
 import '../helpers/coordinate.dart';
@@ -28,6 +27,10 @@ class Actor extends Character{
   String message;
   // If the actor can combat
   bool combatable; 
+  // How much damage this actor can make
+  int attack;
+  // Defense modifier against damage
+  int defense;
   
   ImageElement barHpImage;
   ImageElement barMpImage;
@@ -35,10 +38,10 @@ class Actor extends Character{
   String srcBarHp = "hp_pixel.png";
   String srcBarMp = "mp_pixel.png";
   
-  Actor(Coordinate curPos, int charSprite, int charRow, Scene scene, String imageSource, [ int speed = 1]) : 
+  Actor(Coordinate curPos, int charSprite, int charRow, Scene scene, String imageSource, [ num speed = 1]) : 
           super( curPos, charSprite, charRow, scene, imageSource, speed);
   
-  void initializeActor( bool combatable, int behaviour, [int maxLife = 0, int maxEnergy = 0, String message = ""]){
+  void initializeActor( bool combatable, int behaviour, [int maxLife = 0, int maxEnergy = 0, String message = "", int attack = 0, int defense = 0]){
     this.combatable = combatable;
     this.behaviour = behaviour;
     this.maxLife = maxLife;
@@ -46,6 +49,8 @@ class Actor extends Character{
     this.maxEnergy = maxEnergy;
     this.energy = maxEnergy;
     this.message = message;
+    this.attack = attack;
+    this.defense = defense;
     loadBars();
   }
   
@@ -56,6 +61,10 @@ class Actor extends Character{
     barMpImage = new Element.tag('img'); 
     barMpImage = doc.createElement('img'); 
     barMpImage.src = "assets/particles/extra/" + srcBarMp;
+  }
+  
+  void damage(int numAttack){
+    this.life = this.life - (numAttack - (this.defense * 0.1).floor());
   }
   
   void update(){

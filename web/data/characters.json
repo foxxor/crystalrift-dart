@@ -8,7 +8,12 @@
       "message": "I'm guarding this place",
       "imageSource" : "characters.png",
       "behaviour" : 1,
-      "combatable" : false
+      "combatable" : false,
+      "speed":1,
+      "life": 100,
+      "energy": 0,
+      "attack": 0,
+      "defense": 10
     },
     {
       "x":6,
@@ -19,7 +24,12 @@
       "message": "Move!",
       "behaviour" : 1,
       "imageSource" : "characters.png",
-      "combatable" : false
+      "combatable" : false,
+      "speed":1,
+      "life": 100,
+      "energy": 0,
+      "attack": 0,
+      "defense": 10
     },
     {
       "x":13,
@@ -30,7 +40,12 @@
       "message": "For the king!",
       "behaviour" : 1,
       "imageSource" : "characters.png",
-      "combatable" : false
+      "combatable" : false,
+      "speed":1,
+      "life": 100,
+      "energy": 0,
+      "attack": 0,
+      "defense": 10
     },
     {
       "x":10,
@@ -41,7 +56,12 @@
       "message": "Hello there stranger!",
       "behaviour" : 1,
       "imageSource" : "characters.png",
-      "combatable" : false
+      "combatable" : false,
+      "speed":1,
+      "life": 100,
+      "energy": 0,
+      "attack": 0,
+      "defense": 10
     },
     {
       "x":7,
@@ -52,7 +72,12 @@
       "message": "blergh!",
       "behaviour" : 2,
       "imageSource" : "monsters1.png",
-      "combatable" : true
+      "combatable" : true,
+      "speed":0.65,
+      "life": 200,
+      "energy": 50,
+      "attack": 25,
+      "defense": 25
     }
   ]
 }

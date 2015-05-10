@@ -56,6 +56,11 @@ const int ACTOR_BEHAVIOUR_FOE = 3;
 
 const int MAX_PATHFINDING_ITERATIONS = 800;
 
+//Types of actors
+const int ACTOR_COMBAT_FLEE = 1;
+const int ACTOR_COMBAR_AGGRESIVE = 2;
+const int ACTOR_COMBAT_DEFENSIVE = 3;
+
 //Selection modes for the editor
 const int SINGLE_TILE_SELECTION = 1;
 const int MULTI_TILE_SELECTION = 2;

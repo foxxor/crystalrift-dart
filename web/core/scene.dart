@@ -239,8 +239,8 @@ class Scene{
     while(characters.moveNext()){
       Map m = characters.current;
       Coordinate coords = new Coordinate(m['x'], m['y']);
-      Actor character = new Actor(coords, m['characterId'], m['characterRow'], this, m['imageSource']);
-      character.initializeActor( m['combatable'], m['behaviour'], 100, 100, m['message']);
+      Actor character = new Actor(coords, m['characterId'], m['characterRow'], this, m['imageSource'], m['speed']);
+      character.initializeActor( m['combatable'], m['behaviour'], m['life'], m['energy'], m['message'], m['attack'], m['defense']);
       if(m['moveRandom']){
         character.moveRandom();
       }

@@ -8,10 +8,10 @@ import '../core/globals.dart';
 import 'dart:math' as Math;
 
 class Coordinate {
-  int x;
-  int y;
+  num x;
+  num y;
   
-  Coordinate(int xi, int yi){
+  Coordinate(num xi, num yi){
     this.x = xi;
     this.y = yi;
   }
