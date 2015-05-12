@@ -130,23 +130,25 @@ class Particle implements Graphic{
   }
   
   void update(){
-    Iterator<ImageElement> partIte = particles.iterator;
-    Iterator<Coordinate> coord = particlesCoords.iterator;
-    Iterator<num> alphaIte = particlesAlpha.iterator;
-    while(partIte.moveNext()){
-      ImageElement p = partIte.current;
-      alphaIte.moveNext();
-      num nAlpha = alphaIte.current;
-      coord.moveNext();
-      Coordinate c = coord.current;
-      ctx.save();
-      ctx.globalAlpha = nAlpha;
-      if(blendType != null){
-        ctx.globalCompositeOperation = blendType;
-        ctx.fillStyle = color;
+    if(scene.inCamera(this.curPosPx)){
+      Iterator<ImageElement> partIte = particles.iterator;
+      Iterator<Coordinate> coord = particlesCoords.iterator;
+      Iterator<num> alphaIte = particlesAlpha.iterator;
+      while(partIte.moveNext()){
+        ImageElement p = partIte.current;
+        alphaIte.moveNext();
+        num nAlpha = alphaIte.current;
+        coord.moveNext();
+        Coordinate c = coord.current;
+        ctx.save();
+        ctx.globalAlpha = nAlpha;
+        if(blendType != null){
+          ctx.globalCompositeOperation = blendType;
+          ctx.fillStyle = color;
+        }
+        ctx.drawImageScaled(p, c.x - scene.displayPxX, c.y - scene.displayPxY, width, height);
+        ctx.restore();      
       }
-      ctx.drawImageScaled(p, c.x - scene.displayPxX, c.y - scene.displayPxY, width, height);
-      ctx.restore();      
     }
   }
   

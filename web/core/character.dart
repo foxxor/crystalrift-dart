@@ -358,14 +358,16 @@ class Character implements Graphic{
       if(!curPos.nextToThis(faceDir, chased.curPos) && !isMoving()){
         moveTo(chased.curPos.x, chased.curPos.y);
       }
-      
     }
     screenPosPx.x = curPosPx.x - scene.displayPxX;
     screenPosPx.y = curPosPx.y - scene.displayPxY;
+    if(scene.inCamera(this.curPosPx)){
+      return;
+    }
     ctx.drawImageToRect(this.characterImage , new Rectangle(screenPosPx.x, screenPosPx.y,
-        TILE_SIZE, TILE_SIZE), //Rect to paint the image
-        sourceRect: new Rectangle(((selectedChar) + (frame / ANIMATION_SPEED).floor() ) * TILE_SIZE, 
-            (TILE_SIZE * faceDir) + characterRow, 
-            TILE_SIZE, TILE_SIZE)); //Size of the image
+      TILE_SIZE, TILE_SIZE), //Rect to paint the image
+      sourceRect: new Rectangle(((selectedChar) + (frame / ANIMATION_SPEED).floor() ) * TILE_SIZE, 
+          (TILE_SIZE * faceDir) + characterRow, 
+          TILE_SIZE, TILE_SIZE)); //Size of the image
   }
 }

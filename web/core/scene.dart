@@ -97,17 +97,13 @@ class Scene{
     Iterator<MapAnimation> animationsIte = activeAnimations.iterator;
     while(animationsIte.moveNext()){
       MapAnimation a = animationsIte.current;
-      if(inCamera(a.curPosPx)){
-        a.update();
-      }
+      a.update();
     }
     
     Iterator<Particle> particlesIte = particles.iterator;
       while(particlesIte.moveNext()){
       Particle p = particlesIte.current;
-      if(inCamera(p.curPosPx)){
-        p.update();
-      }
+      p.update();
     }
     
     Iterator<Action> eventIte = activeEvents.iterator;

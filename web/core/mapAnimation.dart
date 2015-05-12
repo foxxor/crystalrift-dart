@@ -46,10 +46,12 @@ class MapAnimation implements Graphic{
   }
   
   void update(){
-    num frameX = animationFrame % 5;
-    num frameY = (animationFrame / 5).floor();
-    ctx.drawImageScaledFromSource(animationImage, ANIMATION_FRAME_WIDTH * frameX, ANIMATION_FRAME_HEIGHT * frameY, 
-        ANIMATION_FRAME_WIDTH, ANIMATION_FRAME_HEIGHT, curPosPx.x - scene.displayPxX, curPosPx.y - scene.displayPxY, TILE_SIZE, TILE_SIZE+10);
+    if(scene.inCamera(this.curPosPx)){
+      num frameX = animationFrame % 5;
+      num frameY = (animationFrame / 5).floor();
+      ctx.drawImageScaledFromSource(animationImage, ANIMATION_FRAME_WIDTH * frameX, ANIMATION_FRAME_HEIGHT * frameY, 
+          ANIMATION_FRAME_WIDTH, ANIMATION_FRAME_HEIGHT, curPosPx.x - scene.displayPxX, curPosPx.y - scene.displayPxY, TILE_SIZE, TILE_SIZE+10);
+    }
   }
   
   void loadGraphic(String src){
