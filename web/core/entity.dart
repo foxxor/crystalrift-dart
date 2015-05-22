@@ -134,6 +134,9 @@ class Entity implements Graphic{
     if(isMoving()){
       updateMove();
     }
+    if(!scene.inCamera(this.curPosPx)){
+      return;
+    }
     
     _ctx.drawImageToRect(this.itemImage , new Rectangle( curPosPx.x - scene.displayPxX, curPosPx.y - scene.displayPxY, TILE_SIZE, TILE_SIZE), //Rect to paint the image
         sourceRect: new Rectangle( tile.xImg, tile.yImg, TILE_SIZE, TILE_SIZE)); //Size of the image

@@ -50,6 +50,7 @@ class Message{
       else { line = testLine; }
     }
     //Stroke
+    print(y);
     _ctx.strokeText(line, x, y);
     _ctx.fillText(line, x, y);
     _ctx.restore();

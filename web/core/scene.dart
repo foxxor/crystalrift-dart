@@ -14,8 +14,8 @@ import 'actor.dart';
 import 'entity.dart';
 import 'tile.dart';
 import 'action.dart';
-import 'mapAnimation.dart';
-import 'particle.dart';
+import 'effects/mapAnimation.dart';
+import 'effects/particle.dart';
 import 'dart:math' as Math;
 
 class Scene{
@@ -39,7 +39,7 @@ class Scene{
   int displayX;
   int displayY;
   
-  //Camera offset tiles
+  //Camera offset px
   int displayPxX;
   int displayPxY;
   

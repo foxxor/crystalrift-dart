@@ -94,7 +94,7 @@ void doAction(){
     }else if(!c.trigger){
       c.trigger = true;
       if(c.message.isNotEmpty){
-        //scene.createMessage(c);
+        scene.createMessage(c);
       }
     }
   }

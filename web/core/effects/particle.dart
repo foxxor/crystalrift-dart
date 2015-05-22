@@ -6,10 +6,10 @@ library particle;
 
 import 'dart:html';
 import 'dart:async';
-import 'globals.dart';
-import 'scene.dart';
-import '../helpers/coordinate.dart';
-import 'graphic.dart';
+import '../globals.dart';
+import '../scene.dart';
+import '../../helpers/coordinate.dart';
+import '../graphic.dart';
 import 'dart:math' as Math;
 
 class Particle implements Graphic{

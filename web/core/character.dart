@@ -49,7 +49,8 @@ class Character implements Graphic{
   bool trigger;
   //Parent scene calling this objetc
   Scene scene;
-
+  
+  // Current position offset in tiles
   int offsetX;
   int offsetY;
   
@@ -361,7 +362,7 @@ class Character implements Graphic{
     }
     screenPosPx.x = curPosPx.x - scene.displayPxX;
     screenPosPx.y = curPosPx.y - scene.displayPxY;
-    if(scene.inCamera(this.curPosPx)){
+    if(!scene.inCamera(this.curPosPx)){
       return;
     }
     ctx.drawImageToRect(this.characterImage , new Rectangle(screenPosPx.x, screenPosPx.y,
