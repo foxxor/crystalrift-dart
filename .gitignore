@@ -5,3 +5,5 @@
 *.idea
 npm-debug.log
 node_modules
+!server/app.js
+!server/server.js
