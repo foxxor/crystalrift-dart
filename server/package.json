@@ -1,0 +1,21 @@
+{
+  "name": "CrystalRiftServer",
+  "description": "Container server for crystal rift dart project.",
+  "version": "0.1.0",
+  "authors": [
+    "Jorge Vargas <vargasjorgeluis@gmail.com>"
+  ],
+  "homepage": "https://github.com/foxxor/crystalrift-dart",
+  "bugs": {
+    "url": "https://github.com/foxxor/crystalrift-dart/issues"
+  },
+  "private": false,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./server"
+  },
+  "dependencies": {
+    "express": "~4.2.0",
+    "morgan": "~1.0.0"
+  }
+}
