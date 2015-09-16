@@ -29,6 +29,8 @@ void main() {
   }else{
     sceneWidth = window.innerWidth;
   }
+
+  // Calculate real viewport size omiting the title height
   if( (MAP_HEIGHT_TILES * TILE_SIZE) < (window.innerHeight - title.scrollHeight)){
     sceneHeight = (((window.innerHeight - title.scrollHeight) - (MAP_HEIGHT_TILES * TILE_SIZE)) / 2).floor();
   }else{
@@ -85,16 +87,16 @@ void setupKeys(){
 void doAction(){
   windowInfo.moveLines();
   //Character message if in front
-  Actor c = scene.getCharacterInFront();
-  if(c != null){
-    if(c.combatable){
-      c.damage(10);
-      scene.createAnimation(c);
-      c.chaseCharacter(scene.player);
-    }else if(!c.trigger){
-      c.trigger = true;
-      if(c.message.isNotEmpty){
-        scene.createMessage(c);
+  Actor character = scene.getCharacterInFront();
+  if(character != null){
+    if(character.combatable){
+      character.damage(10);
+      scene.createAnimation(character);
+      character.chaseCharacter(scene.player);
+    }else if(!character.trigger){
+      character.trigger = true;
+      if(character.message.isNotEmpty){
+        scene.createMessage(character);
       }
     }
   }

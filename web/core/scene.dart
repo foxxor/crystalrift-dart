@@ -81,42 +81,42 @@ class Scene{
     }
     gameMap.update();
     
-    Iterator<Actor> charas = actors.iterator;
-    while(charas.moveNext()){
-      Actor c = charas.current;
-      c.update();
+    Iterator<Actor> characters = actors.iterator;
+    while(characters.moveNext()){
+      Actor character = characters.current;
+      character.update();
     }
     
-    Iterator<Entity> entitiesIte = entities.iterator;
-    while(entitiesIte.moveNext()){
-      Entity i = entitiesIte.current;
-      i.update();
+    Iterator<Entity> entitiesIterator = entities.iterator;
+    while(entitiesIterator.moveNext()){
+      Entity entity = entitiesIterator.current;
+      entity.update();
     }
     player.update();
     
-    Iterator<MapAnimation> animationsIte = activeAnimations.iterator;
-    while(animationsIte.moveNext()){
-      MapAnimation a = animationsIte.current;
-      a.update();
+    Iterator<MapAnimation> animationsIterator = activeAnimations.iterator;
+    while(animationsIterator.moveNext()){
+      MapAnimation animation = animationsIterator.current;
+      animation.update();
     }
     
-    Iterator<Particle> particlesIte = particles.iterator;
-      while(particlesIte.moveNext()){
-      Particle p = particlesIte.current;
-      p.update();
+    Iterator<Particle> particlesIterator = particles.iterator;
+      while(particlesIterator.moveNext()){
+      Particle particle = particlesIterator.current;
+      particle.update();
     }
     
-    Iterator<Action> eventIte = activeEvents.iterator;
-    while(eventIte.moveNext()){
-      Action e = eventIte.current;
-      e.update();
+    Iterator<Action> eventIterator = activeEvents.iterator;
+    while(eventIterator.moveNext()){
+      Action event = eventIterator.current;
+      event.update();
     }
   }
   
   // Verifies if a coordinate is displayed by the camera
-  bool inCamera(Coordinate c){
-    if(c.x >= (displayPxX - TILE_SIZE) && c.y >= (displayPxY - TILE_SIZE) &&
-        c.x < (displayPxX + canvas.width + TILE_SIZE) && c.y < (displayPxY + canvas.height + TILE_SIZE)){
+  bool inCamera(Coordinate coord){
+    if(coord.x >= (displayPxX - TILE_SIZE) && coord.y >= (displayPxY - TILE_SIZE) &&
+        coord.x < (displayPxX + canvas.width + TILE_SIZE) && coord.y < (displayPxY + canvas.height + TILE_SIZE)){
       return true;
     }
     return false;
