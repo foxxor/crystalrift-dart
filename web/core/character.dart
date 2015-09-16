@@ -280,15 +280,17 @@ class Character implements Graphic{
   
   int getCurrentDirection(){
     switch (faceDir) {
-      case 3: //up
-        return UP;
       case 0: //down
         return DOWN;
       case 1: //left
         return LEFT;
       case 2: //right
         return RIGHT;
+      case 3: //up
+        return UP;
     }
+
+    return -1;
   }
   
   void loadGraphic(String src){
@@ -356,7 +358,7 @@ class Character implements Graphic{
       stopMove();
     }
     if(chasing){
-      if(!curPos.nextToThis(faceDir, chased.curPos) && !isMoving()){
+      if(!curPos.nextToThis(faceDir, chased.curPos) ){
         moveTo(chased.curPos.x, chased.curPos.y);
       }
     }

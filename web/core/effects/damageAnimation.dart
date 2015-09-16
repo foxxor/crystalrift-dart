@@ -34,7 +34,7 @@ class DamageAnimation implements Graphic{
   
   void startAnimation(){
     const ms = const Duration(milliseconds: 100);
-    Timer t = new Timer( ms, updateFrame);
+    Timer timer = new Timer( ms, updateFrame);
   }
   
   void updateFrame(){
@@ -52,8 +52,9 @@ class DamageAnimation implements Graphic{
     if(scene.inCamera(this.curPosPx)){
       num frameX = animationFrame % 5;
       num frameY = (animationFrame / 5).floor();
+
       ctx.drawImageScaledFromSource(animationImage, ANIMATION_FRAME_WIDTH * frameX, ANIMATION_FRAME_HEIGHT * frameY, 
-          ANIMATION_FRAME_WIDTH, ANIMATION_FRAME_HEIGHT, curPosPx.x - scene.displayPxX, curPosPx.y - scene.displayPxY, TILE_SIZE, TILE_SIZE+10);
+          ANIMATION_FRAME_WIDTH, ANIMATION_FRAME_HEIGHT, curPosPx.x - scene.displayPxX, curPosPx.y - scene.displayPxY, TILE_SIZE, TILE_SIZE + 10);
     }
   }
   

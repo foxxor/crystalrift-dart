@@ -22,20 +22,20 @@ class Action {
   
   void update(){
     if(type == EVENT_TYPE_MESSAGE){
-      Character c = object;
-      Message m = event;
-      m.x = c.screenPosPx.x;
-      m.y = c.screenPosPx.y;
-      m.update();
+      Character character = object;
+      Message message = event;
+      message.x = character.screenPosPx.x;
+      message.y = character.screenPosPx.y;
+      message.update();
     }else if(type == EVENT_TYPE_ANIMATION){
-      Character c = object;
-      MapAnimation a = event;
-      a.curPosPx.x = c.screenPosPx.x;
-      a.curPosPx.y = c.screenPosPx.y;
-      a.update();
+      Character character = this.object;
+      MapAnimation animation = this.event;
+      animation.curPosPx.x = character.curPosPx.x;
+      animation.curPosPx.y = character.curPosPx.y;
+      animation.update();
     }else if(type == EVENT_TYPE_FIGHT_ANIMATION){
-      MapAnimation a = event;
-      a.update();
+      MapAnimation animation = this.event;
+      animation.update();
     }
   }
   
