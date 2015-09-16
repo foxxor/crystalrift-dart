@@ -4,7 +4,6 @@
 library mapset;
 
 import 'dart:html';
-import 'dart:async';
 import 'globals.dart';
 import 'graphic.dart';
 import 'scene.dart';
@@ -165,6 +164,9 @@ class MapSet implements Graphic{
     
     int offsetFinalX = (canvas.width / TILE_SIZE).ceil() + offsetInitX + 1; // Added 1 to prevent showing not loaded tiles
     int offsetFinalY = (canvas.height / TILE_SIZE).ceil() + offsetInitY + 1; // Added 1 to prevent showing not loaded tiles
+
+    offsetFinalX = ( this.width < offsetFinalX ? this.width : offsetFinalX );
+    offsetFinalY = ( this.height < offsetFinalY ? this.height : offsetFinalY ); 
     
     for (var e = offsetInitY; e < offsetFinalY; e++){
       for (var i = offsetInitX; i < offsetFinalX; i++){
