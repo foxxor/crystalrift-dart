@@ -19,16 +19,30 @@ import 'effects/particle.dart';
 import 'dart:math' as Math;
 
 class Scene{
+  //Graphic vars
   HtmlDocument doc;
   CanvasRenderingContext2D ctx;
   CanvasElement canvas;
   
+  // The current visible map
   MapSet gameMap;
-  List<Actor> actors; //List of current characters
+
+  // The current character playing
   Actor player;
+
+  // List of current characters
+  List<Actor> actors;
+
+  // Entities in the scene
   List<Entity> entities;
+
+  // Currently active events
   List<Action> activeEvents;
+
+  // Currently active animation
   List<MapAnimation> activeAnimations;
+
+  // Currently action particle effects
   List<Particle> particles;
   
   //Scene size

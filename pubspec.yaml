@@ -1,6 +1,6 @@
 name: Crystal_Rift
 author: Foxxor
-description: A sample web application
+description: An HTML5 2D game engine using dart and canvas.
 homepage: https://github.com/foxxor/crystalrift-dart
 documentation: https://github.com/foxxor/crystalrift-dart
 dependencies:

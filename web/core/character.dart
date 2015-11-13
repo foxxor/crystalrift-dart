@@ -23,30 +23,43 @@ class Character implements Graphic{
   
   // Current position in tiles
   Coordinate curPos;
+
   // Current position in pixels
   Coordinate curPosPx;
-// Current position relative to screen in pixels
+
+  // Current position relative to screen in pixels
   Coordinate screenPosPx;
+
   // Current animation frame
   int frame;
+
   // Facing direction
   int faceDir;
+
   // Current selected char
   int selectedChar;
+
   // Current selected char row
   int characterRow;
-  // Move this guy like crazy
+
+  // Make this character move randomly
   bool randomMovement;
+
   // Is this object pasable?
   bool phasable;
+
   // Character movement speed
   num speed;
+
   // Character is chasing?
   bool chasing;
+
   // Who is this chasing?
   Character chased;
+
   // Event is executing?
   bool trigger;
+  
   //Parent scene calling this objetc
   Scene scene;
   

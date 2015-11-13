@@ -73,7 +73,6 @@ void setupCanvas(){
 }
 
 //Keyboard and keybinding
-
 void setupKeys(){
   canvas.onKeyDown.listen((e) {
     reactKey(e);
