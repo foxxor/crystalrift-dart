@@ -40,21 +40,21 @@ class Coordinate {
   }
   
   num distanceToThis(Coordinate c){
-    return (x- c.x).abs() + (y-c.y).abs();
+    return (x - c.x).abs() + (y - c.y).abs();
   }
   
   int facingThis(int face, Coordinate coor){
-    num deltaX = ((coor.x - x)/TILE_SIZE);
-    num deltaY = ((coor.y - y)/TILE_SIZE);
+    num deltaX = ((coor.x - x) / TILE_SIZE);
+    num deltaY = ((coor.y - y) / TILE_SIZE);
     
     if( deltaX == 0 && deltaY.ceil() == 1 && face == UP){
-      return DOWN; //face down
+      return DOWN;
     }else if( deltaX == 0 && deltaY.round() == -1 && face == DOWN){
-      return UP; //face up
+      return UP;
     }else if( deltaX.ceil() == 1 && deltaY == 0 && face == LEFT){
-      return RIGHT; //face left
+      return RIGHT;
     }else if( deltaX.round() == -1 && deltaY == 0 && face == RIGHT){
-      return LEFT; //face right
+      return LEFT;
     }
     
     return -1;

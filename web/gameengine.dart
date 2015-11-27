@@ -85,7 +85,7 @@ void setupKeys(){
 // Function that generate the actions based in the context of the game.
 void doAction(){
   windowInfo.moveLines();
-  //Character message if in front
+  // Trigger action for the character in front, if any.
   Actor character = scene.getCharacterInFront();
   if(character != null){
     if(character.combatable){

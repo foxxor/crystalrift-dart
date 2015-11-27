@@ -55,7 +55,7 @@ const int ACTOR_BEHAVIOUR_GOOD = 1;
 const int ACTOR_BEHAVIOUR_NEUTRAL = 2;
 const int ACTOR_BEHAVIOUR_FOE = 3;
 
-const int MAX_PATHFINDING_ITERATIONS = 800;
+const int MAX_PATHFINDING_ITERATIONS = 100;
 
 //Types of actors
 const int ACTOR_COMBAT_FLEE = 1;

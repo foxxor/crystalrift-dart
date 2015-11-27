@@ -144,7 +144,7 @@ class Character implements Graphic{
       List neighbours = getNeighbours(current, goal);
       Iterator<Coordinate> neighboursIte = neighbours.iterator;
       Coordinate bestNode;
-      num bestDistance = 999999;
+      num bestDistance = 100;
       while(neighboursIte.moveNext()){
         Coordinate node = neighboursIte.current;
         if(node.isTheSame(goal)){
@@ -373,6 +373,7 @@ class Character implements Graphic{
     if(chasing){
       if(!curPos.nextToThis(faceDir, chased.curPos) ){
         moveTo(chased.curPos.x, chased.curPos.y);
+        faceDirection(curPos.facingThis(faceDir, chased.curPos));
       }
     }
     screenPosPx.x = curPosPx.x - scene.displayPxX;

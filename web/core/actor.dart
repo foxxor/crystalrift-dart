@@ -31,6 +31,8 @@ class Actor extends Character{
   int attack;
   // Defense modifier against damage
   int defense;
+  // If the actor is dead
+  bool dead;
   
   ImageElement barHpImage;
   ImageElement barMpImage;
@@ -41,7 +43,7 @@ class Actor extends Character{
   Actor(Coordinate curPos, int charSprite, int charRow, Scene scene, String imageSource, [ num speed = 1]) : 
           super( curPos, charSprite, charRow, scene, imageSource, speed);
   
-  void initializeActor( bool combatable, int behaviour, [int maxLife = 0, int maxEnergy = 0, String message = "", int attack = 0, int defense = 0]){
+  void initializeActor( bool combatable, int behaviour, [int maxLife = 0, int maxEnergy = 0, String message = "", int attack = 0, int defense = 0, bool dead = false]){
     this.combatable = combatable;
     this.behaviour = behaviour;
     this.maxLife = maxLife;
@@ -51,6 +53,7 @@ class Actor extends Character{
     this.message = message;
     this.attack = attack;
     this.defense = defense;
+    this.dead = dead;
     loadBars();
   }
   
@@ -65,14 +68,21 @@ class Actor extends Character{
   
   void damage(int numAttack){
     this.life = this.life - (numAttack - (this.defense * 0.1).floor());
+    if(this.life <= 0){
+      this.dead = true;
+    }   
   }
   
   void update(){
     super.update();
-    if(combatable && life > 0){
+    if(combatable && !this.dead){
       int barWeigth = (TILE_SIZE * (life / maxLife)).floor();
       ctx.drawImageScaled(barHpImage, screenPosPx.x, screenPosPx.y + TILE_SIZE + 3, 
           barWeigth, 3);
+    }
+
+    if(this.dead){
+      this.chasing = false;
     }
   }
   
