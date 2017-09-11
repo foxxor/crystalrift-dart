@@ -94,36 +94,52 @@ class Scene{
       stopMove();
     }
     gameMap.update();
-    
-    Iterator<Actor> characters = actors.iterator;
-    while(characters.moveNext()){
-      Actor character = characters.current;
-      character.update();
-    }
-    
+    player.update();
+
+    updateEntities();
+    updateCharacters();
+    updateAnimations();
+    updateParticles();
+    updateEvents();
+  }
+
+  Future updateEntities() async {
     Iterator<Entity> entitiesIterator = entities.iterator;
     while(entitiesIterator.moveNext()){
       Entity entity = entitiesIterator.current;
       entity.update();
     }
-    player.update();
-    
-    Iterator<MapAnimation> animationsIterator = activeAnimations.iterator;
-    while(animationsIterator.moveNext()){
-      MapAnimation animation = animationsIterator.current;
-      animation.update();
-    }
-    
-    Iterator<Particle> particlesIterator = particles.iterator;
-      while(particlesIterator.moveNext()){
-      Particle particle = particlesIterator.current;
-      particle.update();
-    }
-    
+  }
+
+  Future updateEvents() async {
     Iterator<Action> eventIterator = activeEvents.iterator;
     while(eventIterator.moveNext()){
       Action event = eventIterator.current;
       event.update();
+    }
+  }
+
+  Future updateCharacters() async {
+    Iterator<Actor> characters = actors.iterator;
+    while(characters.moveNext()){
+      Actor character = characters.current;
+      character.update();
+    }
+  }
+
+  Future updateParticles() async {
+    Iterator<Particle> particlesIterator = particles.iterator;
+    while(particlesIterator.moveNext()){
+      Particle particle = particlesIterator.current;
+      particle.update();
+    }
+  }
+
+  Future updateAnimations() async {
+    Iterator<MapAnimation> animationsIterator = activeAnimations.iterator;
+    while(animationsIterator.moveNext()){
+      MapAnimation animation = animationsIterator.current;
+      animation.update();
     }
   }
   

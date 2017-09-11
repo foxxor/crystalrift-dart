@@ -4,6 +4,7 @@
 library mapset;
 
 import 'dart:html';
+import 'dart:async';
 import 'globals.dart';
 import 'graphic.dart';
 import 'scene.dart';
@@ -158,7 +159,7 @@ class MapSet implements Graphic{
     freeTile(xi, yi);
   }
   
-  void update(){
+  void update() {
     int offsetInitX = (scene.displayPxX / TILE_SIZE).floor();
     int offsetInitY = (scene.displayPxY / TILE_SIZE).floor();
     

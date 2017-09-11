@@ -60,5 +60,3 @@ class Message{
     wrapText();
   }
 }
-
-
