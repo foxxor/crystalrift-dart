@@ -76,15 +76,13 @@ class Actor extends Character{
   void update(){
     super.update();
     if(combatable && !this.dead){
-      int barWeigth = (TILE_SIZE * (life / maxLife)).floor();
-      ctx.drawImageScaled(barHpImage, screenPosPx.x, screenPosPx.y + TILE_SIZE + 3, 
-          barWeigth, 3);
+      int barWeight = (TILE_SIZE * (life / maxLife)).floor();
+      ctx.drawImageScaled(barHpImage, screenPosPx.x, screenPosPx.y + TILE_SIZE + 3,
+          barWeight, 3);
     }
 
     if(this.dead){
       this.chasing = false;
     }
   }
-  
-  
 }

@@ -21,30 +21,42 @@ HtmlDocument _doc;
 CanvasRenderingContext2D _ctx;
 CanvasRenderingContext2D _ctxTile;
 CanvasRenderingContext2D mapCtx;
-// Tileset menu canvas
-CanvasElement tilesetCanvas;
-// Selected Tile canvas
-CanvasElement tileCanvas;
-// Map canvas
-CanvasElement mapCanvas;
-ImageElement image;
-ImageElement imageTile;
+
+// HTML containers
 var tileElement;
 var mapElement;
 var navigation;
 var windows;
+
+// Tileset menu canvas
+CanvasElement tilesetCanvas;
+
+// Selected Tile canvas
+CanvasElement tileCanvas;
+
+// Map canvas
+CanvasElement mapCanvas;
+ImageElement image;
+ImageElement imageTile;
+
 int currentLayer;
 String currentTool;
+
 // List of the maps
 List<EditorMap> maps;
+
 // Tileset menu
 MenuTileset menuTileset;
+
 // Tile selector
 TileSelector tileSelector;
+
 // Current tool in use
 var toolSubscription;
+
 // Current map visible
 EditorMap currentMap;
+
 // Object with files information
 FileScan files;
 
@@ -187,8 +199,8 @@ void loadMap(){
 void loadMapSelection(){
   int dragX, dragY;
   mapCanvas.onMouseUp.listen((MouseEvent e){
-    int x = ((e.client.x + mapElement.scrollLeft - 360)/TILE_SIZE).ceil();
-    int y = ((e.client.y + mapElement.scrollTop - 10)/TILE_SIZE).ceil();
+    int x = ((e.client.x - mapElement.offsetLeft) / TILE_SIZE).ceil();
+    int y = ((e.client.y - mapElement.offsetTop) / TILE_SIZE).ceil();
     if(!currentMap.addingEvent && !windows.querySelector('#drawWindow').classes.contains('hide')){
       if(currentMap.selectionMode == SINGLE_TILE_SELECTION){
         if(dragX != x || dragY != y ){
@@ -227,8 +239,8 @@ void loadMapSelection(){
   });
   
   mapCanvas.onMouseDown.listen((MouseEvent e){
-    int x = ((e.client.x + mapElement.scrollLeft - 360)/TILE_SIZE).ceil() -1;
-    int y = ((e.client.y + mapElement.scrollTop - 10)/TILE_SIZE).ceil() -1;
+    int x = ((e.client.x - mapElement.offsetLeft)/TILE_SIZE).ceil() -1;
+    int y = ((e.client.y - mapElement.offsetTop)/TILE_SIZE).ceil() -1;
     if(!currentMap.addingEvent && !windows.querySelector('#drawWindow').classes.contains('hide')){
       dragX = x;
       dragY = y;
@@ -253,8 +265,8 @@ void loadMapSelection(){
   
   //Update the selector position
   mapCanvas.onMouseMove.listen((MouseEvent e){
-    int x = ((e.client.x + mapElement.scrollLeft - 360)/TILE_SIZE).ceil() -1;
-    int y = ((e.client.y + mapElement.scrollTop - 10)/TILE_SIZE).ceil() -1;
+    int x = ((e.client.x - mapElement.offsetLeft) / TILE_SIZE).ceil() - 1;
+    int y = ((e.client.y - mapElement.offsetTop) / TILE_SIZE).ceil() - 1;
     currentMap.updateSelector(x, y);
     currentMap.update(true);
   });
@@ -282,18 +294,18 @@ void loadTileSelection(){
 void tileSelectorBinds(){
   int dragX, dragY;
   tilesetCanvas.onMouseDown.listen((MouseEvent e){
-    int x = ((e.client.x + tileElement.scrollLeft)/TILE_SIZE).ceil() - 1;
-    int y = ((e.client.y + tileElement.scrollTop)/TILE_SIZE).ceil() - 1;
+    int x = ((e.client.x + tileElement.scrollLeft) / TILE_SIZE).ceil() - 1;
+    int y = ((e.client.y + tileElement.scrollTop) / TILE_SIZE).ceil() - 1;
     dragX = x;
     dragY = y;
     menuTileset.beginSelection();
     menuTileset.update();
   });
   
-  //This is to multiple select tiles in the tileset area
+  //This is to multiple select tiles in the tileset container
   tilesetCanvas.onMouseUp.listen((MouseEvent e){
-    int x = ((e.client.x + tileElement.scrollLeft)/TILE_SIZE).ceil();
-    int y = ((e.client.y + tileElement.scrollTop)/TILE_SIZE).ceil();
+    int x = ((e.client.x + tileElement.scrollLeft) / TILE_SIZE).ceil();
+    int y = ((e.client.y + tileElement.scrollTop) / TILE_SIZE).ceil();
     if(dragX != x || dragY != y ){
       int iX = (dragX > x ? x : dragX );
       int iY = (dragY > y ? y : dragY );
@@ -303,7 +315,7 @@ void tileSelectorBinds(){
       int dY = (iY - fY).abs();
       
       if(dX == 1 && dY == 1){
-        Tile tileSelected = new Tile(x -1, y -1);
+        Tile tileSelected = new Tile(x - 1, y - 1);
         tileSelector.setSelection(tileSelected);
         tileSelector.setSelectionMode(SINGLE_TILE_SELECTION);
         currentMap.setSelection(tileSelected);
@@ -333,8 +345,8 @@ void tileSelectorBinds(){
     
   //Update the selector position
   tilesetCanvas.onMouseMove.listen((MouseEvent e){
-    int x = ((e.client.x + tileElement.scrollLeft)/TILE_SIZE).ceil() -1;
-    int y = ((e.client.y + tileElement.scrollTop)/TILE_SIZE).ceil() -1;
+    int x = ((e.client.x + tileElement.offsetLeft) / TILE_SIZE).ceil() - 1;
+    int y = ((e.client.y + tileElement.offsetTop) / TILE_SIZE).ceil() - 1;
     menuTileset.updateSelector(x, y);
     menuTileset.update();
   });

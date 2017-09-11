@@ -43,5 +43,4 @@ class Matrix {
     }
     return map;
   }
-  
 }

@@ -242,7 +242,7 @@ class Scene{
   
   void loadProperties(){
     HttpRequest.getString("data/characters.json").then(loadCharacters);
-    HttpRequest.getString("data/structures.json").then(loadStructures);
+    HttpRequest.getString("data/structures.json").then(loadBuildings);
     HttpRequest.getString("data/entities.json").then(loadEntities);
   }
   
@@ -275,13 +275,13 @@ class Scene{
     }
   }
   
-  void loadStructures(String responseText) {
+  void loadBuildings(String responseText) {
     gameMap.structuresData = JSON.decode(responseText);
     gameMap.addBuilding(0, 6,5);
     gameMap.addRandomDetails();
   }
   
-  void createMessage(Actor char){
+  Future createMessage(Actor char) async {
     Message msg = new Message(ctx, char.message, char.screenPosPx.x, char.screenPosPx.y, 100, 20);
     const ms = const Duration(milliseconds: 5000);
     new Timer( ms, removeEvent);
@@ -289,7 +289,7 @@ class Scene{
     activeEvents.add(event);
   }
   
-  void createAnimation(Actor char){
+  Future createAnimation(Actor char) async {
     Coordinate coord = new Coordinate(0,0);
     MapAnimation animation = new MapAnimation(this, coord, 'light_001');
     Action event = new Action(char, animation, EVENT_TYPE_ANIMATION);
@@ -298,7 +298,7 @@ class Scene{
     new Timer( const Duration(milliseconds: 500), removeEvent);
   }
   
-  void removeEvent(){
+  Future removeEvent() async {
     Action event = activeEvents.elementAt(0);
     if(event.type == EVENT_TYPE_MESSAGE){
       Actor char = event.object;
@@ -307,26 +307,26 @@ class Scene{
     activeEvents.removeAt(0);
   }
   
-  bool shallPass(int face, var c){
+  bool shallPass(int face, var character){
     Coordinate newCoords;
-    if(face == UP && c.curPos.y >= 1){
-      newCoords = new Coordinate(c.curPos.x, c.curPos.y - 1);
-    }else if(face == DOWN && c.curPos.y < gameMap.eventMapset.rows -1){
-      newCoords = new Coordinate(c.curPos.x, c.curPos.y + 1);
-    }else if(face == LEFT && c.curPos.x >= 1){
-      newCoords = new Coordinate(c.curPos.x - 1, c.curPos.y);
-    }else if(face == RIGHT && c.curPos.x < gameMap.eventMapset.cols -1){
-      newCoords = new Coordinate(c.curPos.x + 1, c.curPos.y);
+    if(face == UP && character.curPos.y >= 1){
+      newCoords = new Coordinate(character.curPos.x, character.curPos.y - 1);
+    }else if(face == DOWN && character.curPos.y < gameMap.eventMapset.rows -1){
+      newCoords = new Coordinate(character.curPos.x, character.curPos.y + 1);
+    }else if(face == LEFT && character.curPos.x >= 1){
+      newCoords = new Coordinate(character.curPos.x - 1, character.curPos.y);
+    }else if(face == RIGHT && character.curPos.x < gameMap.eventMapset.cols -1){
+      newCoords = new Coordinate(character.curPos.x + 1, character.curPos.y);
     }else{
       return false;
     }
     
-    return objectIsPassable(c, newCoords, face);
+    return objectIsPassable(character, newCoords, face);
   }
   
-  bool objectIsPassable( var c, Coordinate newCoords, int face){
+  bool objectIsPassable( var character, Coordinate newCoords, int face){
     var tileObject = gameMap.eventMapset.get(newCoords.x, newCoords.y);
-    if(!identical(tileObject, c) && tileObject != null){
+    if(!identical(tileObject, character) && tileObject != null){
       if(tileObject is Actor && !tileObject.phasable ){
         return false;
       }else if(tileObject is Tile){
@@ -340,7 +340,7 @@ class Scene{
       }
     }
     
-    if(c != player){
+    if(character != player){
       bool nextTo = player.curPos.nextToThis2(newCoords);
       if(!player.phasable && nextTo){
         return false;
@@ -361,5 +361,4 @@ class Scene{
     }
     return null;
   }
-  
 }
