@@ -1,6 +1,7 @@
-/*
-  Copyright (C) 2013 Jorge Vargas <vargasjorgeluis@gmail.com>
-*/
+/**
+ * Matrix data structure
+ * A 2-dimensional array that store generic values of each positions
+ */
 
 library matrix;
 

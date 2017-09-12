@@ -201,27 +201,30 @@ void loadMapSelection(){
   mapCanvas.onMouseUp.listen((MouseEvent e){
     int x = ((e.client.x - mapElement.offsetLeft) / TILE_SIZE).ceil();
     int y = ((e.client.y - mapElement.offsetTop) / TILE_SIZE).ceil();
+
     if(!currentMap.addingEvent && !windows.querySelector('#drawWindow').classes.contains('hide')){
-      if(currentMap.selectionMode == SINGLE_TILE_SELECTION){
-        if(dragX != x || dragY != y ){
-          int iX = (dragX > x ? x: dragX );
-          int iY = (dragY > y ? y: dragY );
-          int fX = (dragX > x ? dragX: x );
-          int fY = (dragY > y ? dragY: y );
-          
-            for(num e = iX; e < fX; e++){
-              for(num i = iY; i < fY; i++){
-                if(currentTool == "pencil"){
-                  currentMap.setTile(e, i, tileSelector.selection.x, tileSelector.selection.y, currentLayer);
-                }else{ //Eraser
-                  currentMap.setTile(e, i, 0, 0, currentLayer);
-                }
+      if(currentMap.selectionMode == SINGLE_TILE_SELECTION) {
+        if (dragX != x || dragY != y) {
+          int iX = (dragX > x ? x : dragX);
+          int iY = (dragY > y ? y : dragY);
+          int fX = (dragX > x ? dragX : x);
+          int fY = (dragY > y ? dragY : y);
+
+          for (num e = iX; e < fX; e++) {
+            for (num i = iY; i < fY; i++) {
+              if (currentTool == "pencil") {
+                currentMap.setTile(
+                    e, i, tileSelector.selection.x, tileSelector.selection.y,
+                    currentLayer);
+              } else { //Eraser
+                currentMap.setTile(e, i, 0, 0, currentLayer);
               }
             }
-            currentMap.stopSelection();
-            currentMap.update();
+          }
+          currentMap.stopSelection();
+          currentMap.update();
         }
-      }else if(currentMap.addingEvent && !windows.querySelector('#eventWindow').classes.contains('hide')){ 
+      }else if(currentMap.addingEvent && !windows.querySelector('#eventWindow').classes.contains('hide')){
         int xTile = 0;
         for(num e = x - 1; e < x + currentMap.selection.cols - 1; e++){
           int yTile = 0;
@@ -234,13 +237,22 @@ void loadMapSelection(){
         }
         currentMap.stopSelection();
         currentMap.update();
+      }else if(currentMap.selectionMode == MULTI_TILE_SELECTION && currentTool == "pencil") {
+        for (var i = 0; i < tileSelector.selection.rows; i++) {
+          for (var e = 0; e < tileSelector.selection.cols; e++) {
+            currentMap.setTile(x+e-1, y+i-1, tileSelector.selection.get(e, i).x,
+                tileSelector.selection.get(e, i).y, currentLayer);
+          }
+        }
+        currentMap.stopSelection();
+        currentMap.update();
       }
     }
   });
   
   mapCanvas.onMouseDown.listen((MouseEvent e){
-    int x = ((e.client.x - mapElement.offsetLeft)/TILE_SIZE).ceil() -1;
-    int y = ((e.client.y - mapElement.offsetTop)/TILE_SIZE).ceil() -1;
+    int x = ((e.client.x - mapElement.offsetLeft) / TILE_SIZE).ceil() - 1;
+    int y = ((e.client.y - mapElement.offsetTop) / TILE_SIZE).ceil() - 1;
     if(!currentMap.addingEvent && !windows.querySelector('#drawWindow').classes.contains('hide')){
       dragX = x;
       dragY = y;
@@ -345,8 +357,8 @@ void tileSelectorBinds(){
     
   //Update the selector position
   tilesetCanvas.onMouseMove.listen((MouseEvent e){
-    int x = ((e.client.x + tileElement.offsetLeft) / TILE_SIZE).ceil() - 1;
-    int y = ((e.client.y + tileElement.offsetTop) / TILE_SIZE).ceil() - 1;
+    int x = ((e.client.x + tileElement.scrollLeft) / TILE_SIZE).ceil() - 1;
+    int y = ((e.client.y + tileElement.scrollTop) / TILE_SIZE).ceil() - 1;
     menuTileset.updateSelector(x, y);
     menuTileset.update();
   });

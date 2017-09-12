@@ -37,9 +37,9 @@ class MenuTileset{
   }
   
   void loadTileset(){
-    num cols = image.width / TILE_SIZE;
-    num rows = image.height / TILE_SIZE;
-    ctx.drawImage( image, 0, 0);
+    //num cols = image.width / TILE_SIZE;
+    //num rows = image.height / TILE_SIZE;
+    ctx.drawImage(image, 0, 0);
     /*ctx.save();
     ctx.globalAlpha = 0.1;
     ctx.strokeStyle = '#000';
@@ -63,7 +63,7 @@ class MenuTileset{
   }
   
   void beginSelection(){
-    initialSelection = new Coordinate(mouseSelector.x-1, mouseSelector.y-1);
+    initialSelection = new Coordinate(mouseSelector.x - 1, mouseSelector.y - 1);
     mouseSelecting = true;
   }
   
@@ -73,6 +73,7 @@ class MenuTileset{
   
   void update(){
     loadTileset();
+
     //Draw of the map selector icon
     ctx.strokeStyle = '#FFF';
     ctx.lineWidth   = 1;
@@ -84,6 +85,5 @@ class MenuTileset{
     }else{
       ctx.strokeRect(mouseSelector.x * TILE_SIZE,  mouseSelector.y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
     }
-          
   }
 }
