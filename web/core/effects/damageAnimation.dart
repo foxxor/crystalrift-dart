@@ -37,7 +37,7 @@ class DamageAnimation implements Graphic{
     Timer timer = new Timer( ms, updateFrame);
   }
   
-  void updateFrame(){
+  Future updateFrame() async {
     num maxFrames = (animationImage.height / ANIMATION_FRAME_HEIGHT) * 5;
     if(animationFrame >= maxFrames){
       animationFrame = 0;
@@ -46,7 +46,7 @@ class DamageAnimation implements Graphic{
     startAnimation();
   }
   
-  void update(){
+  Future update() async {
     this.curPosPx.y -= 1;
     
     if(scene.inCamera(this.curPosPx)){

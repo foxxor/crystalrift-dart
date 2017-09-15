@@ -308,24 +308,24 @@ class Scene{
   }
   
   bool shallPass(int face, var character){
-    Coordinate newCoords;
+    Coordinate facingCoords;
     if(face == UP && character.curPos.y >= 1){
-      newCoords = new Coordinate(character.curPos.x, character.curPos.y - 1);
-    }else if(face == DOWN && character.curPos.y < gameMap.eventMapset.rows -1){
-      newCoords = new Coordinate(character.curPos.x, character.curPos.y + 1);
+      facingCoords = new Coordinate(character.curPos.x, character.curPos.y - 1);
+    }else if(face == DOWN && character.curPos.y < gameMap.eventMapset.rows - 1){
+      facingCoords = new Coordinate(character.curPos.x, character.curPos.y + 1);
     }else if(face == LEFT && character.curPos.x >= 1){
-      newCoords = new Coordinate(character.curPos.x - 1, character.curPos.y);
-    }else if(face == RIGHT && character.curPos.x < gameMap.eventMapset.cols -1){
-      newCoords = new Coordinate(character.curPos.x + 1, character.curPos.y);
+      facingCoords = new Coordinate(character.curPos.x - 1, character.curPos.y);
+    }else if(face == RIGHT && character.curPos.x < gameMap.eventMapset.cols - 1){
+      facingCoords = new Coordinate(character.curPos.x + 1, character.curPos.y);
     }else{
       return false;
     }
     
-    return objectIsPassable(character, newCoords, face);
+    return objectIsPassable(character, facingCoords, face);
   }
   
-  bool objectIsPassable( var character, Coordinate newCoords, int face){
-    var tileObject = gameMap.eventMapset.get(newCoords.x, newCoords.y);
+  bool objectIsPassable( var character, Coordinate facingCoords, int face){
+    var tileObject = gameMap.eventMapset.get(facingCoords.x, facingCoords.y);
     if(!identical(tileObject, character) && tileObject != null){
       if(tileObject is Actor && !tileObject.phasable ){
         return false;
@@ -341,7 +341,7 @@ class Scene{
     }
     
     if(character != player){
-      bool nextTo = player.curPos.nextToThis2(newCoords);
+      bool nextTo = player.curPos.nextToThis2(facingCoords);
       if(!player.phasable && nextTo){
         return false;
       }
@@ -350,9 +350,9 @@ class Scene{
   }
   
   Actor getCharacterInFront(){
-    Iterator<Actor> charas = actors.iterator;
-    while(charas.moveNext()){
-      Actor char = charas.current;
+    Iterator<Actor> characters = actors.iterator;
+    while(characters.moveNext()){
+      Actor char = characters.current;
       int charFace = char.curPosPx.facingThis(player.getCurrentDirection(), player.curPosPx);
       if(charFace >= 0){
         char.faceDirection(charFace);

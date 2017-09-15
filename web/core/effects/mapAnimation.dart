@@ -36,7 +36,7 @@ class MapAnimation implements Graphic{
     Timer t = new Timer( ms, updateFrame);
   }
   
-  void updateFrame(){
+  Future updateFrame() async {
     num maxFrames = (animationImage.height / ANIMATION_FRAME_HEIGHT) * 5;
     if(animationFrame >= maxFrames){
       animationFrame = 0;
@@ -45,7 +45,7 @@ class MapAnimation implements Graphic{
     startAnimation();
   }
   
-  void update(){
+  Future update() async {
     if(scene.inCamera(this.curPosPx)){
       num frameX = animationFrame % 5;
       num frameY = (animationFrame / 5).floor();

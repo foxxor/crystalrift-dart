@@ -1,6 +1,3 @@
-/*
-  Copyright (C) 2013 Jorge Vargas <vargasjorgeluis@gmail.com>
-*/
 
 library character;
 
@@ -45,7 +42,7 @@ class Character implements Graphic{
   // Make this character move randomly
   bool randomMovement;
 
-  // Is this object pasable?
+  // Is this object phasable?
   bool phasable;
 
   // Character movement speed
@@ -60,15 +57,12 @@ class Character implements Graphic{
   // Event is executing?
   bool trigger;
   
-  //Parent scene calling this objetc
+  //Parent scene calling this class
   Scene scene;
   
   // Current position offset in tiles
   int offsetX;
   int offsetY;
-  
-  var acDelta = 0; //Deprecated 
-  var lastUpdateTime = 0; //Deprecated
   
   Character( Coordinate this.curPos, int selectedChar, int characterRow, Scene this.scene, String imageSource, 
       [num this.speed = 1]) {
@@ -91,20 +85,16 @@ class Character implements Graphic{
     loadGraphic("assets/character/" + imageSource);
   }
 
-  void moveRandom(){
+  Future moveRandom() async {
     const ms = const Duration(milliseconds: 2000);
-    new Timer( ms, doMoveRandom);
+    new Timer( ms, randomMove);
   }
-  
-  void doMoveRandom(){
-    randomMove();
-    moveRandom();
-  }
-  
+
   void randomMove(){
     var random = new Math.Random();
     var number = random.nextInt(4);
     move(number);
+    moveRandom();
   }
   
   void chaseCharacter(Character chased){
@@ -276,9 +266,6 @@ class Character implements Graphic{
   
   void faceDirection(int direction){
     switch (direction) {
-      case UP: //up
-        faceDir = 3;
-        break;
       case DOWN: //down
         faceDir = 0;
         break;
@@ -287,6 +274,9 @@ class Character implements Graphic{
         break;
       case RIGHT: //right
         faceDir = 2;
+        break;
+      case UP: //up
+        faceDir = 3;
         break;
     }
   }
@@ -364,7 +354,7 @@ class Character implements Graphic{
     frame = 1 * ANIMATION_SPEED;
   }
 
-  void update(){
+  Future update() async {
     if(isMoving()){
       updateMove();
     }else{

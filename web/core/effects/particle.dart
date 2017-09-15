@@ -84,7 +84,7 @@ class Particle implements Graphic{
     Timer t = new Timer( ms, updateAnimation);
   }
   
-  void updateAnimation(){
+  Future updateAnimation() async {
     var random = new Math.Random();
     Iterator<Coordinate> coordIte = particlesCoords.iterator;
     frame ++;
@@ -129,7 +129,7 @@ class Particle implements Graphic{
     start();
   }
   
-  void update(){
+  Future update() async {
     if(scene.inCamera(this.curPosPx)){
       Iterator<ImageElement> partIte = particles.iterator;
       Iterator<Coordinate> coord = particlesCoords.iterator;

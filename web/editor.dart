@@ -277,8 +277,8 @@ void loadMapSelection(){
   
   //Update the selector position
   mapCanvas.onMouseMove.listen((MouseEvent e){
-    int x = ((e.client.x - mapElement.offsetLeft) / TILE_SIZE).ceil() - 1;
-    int y = ((e.client.y - mapElement.offsetTop) / TILE_SIZE).ceil() - 1;
+    int x = ((e.client.x - mapElement.offsetLeft + mapElement.scrollLeft) / TILE_SIZE).ceil() - 1;
+    int y = ((e.client.y - mapElement.offsetTop + mapElement.scrollTop) / TILE_SIZE).ceil() - 1;
     currentMap.updateSelector(x, y);
     currentMap.update(true);
   });
