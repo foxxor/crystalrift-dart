@@ -89,7 +89,7 @@ void doAction(){
   Actor character = scene.getCharacterInFront();
   if(character != null){
     if(character.combatable){
-      character.damage(10);
+      character.damage(30);
       scene.createAnimation(character);
       character.chaseCharacter(scene.player);
     }else if(!character.trigger){
@@ -113,5 +113,4 @@ void reactKey(var evt) {
   }else if(evt.keyCode == 13 ){ //Action
     doAction();
   }
-  
 }

@@ -73,7 +73,7 @@ class Scene{
     particles.add(particle);
     activeAnimations = new List<MapAnimation>();
     activeAnimations.add(animation);
-    player = new Actor(initCoor, 0, 1, this, "characters.png"); //Main Player
+    player = new Actor(initCoor, 0, 1, this, "characters.png", 1); //Main Player
     player.initializeActor( true, ACTOR_BEHAVIOUR_GOOD, 100, 100);
     //player.moveTo( 13, 4);
     actors = new List<Actor>();
@@ -196,32 +196,30 @@ class Scene{
       case UP:
         player.move(UP);
         if(player.curPos.y > (canvas.height / ( 2 * TILE_SIZE) ).floor()
-            && player.curPos.y < (MAP_HEIGHT_TILES - displayY)
-            && player.curPos.y < MAP_HEIGHT_TILES - (canvas.height / (2 * TILE_SIZE) ).floor()){
+            && player.curPos.y < (gameMap.height - displayY)
+            && player.curPos.y < gameMap.height - (canvas.height / (2 * TILE_SIZE) ).floor()){
           centerCamera(CENTER_TYPE_VERTICAL);
         }
         break;
       case DOWN:
         player.move(DOWN);
         if(player.curPos.y > (canvas.height / ( 2 * TILE_SIZE) ).floor()
-            && player.curPos.y < (MAP_HEIGHT_TILES - displayY)
-            && player.curPos.y < MAP_HEIGHT_TILES - (canvas.height / ( 2 * TILE_SIZE) ).floor()){
+            && player.curPos.y < (gameMap.height - displayY)
+            && player.curPos.y < gameMap.height - (canvas.height / ( 2 * TILE_SIZE) ).floor()){
           centerCamera(CENTER_TYPE_VERTICAL);
         }
         break;
       case LEFT:
         player.move(LEFT);
-        if(player.curPos.x < (MAP_WIDTH_TILES - displayX)
-            && player.curPos.x < MAP_WIDTH_TILES - (canvas.width / ( 2 * TILE_SIZE) ).floor()
-            && player.curPos.x < MAP_WIDTH_TILES - (canvas.width / ( 2 * TILE_SIZE) ).floor()){
+        if(player.curPos.x < (canvas.width - displayX)
+            && player.curPos.x < gameMap.width - (canvas.width / ( 2 * TILE_SIZE) ).floor()){
           centerCamera(CENTER_TYPE_HORIZONTAL);
         }
         break;
       case RIGHT:
         player.move(RIGHT);
-        if(player.curPos.x < (MAP_WIDTH_TILES - displayX)
-            && player.curPos.x < MAP_WIDTH_TILES - (canvas.width / ( 2 * TILE_SIZE) ).floor()
-            && player.curPos.x < MAP_WIDTH_TILES - (canvas.width / ( 2 * TILE_SIZE) ).floor()){
+        if(player.curPos.x < (canvas.width - displayX)
+            && player.curPos.x < gameMap.width - (canvas.width / ( 2 * TILE_SIZE) ).floor()){
           centerCamera(CENTER_TYPE_HORIZONTAL);
         }
         break;  
@@ -231,7 +229,6 @@ class Scene{
   // This have to be adjusted depending if the window size is odd or even
   void centerCamera(int type){
     if(type == CENTER_TYPE_HORIZONTAL){
-      // Adjusted with -1 because the window width is odd
       displayX = Math.max(Math.min(player.curPos.x - (canvas.width / ( 2 * TILE_SIZE) ).floor(), 
         MAP_WIDTH_TILES), 0);
     }else{

@@ -159,18 +159,6 @@ class Character implements Graphic{
     }
   }
   
-  bool insideArray(Coordinate coord, List<Coordinate> coords){
-    Iterable coordsIterable = coords.reversed;
-    Iterator<Coordinate> coordsIte = coordsIterable.iterator;
-    while(coordsIte.moveNext()){
-      Coordinate node = coordsIte.current;
-      if(node.isTheSame(coord)){
-        return true;
-      }
-    }
-    return false;
-  }
-  
   void recreatePath(List<Coordinate> open){
     Iterator<Coordinate> openIte = open.iterator;
     while(openIte.moveNext()){
@@ -301,11 +289,14 @@ class Character implements Graphic{
     this.characterImage = doc.createElement('img'); 
     this.characterImage.src = src;
   }
-  
-  bool isMoving(){
-    return (curPosPx.x != curPos.x * TILE_SIZE || curPosPx.y != curPos.y * TILE_SIZE);
+
+  void animate(){
+    frame ++;
+    if(frame > 2 * ANIMATION_SPEED){
+      frame = 0;
+    }
   }
-  
+
   void updateMove(){
     num distance = 2 * this.speed ;
     if(curPos.y * TILE_SIZE > curPosPx.y){
@@ -314,7 +305,7 @@ class Character implements Graphic{
     }
     if(curPos.x * TILE_SIZE > curPosPx.x){
       faceDirection(RIGHT);
-      curPosPx.x = Math.min(curPosPx.x + distance, curPos.x * TILE_SIZE);  
+      curPosPx.x = Math.min(curPosPx.x + distance, curPos.x * TILE_SIZE);
     }
     if(curPos.y * TILE_SIZE < curPosPx.y){
       faceDirection(UP);
@@ -324,16 +315,22 @@ class Character implements Graphic{
       faceDirection(LEFT);
       curPosPx.x = Math.max(curPosPx.x - distance, curPos.x * TILE_SIZE);
     }
+    if(curPos.y * TILE_SIZE > (curPosPx.y + (2 * TILE_SIZE))){
+      curPos.y = (curPosPx.y / TILE_SIZE).ceil();
+    }
+    if(curPos.x * TILE_SIZE > (curPosPx.x + (2 * TILE_SIZE))){
+      curPos.x = (curPosPx.x / TILE_SIZE).ceil();
+    }
+    if(curPos.y * TILE_SIZE < (curPosPx.y - (2 * TILE_SIZE))){
+      curPos.y = (curPosPx.y / TILE_SIZE).floor();
+    }
+    if(curPos.x * TILE_SIZE < (curPosPx.x - (2 * TILE_SIZE))){
+      curPos.x = (curPosPx.x / TILE_SIZE).floor();
+    }
+
     animate();
   }
-  
-  void animate(){
-    frame ++;
-    if(frame > 2 * ANIMATION_SPEED){
-      frame = 0;
-    }
-  }
-  
+
   void stopMove(){
     if(curPos.y * TILE_SIZE > curPosPx.y){
       num dy = (curPosPx.y + (TILE_SIZE - (curPosPx.y % TILE_SIZE))) / TILE_SIZE;
@@ -345,13 +342,17 @@ class Character implements Graphic{
     }
     if(curPos.y * TILE_SIZE < curPosPx.y){
       num dy = (curPosPx.y + (TILE_SIZE - (curPosPx.y % TILE_SIZE))) / TILE_SIZE;
-      curPos.y = Math.max(dy.floor(), curPos.y) -1;
+      curPos.y = Math.max(dy.floor(), curPos.y) - 1;
     }
     if(curPos.x * TILE_SIZE < curPosPx.x){
       num dx = (curPosPx.x + (TILE_SIZE - (curPosPx.x % TILE_SIZE))) / TILE_SIZE;
-      curPos.x = Math.max(dx.floor(), curPos.x) -1;
+      curPos.x = Math.max(dx.floor(), curPos.x) - 1;
     }
     frame = 1 * ANIMATION_SPEED;
+  }
+
+  bool isMoving(){
+    return (curPosPx.x != curPos.x * TILE_SIZE || curPosPx.y != curPos.y * TILE_SIZE);
   }
 
   Future update() async {
@@ -360,17 +361,19 @@ class Character implements Graphic{
     }else{
       stopMove();
     }
+
+    screenPosPx.x = curPosPx.x - scene.displayPxX;
+    screenPosPx.y = curPosPx.y - scene.displayPxY;
+    if(!scene.inCamera(this.curPosPx)){
+      return;
+    }
     if(chasing){
       if(!curPos.nextToThis(faceDir, chased.curPos) ){
         moveTo(chased.curPos.x, chased.curPos.y);
         faceDirection(curPos.facingThis(faceDir, chased.curPos));
       }
     }
-    screenPosPx.x = curPosPx.x - scene.displayPxX;
-    screenPosPx.y = curPosPx.y - scene.displayPxY;
-    if(!scene.inCamera(this.curPosPx)){
-      return;
-    }
+
     ctx.drawImageToRect(this.characterImage , new Rectangle(screenPosPx.x, screenPosPx.y,
       TILE_SIZE, TILE_SIZE), //Rect to paint the image
       sourceRect: new Rectangle(((selectedChar) + (frame / ANIMATION_SPEED).floor() ) * TILE_SIZE, 

@@ -1,10 +1,8 @@
-/*
-  Copyright (C) 2014 Jorge Vargas <vargasjorgeluis@gmail.com>
-*/
 
 library actor;
 
 import 'dart:html';
+import 'dart:async';
 import 'globals.dart';
 import 'scene.dart';
 import '../helpers/coordinate.dart';
@@ -43,7 +41,7 @@ class Actor extends Character{
   Actor(Coordinate curPos, int charSprite, int charRow, Scene scene, String imageSource, [ num speed = 1]) : 
           super( curPos, charSprite, charRow, scene, imageSource, speed);
   
-  void initializeActor( bool combatable, int behaviour, [int maxLife = 0, int maxEnergy = 0, String message = "", int attack = 0, int defense = 0, bool dead = false]){
+  void initializeActor( bool combatable, int behaviour, [int maxLife = 0, int maxEnergy = 0, String message = "", int attack = 0, int defense = 0, bool dead = false, int speed = 1]){
     this.combatable = combatable;
     this.behaviour = behaviour;
     this.maxLife = maxLife;
@@ -73,7 +71,7 @@ class Actor extends Character{
     }   
   }
   
-  void update(){
+  Future update() async {
     super.update();
     if(combatable && !this.dead){
       int barWeight = (TILE_SIZE * (life / maxLife)).floor();
