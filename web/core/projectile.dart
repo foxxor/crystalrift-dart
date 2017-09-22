@@ -6,8 +6,10 @@ import 'dart:async';
 import 'globals.dart';
 import 'scene.dart';
 import 'graphic.dart';
+import 'actor.dart';
+import 'entity.dart';
+import 'tile.dart';
 import '../helpers/coordinate.dart';
-import '../helpers/matrix.dart';
 import 'dart:math' as Math;
 
 class Projectile implements Graphic{
@@ -80,8 +82,22 @@ class Projectile implements Graphic{
   }
 
   void updatePosition(){
+    // Checks if there's something blocking the projectile to remove it
+    if (!shallPass()) {
+      Actor actor = scene.getCharacterInFront(this);
+
+      if (actor != null && actor.combatable){
+        actor.doDamage();
+      }
+
+      scene.removeProjectile(this);
+      return;
+    }
+
+    // After the projectile reached it max range remove it
     if (steps == range){
       scene.removeProjectile(this);
+      return;
     }
 
     switch (faceDir) {
@@ -112,6 +128,21 @@ class Projectile implements Graphic{
     }
   }
 
+  bool shallPass(){
+    var tileObject = scene.gameMap.eventMapset.get(curPos.x, curPos.y);
+
+    if(tileObject != null){
+      if(tileObject is Actor && !tileObject.phasable && !identical(tileObject, scene.player) ){
+        return false;
+      }else if(tileObject is Tile){
+        return false;
+      }else if(tileObject is Entity){
+        return false;
+      }
+    }
+    return true;
+  }
+
   void updateMove(){
     num distance = 2 * this.speed ;
     if(curPos.y * TILE_SIZE > curPosPx.y){
@@ -126,5 +157,20 @@ class Projectile implements Graphic{
     if(curPos.x * TILE_SIZE < curPosPx.x){
       curPosPx.x = Math.max(curPosPx.x - distance, curPos.x * TILE_SIZE);
     }
+  }
+
+  int getCurrentDirection(){
+    switch (faceDir) {
+      case 0: //down
+        return DOWN;
+      case 1: //left
+        return LEFT;
+      case 2: //right
+        return RIGHT;
+      case 3: //up
+        return UP;
+    }
+
+    return -1;
   }
 }

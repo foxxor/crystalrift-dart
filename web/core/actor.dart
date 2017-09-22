@@ -70,6 +70,12 @@ class Actor extends Character{
       this.dead = true;
     }   
   }
+
+  void doDamage(){
+    damage(30);
+    scene.createAnimation(this);
+    chaseCharacter(scene.player);
+  }
   
   Future update() async {
     super.update();

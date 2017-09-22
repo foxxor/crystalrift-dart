@@ -1,6 +1,4 @@
-/*
-  Copyright (C) 2013 Jorge Vargas <vargasjorgeluis@gmail.com>
-*/
+
 library scene;
 
 import 'dart:html';
@@ -101,11 +99,11 @@ class Scene{
     gameMap.update();
     player.update();
 
-    updateEntities();
     updateCharacters();
-    updateAnimations();
+    updateEntities();
     updateParticles();
     updateEvents();
+    updateAnimations();
     updateProjectiles();
   }
 
@@ -205,7 +203,7 @@ class Scene{
     }
   }
   
-  void move(int direction){
+  void movePlayer(int direction){
     switch (direction){
       case UP:
         player.move(UP);
@@ -366,13 +364,19 @@ class Scene{
     return true;
   }
   
-  Actor getCharacterInFront(){
+  Actor getCharacterInFront([var entity = null]){
     Iterator<Actor> characters = actors.iterator;
     while(characters.moveNext()){
       Actor char = characters.current;
-      int charFace = char.curPosPx.facingThis(player.getCurrentDirection(), player.curPosPx);
+
+      if(entity == null){
+        entity = player;
+      }
+      int charFace = char.curPosPx.facingThis(entity.getCurrentDirection(), entity.curPosPx);
       if(charFace >= 0){
-        char.faceDirection(charFace);
+        if(identical(entity, player)) {
+          char.faceDirection(charFace);
+        }
         return char;
       }
     }

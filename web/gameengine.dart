@@ -91,9 +91,7 @@ void doAction(){
   Actor character = scene.getCharacterInFront();
   if(character != null){
     if(character.combatable){
-      character.damage(30);
-      scene.createAnimation(character);
-      character.chaseCharacter(scene.player);
+      character.doDamage();
     }else if(!character.trigger){
       character.trigger = true;
       if(character.message.isNotEmpty){
@@ -105,19 +103,19 @@ void doAction(){
 
 void createProjectile(){
   Coordinate curPos = new Coordinate(scene.player.curPos.x, scene.player.curPos.y);
-  Projectile projectile = new Projectile(curPos, scene.player.faceDir, scene, 'arrow_faces.png', 4, 2);
+  Projectile projectile = new Projectile(curPos, scene.player.faceDir, scene, 'arrow_faces.png', 5, 2);
   scene.projectiles.add(projectile);
 }
 
 void reactKey(var evt) {
   if(evt.keyCode == 37 || evt.keyCode == 65 ) { // Left + A
-      scene.move(LEFT);
+      scene.movePlayer(LEFT);
   }else if(evt.keyCode == 38 || evt.keyCode == 87 ){ // Up + W
-      scene.move(UP);
+      scene.movePlayer(UP);
   }else if(evt.keyCode == 39 || evt.keyCode == 68 ){ // Right + D
-      scene.move(RIGHT);
+      scene.movePlayer(RIGHT);
   }else if(evt.keyCode == 40 || evt.keyCode == 83 ){ // Down + S
-      scene.move(DOWN);
+      scene.movePlayer(DOWN);
   }else if(evt.keyCode == 13 ){ // Action
     doAction();
   }else if(evt.keyCode == 82 ){ // Projectile

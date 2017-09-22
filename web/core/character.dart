@@ -357,7 +357,7 @@ class Character implements Graphic{
     return (curPosPx.x != curPos.x * TILE_SIZE || curPosPx.y != curPos.y * TILE_SIZE);
   }
 
-  Future update() async {
+  void update(){
     if(isMoving()){
       updateMove();
     }else{
