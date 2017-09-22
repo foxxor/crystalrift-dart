@@ -244,6 +244,20 @@ class Character implements Graphic{
         }
         break;
     }
+
+    // Throttle the movement to avoid camera issues
+    if(curPos.y * TILE_SIZE > (curPosPx.y + (2 * TILE_SIZE))){
+      curPos.y = (curPosPx.y / TILE_SIZE).ceil();
+    }
+    if(curPos.x * TILE_SIZE > (curPosPx.x + (2 * TILE_SIZE))){
+      curPos.x = (curPosPx.x / TILE_SIZE).ceil();
+    }
+    if(curPos.y * TILE_SIZE < (curPosPx.y - (2 * TILE_SIZE))){
+      curPos.y = (curPosPx.y / TILE_SIZE).floor();
+    }
+    if(curPos.x * TILE_SIZE < (curPosPx.x - (2 * TILE_SIZE))){
+      curPos.x = (curPosPx.x / TILE_SIZE).floor();
+    }
     
     if(moved){
       scene.gameMap.moveToTile(initX, initY, curPos.x, curPos.y, this);
@@ -314,18 +328,6 @@ class Character implements Graphic{
     if(curPos.x * TILE_SIZE < curPosPx.x){
       faceDirection(LEFT);
       curPosPx.x = Math.max(curPosPx.x - distance, curPos.x * TILE_SIZE);
-    }
-    if(curPos.y * TILE_SIZE > (curPosPx.y + (2 * TILE_SIZE))){
-      curPos.y = (curPosPx.y / TILE_SIZE).ceil();
-    }
-    if(curPos.x * TILE_SIZE > (curPosPx.x + (2 * TILE_SIZE))){
-      curPos.x = (curPosPx.x / TILE_SIZE).ceil();
-    }
-    if(curPos.y * TILE_SIZE < (curPosPx.y - (2 * TILE_SIZE))){
-      curPos.y = (curPosPx.y / TILE_SIZE).floor();
-    }
-    if(curPos.x * TILE_SIZE < (curPosPx.x - (2 * TILE_SIZE))){
-      curPos.x = (curPosPx.x / TILE_SIZE).floor();
     }
 
     animate();

@@ -14,6 +14,7 @@ import 'actor.dart';
 import 'entity.dart';
 import 'tile.dart';
 import 'action.dart';
+import 'projectile.dart';
 import 'effects/mapAnimation.dart';
 import 'effects/particle.dart';
 import 'dart:math' as Math;
@@ -37,13 +38,16 @@ class Scene{
   List<Entity> entities;
 
   // Currently active events
-  List<Action> activeEvents;
+  List<Action> events;
 
   // Currently active animation
   List<MapAnimation> activeAnimations;
 
   // Currently action particle effects
   List<Particle> particles;
+
+  // Current active projectiles
+  List<Projectile> projectiles;
   
   //Scene size
   int width;
@@ -63,7 +67,7 @@ class Scene{
     this.canvas = canvas;
     gameMap = new MapSet(this, MAP_WIDTH_TILES, MAP_HEIGHT_TILES);
     Coordinate initCoor = new Coordinate(15, 10);
-    Coordinate initCoor2 = new Coordinate(12 * TILE_SIZE, 4* TILE_SIZE);
+    Coordinate initCoor2 = new Coordinate(12 * TILE_SIZE, 4 * TILE_SIZE);
     MapAnimation animation = new MapAnimation(this, initCoor2, 'fire_001');
     animation.startAnimation();
     Coordinate partCoor = new Coordinate(12 * TILE_SIZE, 7 * TILE_SIZE);
@@ -82,16 +86,17 @@ class Scene{
     displayY = 0;
     displayPxX = 0 * TILE_SIZE;
     displayPxY = 0 * TILE_SIZE;
-    activeEvents = new List<Action>();
+    events = new List<Action>();
+    projectiles = new List<Projectile>();
     loadProperties();
   }
   
   void update(){
     //The order of rendering here controls the priority of visualization
-    if(isMoving() && player.isMoving()){
-      updateMove();
+    if(isCameraMoving() && player.isMoving()){
+      updateCameraMovement();
     }else{
-      stopMove();
+      stopCameraMovement();
     }
     gameMap.update();
     player.update();
@@ -101,6 +106,7 @@ class Scene{
     updateAnimations();
     updateParticles();
     updateEvents();
+    updateProjectiles();
   }
 
   Future updateEntities() async {
@@ -112,7 +118,7 @@ class Scene{
   }
 
   Future updateEvents() async {
-    Iterator<Action> eventIterator = activeEvents.iterator;
+    Iterator<Action> eventIterator = events.iterator;
     while(eventIterator.moveNext()){
       Action event = eventIterator.current;
       event.update();
@@ -142,7 +148,15 @@ class Scene{
       animation.update();
     }
   }
-  
+
+  Future updateProjectiles() async {
+    Iterator<Projectile> projectileIterator = projectiles.iterator;
+    while(projectileIterator.moveNext()){
+      Projectile projectile = projectileIterator.current;
+      projectile.update();
+    }
+  }
+
   // Verifies if a coordinate is displayed by the camera
   bool inCamera(Coordinate coord){
     if(coord.x >= (displayPxX - TILE_SIZE) && coord.y >= (displayPxY - TILE_SIZE) &&
@@ -152,13 +166,13 @@ class Scene{
     return false;
   } 
   
-  void updateMove(){
+  Future updateCameraMovement() async{
     var distance = 2 * player.speed;
     if(displayY * TILE_SIZE > displayPxY){
       displayPxY = Math.min(displayPxY + distance, displayY * TILE_SIZE);
     }
     if(displayX * TILE_SIZE > displayPxX){
-      displayPxX = Math.min(displayPxX + distance, displayX * TILE_SIZE);  
+      displayPxX = Math.min(displayPxX + distance, displayX * TILE_SIZE);
     }
     if(displayY * TILE_SIZE < displayPxY){
       displayPxY = Math.max(displayPxY - distance, displayY * TILE_SIZE);
@@ -168,11 +182,11 @@ class Scene{
     }
   }
   
-  bool isMoving(){
+  bool isCameraMoving(){
     return (displayPxX != displayX * TILE_SIZE || displayPxY != displayY * TILE_SIZE);
   }
   
-  void stopMove(){
+  void stopCameraMovement(){
     if(displayY * TILE_SIZE > displayPxY){
       num dy = (displayY + (TILE_SIZE - (displayPxY % TILE_SIZE))) / TILE_SIZE;
       displayY = Math.min(dy.floor(), displayY);
@@ -195,7 +209,7 @@ class Scene{
     switch (direction){
       case UP:
         player.move(UP);
-        if(player.curPos.y > (canvas.height / ( 2 * TILE_SIZE) ).floor()
+        if(player.curPos.y > (canvas.height / (2 * TILE_SIZE) ).floor()
             && player.curPos.y < (gameMap.height - displayY)
             && player.curPos.y < gameMap.height - (canvas.height / (2 * TILE_SIZE) ).floor()){
           centerCamera(CENTER_TYPE_VERTICAL);
@@ -203,7 +217,7 @@ class Scene{
         break;
       case DOWN:
         player.move(DOWN);
-        if(player.curPos.y > (canvas.height / ( 2 * TILE_SIZE) ).floor()
+        if(player.curPos.y > (canvas.height / (2 * TILE_SIZE) ).floor()
             && player.curPos.y < (gameMap.height - displayY)
             && player.curPos.y < gameMap.height - (canvas.height / ( 2 * TILE_SIZE) ).floor()){
           centerCamera(CENTER_TYPE_VERTICAL);
@@ -229,11 +243,13 @@ class Scene{
   // This have to be adjusted depending if the window size is odd or even
   void centerCamera(int type){
     if(type == CENTER_TYPE_HORIZONTAL){
-      displayX = Math.max(Math.min(player.curPos.x - (canvas.width / ( 2 * TILE_SIZE) ).floor(), 
-        MAP_WIDTH_TILES), 0);
+      displayX = Math.max(
+          Math.min(player.curPos.x - (canvas.width / ( 2 * TILE_SIZE) ).floor(), MAP_WIDTH_TILES),
+          0);
     }else{
-      displayY = Math.max(Math.min(player.curPos.y - (canvas.height / ( 2 * TILE_SIZE) ).floor(), 
-        MAP_HEIGHT_TILES), 0);
+      displayY = Math.max(
+          Math.min(player.curPos.y - (canvas.height / ( 2 * TILE_SIZE) ).floor(), MAP_HEIGHT_TILES),
+          0);
     }
   }
   
@@ -283,25 +299,29 @@ class Scene{
     const ms = const Duration(milliseconds: 5000);
     new Timer( ms, removeEvent);
     Action event = new Action(char, msg, EVENT_TYPE_MESSAGE);
-    activeEvents.add(event);
+    events.add(event);
   }
   
   Future createAnimation(Actor char) async {
-    Coordinate coord = new Coordinate(0,0);
-    MapAnimation animation = new MapAnimation(this, coord, 'light_001');
+    Coordinate coords = new Coordinate(0,0);
+    MapAnimation animation = new MapAnimation(this, coords, 'light_001');
     Action event = new Action(char, animation, EVENT_TYPE_ANIMATION);
-    activeEvents.add(event);
+    events.add(event);
     animation.startAnimation();
     new Timer( const Duration(milliseconds: 500), removeEvent);
   }
   
   Future removeEvent() async {
-    Action event = activeEvents.elementAt(0);
+    Action event = events.elementAt(0);
     if(event.type == EVENT_TYPE_MESSAGE){
       Actor char = event.object;
       char.trigger = false;
     }
-    activeEvents.removeAt(0);
+    events.removeAt(0);
+  }
+
+  Future removeProjectile(Projectile projectile) async{
+    projectiles.remove(projectile);
   }
   
   bool shallPass(int face, var character){

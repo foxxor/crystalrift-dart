@@ -5,8 +5,10 @@
 import 'dart:html';
 import 'core/globals.dart';
 import 'core/actor.dart';
+import 'core/projectile.dart';
 import 'core/scene.dart';
 import 'core/windowset.dart';
+import 'helpers/coordinate.dart';
 
 //System vars
 HtmlDocument _doc;
@@ -101,16 +103,24 @@ void doAction(){
   }
 }
 
+void createProjectile(){
+  Coordinate curPos = new Coordinate(scene.player.curPos.x, scene.player.curPos.y);
+  Projectile projectile = new Projectile(curPos, scene.player.faceDir, scene, 'arrow_faces.png', 4, 2);
+  scene.projectiles.add(projectile);
+}
+
 void reactKey(var evt) {
-  if(evt.keyCode == 37 || evt.keyCode == 65 ) { //left
+  if(evt.keyCode == 37 || evt.keyCode == 65 ) { // Left + A
       scene.move(LEFT);
-  }else if(evt.keyCode == 38 || evt.keyCode == 87 ){ //up
+  }else if(evt.keyCode == 38 || evt.keyCode == 87 ){ // Up + W
       scene.move(UP);
-  }else if(evt.keyCode == 39 || evt.keyCode == 68 ){ //right
+  }else if(evt.keyCode == 39 || evt.keyCode == 68 ){ // Right + D
       scene.move(RIGHT);
-  }else if(evt.keyCode == 40 || evt.keyCode == 83 ){ //down
+  }else if(evt.keyCode == 40 || evt.keyCode == 83 ){ // Down + S
       scene.move(DOWN);
-  }else if(evt.keyCode == 13 ){ //Action
+  }else if(evt.keyCode == 13 ){ // Action
     doAction();
+  }else if(evt.keyCode == 82 ){ // Projectile
+    createProjectile();
   }
 }
