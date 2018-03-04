@@ -17,6 +17,8 @@ import 'effects/mapAnimation.dart';
 import 'effects/particle.dart';
 import 'dart:math' as Math;
 
+import 'modules/battle_module.dart';
+
 class Scene{
   //Graphic vars
   HtmlDocument doc;
@@ -302,7 +304,7 @@ class Scene{
   
   Future createAnimation(Actor char) async {
     Coordinate coords = new Coordinate(0,0);
-    MapAnimation animation = new MapAnimation(this, coords, 'light_001');
+    MapAnimation animation = new MapAnimation(this, coords, 'fire_001');
     Action event = new Action(char, animation, EVENT_TYPE_ANIMATION);
     events.add(event);
     animation.startAnimation();

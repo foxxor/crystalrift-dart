@@ -1,6 +1,4 @@
 
-library projectile;
-
 import 'dart:html';
 import 'dart:async';
 import 'globals.dart';

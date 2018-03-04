@@ -103,7 +103,7 @@ void doAction(){
 
 void createProjectile(){
   Coordinate curPos = new Coordinate(scene.player.curPos.x, scene.player.curPos.y);
-  Projectile projectile = new Projectile(curPos, scene.player.faceDir, scene, 'arrow_faces.png', 5, 2);
+  Projectile projectile = new Projectile(curPos, scene.player.faceDir, scene, 'energy_ball.png', 5, 2);
   scene.projectiles.add(projectile);
 }
 
