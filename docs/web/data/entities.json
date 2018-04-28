@@ -1,0 +1,45 @@
+{"entities":[
+    {
+      "xTile":20,
+      "yTile":34,
+      "x":9,
+      "y":8,
+      "pushable": true
+    },
+    {
+      "xTile":5,
+      "yTile":31,
+      "x":4,
+      "y":7,
+      "pushable": true
+    },
+    {
+      "xTile":21,
+      "yTile":35,
+      "x":5,
+      "y":8,
+      "pushable": false
+    },
+    {
+      "xTile":22,
+      "yTile":35,
+      "x":5,
+      "y":9,
+      "pushable": false
+    },
+    {
+      "xTile":3,
+      "yTile":55,
+      "x":12,
+      "y":7,
+      "pushable": false
+    },
+    {
+      "xTile":2,
+      "yTile":58,
+      "x":12,
+      "y":4,
+      "pushable": false
+    }
+  ]
+}
