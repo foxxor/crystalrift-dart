@@ -1,12 +1,9 @@
-*.js
 *.deps
 *.map
 *.DS_Store
 *.idea
 npm-debug.log
 node_modules
-!server/app.js
-!server/server.js
 package-lock.json
 .packages
 pubspec.lock
