@@ -5,3 +5,9 @@ homepage: https://github.com/foxxor/crystalrift-dart
 documentation: https://github.com/foxxor/crystalrift-dart
 dependencies:
   browser: any
+publish_to: none
+environment:
+  sdk: ">=1.23.0 <2.0.0"
+transformers:
+- $dart2js:
+    csp: true
