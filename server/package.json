@@ -5,6 +5,7 @@
   "authors": [
     "Jorge Vargas <vargasjorgeluis@gmail.com>"
   ],
+  "license": "MIT",
   "homepage": "https://github.com/foxxor/crystalrift-dart",
   "bugs": {
     "url": "https://github.com/foxxor/crystalrift-dart/issues"
