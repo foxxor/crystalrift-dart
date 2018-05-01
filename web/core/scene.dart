@@ -15,7 +15,6 @@ import 'projectile.dart';
 import 'effects/mapAnimation.dart';
 import 'effects/particle.dart';
 import 'dart:math' as Math;
-
 import 'modules/battle_module.dart';
 
 class Scene {
@@ -271,115 +270,115 @@ class Scene {
     }
     
     void loadCharacters( String responseText ) {
-      Map charactersData = JSON.decode(responseText);
-      Iterator<Map> characters = charactersData['characters'].iterator;
-      while(characters.moveNext()){
-        Map m = characters.current;
-        Coordinate coords = new Coordinate(m['x'], m['y']);
-        Actor character = new Actor(coords, m['characterId'], m['characterRow'], this, m['imageSource'], m['speed']);
-        character.initializeActor( m['combatable'], m['behaviour'], m['life'], m['energy'], m['message'], m['attack'], m['defense']);
-        if(m['moveRandom']){
-          character.moveRandom();
+        Map charactersData = JSON.decode(responseText);
+        Iterator<Map> characters = charactersData['characters'].iterator;
+        while( characters.moveNext() ){
+            Map m = characters.current;
+            Coordinate coords = new Coordinate( m['x'], m['y'] );
+            Actor character = new Actor( coords, m['characterId'], m['characterRow'], this, m['imageSource'], m['speed'] ;
+            character.initializeActor( m['combatable'], m['behaviour'], m['life'], m['energy'], m['message'], m['attack'], m['defense'] );
+            if(m['moveRandom']){
+                character.moveRandom();
+            }
+            actors.add(character);
+            gameMap.occupyTile( m['x'], m['y'], character );
         }
-        actors.add(character);
-        gameMap.occupyTile(m['x'], m['y'], character);
-      }
     }
     
-    void loadBuildings(String responseText) {
-      gameMap.structuresData = JSON.decode(responseText);
-      gameMap.addBuilding(0, 6,5);
-      gameMap.addRandomDetails();
+    void loadBuildings( String responseText ) {
+        gameMap.structuresData = JSON.decode( responseText );
+        gameMap.addBuilding(0, 6,5);
+        gameMap.addRandomDetails();
     }
     
-    Future createMessage(Actor char) async {
-      Message msg = new Message(ctx, char.message, char.screenPosPx.x, char.screenPosPx.y, 100, 20);
-      const ms = const Duration(milliseconds: 5000);
-      new Timer( ms, removeEvent);
-      Action event = new Action(char, msg, EVENT_TYPE_MESSAGE);
-      events.add(event);
+    Future createMessage( Actor char ) async {
+        Message msg = new Message( ctx, char.message, char.screenPosPx.x, char.screenPosPx.y, 100, 20 );
+        const ms = const Duration( milliseconds: 5000 );
+        new Timer( ms, removeEvent );
+        Action event = new Action( char, msg, EVENT_TYPE_MESSAGE );
+        events.add( event );
     }
     
     Future createAnimation(Actor char) async {
-      Coordinate coords = new Coordinate(0,0);
-      MapAnimation animation = new MapAnimation(this, coords, 'fire_001');
-      Action event = new Action(char, animation, EVENT_TYPE_ANIMATION);
-      events.add(event);
-      animation.startAnimation();
-      new Timer( const Duration(milliseconds: 500), removeEvent);
+        Coordinate coords = new Coordinate( 0,0 );
+        MapAnimation animation = new MapAnimation( this, coords, 'fire_001' );
+        Action event = new Action( char, animation, EVENT_TYPE_ANIMATION );
+        events.add( event );
+        animation.startAnimation();
+        new Timer( const Duration(milliseconds: 500), removeEvent );
     }
     
     Future removeEvent() async {
-      Action event = events.elementAt(0);
-      if(event.type == EVENT_TYPE_MESSAGE){
-        Actor char = event.object;
-        char.trigger = false;
-      }
-      events.removeAt(0);
+        Action event = events.elementAt( 0 );
+        if ( event.type == EVENT_TYPE_MESSAGE ) {
+            Actor char = event.object;
+            char.trigger = false;
+        }
+        events.removeAt( 0 );
     }
 
-    Future removeProjectile(Projectile projectile) async{
-      projectiles.remove(projectile);
+    Future removeProjectile( Projectile projectile ) async {
+        projectiles.remove( projectile );
     }
     
-    bool shallPass(int face, var character){
-      Coordinate facingCoords;
-      if(face == UP && character.curPos.y >= 1){
-        facingCoords = new Coordinate(character.curPos.x, character.curPos.y - 1);
-      }else if(face == DOWN && character.curPos.y < gameMap.eventMapset.rows - 1){
-        facingCoords = new Coordinate(character.curPos.x, character.curPos.y + 1);
-      }else if(face == LEFT && character.curPos.x >= 1){
-        facingCoords = new Coordinate(character.curPos.x - 1, character.curPos.y);
-      }else if(face == RIGHT && character.curPos.x < gameMap.eventMapset.cols - 1){
-        facingCoords = new Coordinate(character.curPos.x + 1, character.curPos.y);
-      }else{
-        return false;
-      }
-      
-      return objectIsPassable(character, facingCoords, face);
-    }
-    
-    bool objectIsPassable( var character, Coordinate facingCoords, int face){
-      var tileObject = gameMap.eventMapset.get(facingCoords.x, facingCoords.y);
-      if(!identical(tileObject, character) && tileObject != null){
-        if(tileObject is Actor && !tileObject.phasable ){
-          return false;
-        }else if(tileObject is Tile){
-          return false;
-        }else if(tileObject is Entity && !tileObject.pushable){
-          return false;
-        }else if(tileObject is Entity && tileObject.pushable){
-          if(!tileObject.move(face)){
+    bool shallPass( int face, var character ) {
+        Coordinate facingCoords;
+        if ( face == UP && character.curPos.y >= 1 ) {
+            facingCoords = new Coordinate( character.curPos.x, character.curPos.y - 1 );
+        } else if ( face == DOWN && character.curPos.y < gameMap.eventMapset.rows - 1 ) {
+            facingCoords = new Coordinate( character.curPos.x, character.curPos.y + 1 );
+        } else if ( face == LEFT && character.curPos.x >= 1 ) {
+            facingCoords = new Coordinate( character.curPos.x - 1, character.curPos.y );
+        } else if ( face == RIGHT && character.curPos.x < gameMap.eventMapset.cols - 1 ) {
+            facingCoords = new Coordinate( character.curPos.x + 1, character.curPos.y );
+        } else {
             return false;
-          }
         }
-      }
       
-      if(character != player){
-        bool nextTo = player.curPos.nextToThis2(facingCoords);
-        if(!player.phasable && nextTo){
-          return false;
-        }
-      }
-      return true;
+      return objectIsPassable( character, facingCoords, face );
     }
     
-    Actor getCharacterInFront([var entity = null]){
-      Iterator<Actor> characters = actors.iterator;
-      while(characters.moveNext()){
-        Actor char = characters.current;
+    bool objectIsPassable( var character, Coordinate facingCoords, int face ) {
+        var tileObject = gameMap.eventMapset.get( facingCoords.x, facingCoords.y );
+        if ( !identical( tileObject, character ) && tileObject != null ) {
+            if ( tileObject is Actor && !tileObject.phasable ){
+                return false;
+            } else if ( tileObject is Tile ) {
+                return false;
+            } else if ( tileObject is Entity && !tileObject.pushable ) {
+                return false;
+            } else if( tileObject is Entity && tileObject.pushable ) {
+                if ( !tileObject.move( face ) ) {
+                    return false;
+                }
+            }
+        }
+      
+        if ( character != player ) {
+            bool nextTo = player.curPos.nextToThis2( facingCoords );
+            if ( !player.phasable && nextTo ) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    Actor getCharacterInFront( [ var entity = null ] ) {
+        Iterator<Actor> characters = actors.iterator;
+        while( characters.moveNext() ){
+            Actor char = characters.current;
 
-        if(entity == null){
-          entity = player;
+            if ( entity == null ){
+                entity = player;
+            }
+            int charFace = char.curPosPx.facingThis( entity.getCurrentDirection(), entity.curPosPx );
+            if ( charFace >= 0 ) {
+                if ( identical( entity, player ) ) {
+                    char.faceDirection( charFace );
+            }
+            return char;
+            }
         }
-        int charFace = char.curPosPx.facingThis(entity.getCurrentDirection(), entity.curPosPx);
-        if(charFace >= 0){
-          if(identical(entity, player)) {
-            char.faceDirection(charFace);
-          }
-          return char;
-        }
-      }
-      return null;
+        return null;
     }
 }
