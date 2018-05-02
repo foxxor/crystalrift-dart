@@ -3,7 +3,7 @@
 */
 library mapset;
 
-import 'dart:html';
+import 'dart:html' hide Matrix;
 import 'dart:async';
 import 'globals.dart';
 import 'graphic.dart';

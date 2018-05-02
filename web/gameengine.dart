@@ -1,4 +1,5 @@
 import 'dart:html';
+
 import 'core/globals.dart';
 import 'core/actor.dart';
 import 'core/projectile.dart';
@@ -75,8 +76,8 @@ void resizeViewport() {
     scene.height = sceneHeight;
 }
 
-//refresh method
-void update( num delta ) {
+// Global refresh method
+update( num delta ) async {
     context.clearRect( 0, 0, canvas.width, canvas.height );
     scene.update();
 

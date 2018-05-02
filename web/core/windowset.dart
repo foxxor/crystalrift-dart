@@ -1,6 +1,7 @@
 library windowset;
 
 import 'dart:html';
+import 'dart:async';
 import 'globals.dart';
 import 'scene.dart';
 import 'graphic.dart';
@@ -31,7 +32,7 @@ class WindowSet implements Graphic {
         loadGraphic( 'assets/window/BlueGloss.png' );
     }
   
-    Future update() async {
+    update() async {
         _ctx.save();
         _ctx.globalAlpha = 0.7;
 

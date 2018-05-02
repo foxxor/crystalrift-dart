@@ -3,7 +3,7 @@
 */
 library mapEvent;
 
-import 'dart:html';
+import 'dart:html' hide Matrix;
 import '../core/tile.dart';
 import '../helpers/matrix.dart';
 import '../helpers/coordinate.dart';

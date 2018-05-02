@@ -3,13 +3,13 @@
 */
 library TileSelector;
 
-import 'dart:html';
+import 'dart:html' hide Matrix;
 import '../core/tile.dart';
 import '../helpers/matrix.dart';
 import '../helpers/coordinate.dart';
 import '../core/globals.dart';
 
-class TileSelector{
+class TileSelector {
   HtmlDocument doc;
   CanvasRenderingContext2D ctx;
   CanvasElement canvas;

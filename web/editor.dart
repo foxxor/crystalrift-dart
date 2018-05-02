@@ -2,7 +2,7 @@
   Copyright (C) 2015 Jorge Vargas <vargasjorgeluis@gmail.com>
 */
 
-import 'dart:html';
+import 'dart:html' hide Matrix;
 import 'dart:js';
 import 'editor/editorMap.dart';
 import 'editor/menuTileset.dart';
