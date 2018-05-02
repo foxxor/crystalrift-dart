@@ -9,7 +9,7 @@ import '../helpers/coordinate.dart';
 import 'dart:math' as Math;
 import 'character.dart';
 
-class Actor extends Character{
+class Actor extends Character {
   
   // Max life
   int maxLife;
@@ -57,10 +57,10 @@ class Actor extends Character{
   
   void loadBars(){
     barHpImage = new Element.tag('img'); 
-    barHpImage = doc.createElement('img'); 
+    barHpImage = document.createElement('img'); 
     barHpImage.src = "assets/particles/extra/" + srcBarHp;
     barMpImage = new Element.tag('img'); 
-    barMpImage = doc.createElement('img'); 
+    barMpImage = document.createElement('img'); 
     barMpImage.src = "assets/particles/extra/" + srcBarMp;
   }
   
@@ -81,7 +81,7 @@ class Actor extends Character{
     super.update();
     if(combatable && !this.dead){
       int barWeight = (TILE_SIZE * (life / maxLife)).floor();
-      ctx.drawImageScaled(barHpImage, screenPosPx.x, screenPosPx.y + TILE_SIZE + 3,
+      context.drawImageScaled(barHpImage, screenPosPx.x, screenPosPx.y + TILE_SIZE + 3,
           barWeight, 3);
     }
 

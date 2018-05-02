@@ -1,7 +1,3 @@
-/*
-  Copyright (C) 2013 Jorge Vargas <vargasjorgeluis@gmail.com>
-*/
-
 library entity;
 
 import 'dart:html';
@@ -12,9 +8,9 @@ import '../helpers/coordinate.dart';
 import 'tile.dart';
 import 'dart:math' as Math;
 
-class Entity implements Graphic{
-  HtmlDocument _doc;
-  CanvasRenderingContext2D _ctx;
+class Entity implements Graphic {
+  HtmlDocument document;
+  CanvasRenderingContext2D context;
   CanvasElement canvas;
   ImageElement itemImage;
   
@@ -33,16 +29,16 @@ class Entity implements Graphic{
   //Parent scene
   Scene scene;
   
-  Entity(HtmlDocument this._doc, CanvasRenderingContext2D this._ctx, CanvasElement this.canvas, 
-      Coordinate this.curPos, Tile this.tile, Scene this.scene, [bool this.pushable = false, int this.speed = 1]){
-    this.curPosPx = new Coordinate(curPos.x *TILE_SIZE, curPos.y *TILE_SIZE);
+  Entity(HtmlDocument this.document, CanvasRenderingContext2D this.context, CanvasElement this.canvas, 
+      Coordinate this.curPos, Tile this.tile, Scene this.scene, [bool this.pushable = false, int this.speed = 1]) {
+    this.curPosPx = new Coordinate( curPos.x * TILE_SIZE, curPos.y * TILE_SIZE );
     this.moving = false;
     loadGraphic("assets/tileset/tileset.png");
   }
   
   void loadGraphic(String src){
     this.itemImage = new Element.tag('img'); 
-    this.itemImage = _doc.createElement('img'); 
+    this.itemImage = document.createElement('img'); 
     this.itemImage.src = src;
     this.itemImage.onLoad.listen((value) => update());
   }
@@ -138,7 +134,7 @@ class Entity implements Graphic{
       return;
     }
     
-    _ctx.drawImageToRect(this.itemImage , new Rectangle( curPosPx.x - scene.displayPxX, curPosPx.y - scene.displayPxY, TILE_SIZE, TILE_SIZE), //Rect to paint the image
+    context.drawImageToRect(this.itemImage , new Rectangle( curPosPx.x - scene.displayPxX, curPosPx.y - scene.displayPxY, TILE_SIZE, TILE_SIZE), //Rect to paint the image
         sourceRect: new Rectangle( tile.xImg, tile.yImg, TILE_SIZE, TILE_SIZE)); //Size of the image
   }
 }

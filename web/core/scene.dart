@@ -19,8 +19,8 @@ import 'modules/battle_module.dart';
 
 class Scene {
     //Graphic vars
-    HtmlDocument doc;
-    CanvasRenderingContext2D ctx;
+    HtmlDocument document;
+    CanvasRenderingContext2D context;
     CanvasElement canvas;
     
     // The current visible map
@@ -59,10 +59,11 @@ class Scene {
     int displayPxX;
     int displayPxY;
     
-    Scene( HtmlDocument doc, CanvasRenderingContext2D ctx, CanvasElement canvas ) {
-        this.doc = doc;
-        this.ctx = ctx;
+    Scene( HtmlDocument document, CanvasRenderingContext2D context, CanvasElement canvas ) {
+        this.document = document;
+        this.context = context;
         this.canvas = canvas;
+        
         gameMap = new MapSet( this, MAP_WIDTH_TILES, MAP_HEIGHT_TILES );
         Coordinate initCoor = new Coordinate( 15, 10 );
         Coordinate initCoor2 = new Coordinate( 12 * TILE_SIZE, 4 * TILE_SIZE );
@@ -89,7 +90,7 @@ class Scene {
         loadProperties();
     }
     
-    void update(){
+    void update() {
         //The order of rendering here controls the priority of visualization
         if ( isCameraMoving() && player.isMoving() ) {
             updateCameraMovement();
@@ -99,7 +100,7 @@ class Scene {
         gameMap.update();
         player.update();
 
-        updateCharacters();
+        updateCharacters() ;
         updateEntities();
         updateParticles();
         updateEvents();
@@ -263,7 +264,7 @@ class Scene {
             Map i = iteEntities.current;
             Coordinate coords = new Coordinate( i['x'], i['y'] );
             Tile tile = new Tile( i['xTile'], i['yTile'] );
-            Entity item = new Entity( doc, ctx, canvas, coords, tile, this, i['pushable'] );
+            Entity item = new Entity( document, context, canvas, coords, tile, this, i['pushable'] );
             entities.add(item);
             gameMap.occupyTile( i['x'], i['y'], item );
         }
@@ -275,7 +276,7 @@ class Scene {
         while( characters.moveNext() ){
             Map m = characters.current;
             Coordinate coords = new Coordinate( m['x'], m['y'] );
-            Actor character = new Actor( coords, m['characterId'], m['characterRow'], this, m['imageSource'], m['speed'] ;
+            Actor character = new Actor( coords, m['characterId'], m['characterRow'], this, m['imageSource'], m['speed'] );
             character.initializeActor( m['combatable'], m['behaviour'], m['life'], m['energy'], m['message'], m['attack'], m['defense'] );
             if(m['moveRandom']){
                 character.moveRandom();
@@ -292,7 +293,7 @@ class Scene {
     }
     
     Future createMessage( Actor char ) async {
-        Message msg = new Message( ctx, char.message, char.screenPosPx.x, char.screenPosPx.y, 100, 20 );
+        Message msg = new Message( context, char.message, char.screenPosPx.x, char.screenPosPx.y, 100, 20 );
         const ms = const Duration( milliseconds: 5000 );
         new Timer( ms, removeEvent );
         Action event = new Action( char, msg, EVENT_TYPE_MESSAGE );

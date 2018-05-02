@@ -13,8 +13,8 @@ import 'dart:math' as Math;
 class Projectile implements Graphic{
 
   // Graphic vars
-  HtmlDocument doc;
-  CanvasRenderingContext2D ctx;
+  HtmlDocument document;
+  CanvasRenderingContext2D context;
   CanvasElement canvas;
   ImageElement image;
 
@@ -44,8 +44,8 @@ class Projectile implements Graphic{
 
   Projectile( Coordinate this.curPos, int this.faceDir, Scene this.scene, String imageSource, num this.range,
       [num this.speed = 1]) {
-    this.doc = scene.doc;
-    this.ctx = scene.ctx;
+    this.document = scene.document;
+    this.context = scene.context;
     this.canvas = scene.canvas;
 
     this.steps = 0;
@@ -56,7 +56,7 @@ class Projectile implements Graphic{
 
   void loadGraphic(String src){
     this.image = new Element.tag('img');
-    this.image = doc.createElement('img');
+    this.image = document.createElement('img');
     this.image.src = src;
   }
 
@@ -72,7 +72,7 @@ class Projectile implements Graphic{
       return;
     }
 
-    ctx.drawImageToRect(this.image , new Rectangle(screenPosPx.x, screenPosPx.y,
+    context.drawImageToRect(this.image , new Rectangle(screenPosPx.x, screenPosPx.y,
         TILE_SIZE, TILE_SIZE), //Rect to paint the image
         sourceRect: new Rectangle(0,
             TILE_SIZE * faceDir,

@@ -1,4 +1,3 @@
-
 library character;
 
 import 'dart:html';
@@ -10,11 +9,11 @@ import '../helpers/coordinate.dart';
 import '../helpers/matrix.dart';
 import 'dart:math' as Math;
 
-class Character implements Graphic{
+class Character implements Graphic {
   
   //Graphic vars
-  HtmlDocument doc;
-  CanvasRenderingContext2D ctx;
+  HtmlDocument document;
+  CanvasRenderingContext2D context;
   CanvasElement canvas;
   ImageElement characterImage;
   
@@ -66,8 +65,8 @@ class Character implements Graphic{
   
   Character( Coordinate this.curPos, int selectedChar, int characterRow, Scene this.scene, String imageSource, 
       [num this.speed = 1]) {
-    this.doc = scene.doc;
-    this.ctx = scene.ctx;
+    this.document = scene.document;
+    this.context = scene.context;
     this.canvas = scene.canvas;
     
     this.randomMovement = false;
@@ -300,7 +299,7 @@ class Character implements Graphic{
   
   void loadGraphic(String src){
     this.characterImage = new Element.tag('img'); 
-    this.characterImage = doc.createElement('img'); 
+    this.characterImage = document.createElement('img'); 
     this.characterImage.src = src;
   }
 
@@ -376,7 +375,7 @@ class Character implements Graphic{
       }
     }
 
-    ctx.drawImageToRect(this.characterImage , new Rectangle(screenPosPx.x, screenPosPx.y,
+    context.drawImageToRect(this.characterImage , new Rectangle(screenPosPx.x, screenPosPx.y,
       TILE_SIZE, TILE_SIZE), //Rect to paint the image
       sourceRect: new Rectangle(((selectedChar) + (frame / ANIMATION_SPEED).floor() ) * TILE_SIZE, 
           (TILE_SIZE * faceDir) + characterRow, 

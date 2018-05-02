@@ -13,8 +13,8 @@ import 'tile.dart';
 import 'dart:math' as Math;
 
 class MapSet implements Graphic{
-  HtmlDocument doc;
-  CanvasRenderingContext2D ctx;
+  HtmlDocument document;
+  CanvasRenderingContext2D context;
   CanvasElement canvas;
   ImageElement mapsetImage;
   Map structuresData;
@@ -32,8 +32,8 @@ class MapSet implements Graphic{
   Matrix eventMapset;
   
   MapSet(Scene this.scene, int this.width, int this.height) {
-    this.doc = scene.doc;
-    this.ctx = scene.ctx;
+    this.document = scene.document;
+    this.context = scene.context;
     this.canvas = scene.canvas;
     
     mapset = new Matrix(this.width, this.height);
@@ -46,14 +46,14 @@ class MapSet implements Graphic{
   
   void loadGraphic(String src){
     this.mapsetImage = new Element.tag('img'); 
-    this.mapsetImage = doc.createElement('img'); 
+    this.mapsetImage = document.createElement('img'); 
     this.mapsetImage.src = src;
     this.mapsetImage.onLoad.listen((value) => hideLoading());
   }
   
   void hideLoading(){
-    doc.querySelector("#loading").classes.add('hidden');
-    doc.querySelector("#canvas").classes.remove('hidden');
+    document.querySelector("#loading").classes.add('hidden');
+    document.querySelector("#canvas").classes.remove('hidden');
     update();
   }
   
@@ -172,12 +172,12 @@ class MapSet implements Graphic{
     for (var e = offsetInitY; e < offsetFinalY; e++){
       for (var i = offsetInitX; i < offsetFinalX; i++){
         Tile tile = mapset.get( i , e);
-        ctx.drawImageToRect(this.mapsetImage , new Rectangle(i * TILE_SIZE - scene.displayPxX, e * TILE_SIZE - scene.displayPxY, TILE_SIZE, TILE_SIZE), //Rect to paint the image
+        context.drawImageToRect(this.mapsetImage , new Rectangle(i * TILE_SIZE - scene.displayPxX, e * TILE_SIZE - scene.displayPxY, TILE_SIZE, TILE_SIZE), //Rect to paint the image
             sourceRect: new Rectangle( tile.xImg, tile.yImg, TILE_SIZE, TILE_SIZE)); //Size of the image
         
         if(mapset2.get(i, e) != 0){
           Tile tile2 = mapset2.get(i, e);
-          ctx.drawImageToRect(this.mapsetImage , new Rectangle(i * TILE_SIZE - scene.displayPxX, e * TILE_SIZE - scene.displayPxY, TILE_SIZE, TILE_SIZE), //Rect to paint the image
+          context.drawImageToRect(this.mapsetImage , new Rectangle(i * TILE_SIZE - scene.displayPxX, e * TILE_SIZE - scene.displayPxY, TILE_SIZE, TILE_SIZE), //Rect to paint the image
               sourceRect: new Rectangle( tile2.xImg, tile2.yImg, TILE_SIZE, TILE_SIZE)); //Size of the image
         }
       }

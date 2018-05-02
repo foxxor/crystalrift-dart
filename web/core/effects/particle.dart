@@ -1,7 +1,3 @@
-/*
-  Copyright (C) 2013 Jorge Vargas <vargasjorgeluis@gmail.com>
-*/
-
 library particle;
 
 import 'dart:html';
@@ -12,11 +8,11 @@ import '../../helpers/coordinate.dart';
 import '../graphic.dart';
 import 'dart:math' as Math;
 
-class Particle implements Graphic{
+class Particle implements Graphic {
   
   //Graphical vars
-  HtmlDocument doc;
-  CanvasRenderingContext2D ctx;
+  HtmlDocument document;
+  CanvasRenderingContext2D context;
   CanvasElement canvas;
   List<ImageElement> particles;
   List<Coordinate> particlesCoords;
@@ -33,8 +29,8 @@ class Particle implements Graphic{
   String color;
   
   Particle(Scene this.scene, Coordinate this.curPosPx, String this.effect){
-    this.doc = scene.doc;
-    this.ctx = scene.ctx;
+    this.document = scene.document;
+    this.context = scene.context;
     this.canvas = scene.canvas;
     
     this.particles = new List<ImageElement>();
@@ -140,14 +136,14 @@ class Particle implements Graphic{
         num nAlpha = alphaIte.current;
         coord.moveNext();
         Coordinate c = coord.current;
-        ctx.save();
-        ctx.globalAlpha = nAlpha;
+        context.save();
+        context.globalAlpha = nAlpha;
         if(blendType != null){
-          ctx.globalCompositeOperation = blendType;
-          ctx.fillStyle = color;
+          context.globalCompositeOperation = blendType;
+          context.fillStyle = color;
         }
-        ctx.drawImageScaled(p, c.x - scene.displayPxX, c.y - scene.displayPxY, width, height);
-        ctx.restore();      
+        context.drawImageScaled(p, c.x - scene.displayPxX, c.y - scene.displayPxY, width, height);
+        context.restore();      
       }
     }
   }
@@ -155,15 +151,15 @@ class Particle implements Graphic{
   //This method doesnt work because is super slow :(
   void drawParticle(num x, num y){
     var radius = 2;
-    ctx.arc(x, y, radius, 0, 
+    context.arc(x, y, radius, 0, 
         2 * Math.PI, false);
-    ctx.fillStyle = 'orange';
-    ctx.fill();
+    context.fillStyle = 'orange';
+    context.fill();
   }
   
   void loadGraphic(String src){
     ImageElement particleImage = new Element.tag('img'); 
-    particleImage = doc.createElement('img'); 
+    particleImage = document.createElement('img'); 
     particleImage.src = src;
     particleImage.onLoad.listen((value) => update());
     var random = new Math.Random();

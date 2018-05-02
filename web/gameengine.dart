@@ -1,7 +1,3 @@
-/*
-  Copyright (C) 2013 Jorge Vargas <vargasjorgeluis@gmail.com>
-*/
-
 import 'dart:html';
 import 'core/globals.dart';
 import 'core/actor.dart';
@@ -15,10 +11,12 @@ HtmlDocument document;
 CanvasRenderingContext2D context;
 CanvasElement canvas;
 Scene scene;
-WindowSet windowInfo;
+WindowSet gameDialog;
 Element titleElement;
+bool gameLocked;
 
 void main() {
+    gameLocked = true;
     document = window.document;
     titleElement = document.querySelector( ".navbar" );
     setupCanvas();
@@ -34,7 +32,7 @@ void main() {
   
     setupKeys();
     String text = "Hi, welcome to this demo of Crystal Rift! \n Please use the A/S/D/W keys to move around. \n Use enter key to interact with characters and close this window. ";
-    windowInfo = new WindowSet( document, context, canvas, 
+    gameDialog = new WindowSet( document, context, canvas, 
         ( ( canvas.width ) / 2 ).floor() - ( ( WINDOW_WIDTH / 2 ).floor() + ( scene.width == window.innerWidth ? 0 : scene.width ) ), 
         scene.height - WINDOW_HEIGHT - 50, 
         WINDOW_WIDTH, WINDOW_HEIGHT, text );
@@ -82,8 +80,10 @@ void update( num delta ) {
     context.clearRect( 0, 0, canvas.width, canvas.height );
     scene.update();
 
-    if ( !windowInfo.endOfLine ) {
-        windowInfo.update();
+    if ( !gameDialog.endOfLine ) {
+        gameDialog.update();
+    } else {
+        gameLocked = false;
     }
     
     // Callback this same function, to create a loop
@@ -92,7 +92,8 @@ void update( num delta ) {
 
 // Function that generate the actions based in the context of the game.
 void doAction() {
-    windowInfo.moveLines();
+    gameDialog.moveLines();
+
     // Trigger action for the character in front, if any.
     Actor character = scene.getCharacterInFront();
     if ( character != null ) {
@@ -107,14 +108,14 @@ void doAction() {
     }
 }
 
-void createProjectile(){
+void createProjectile() {
     Coordinate curPos = new Coordinate( scene.player.curPos.x, scene.player.curPos.y );
     Projectile projectile = new Projectile( curPos, scene.player.faceDir, scene, 'energy_ball.png', 5, 2 );
     scene.projectiles.add(projectile);
 }
 
 // Keyboard and keybinding
-void setupKeys(){
+void setupKeys() {
     canvas.onKeyDown.listen((e) {
         reactKey(e);
     });
@@ -124,17 +125,19 @@ void setupKeys(){
 }
 
 void reactKey( var evt ) {
-    if ( evt.keyCode == 37 || evt.keyCode == 65 ) { // Left + A
-        scene.movePlayer( LEFT );
-    } else if ( evt.keyCode == 38 || evt.keyCode == 87 ) { // Up + W
-        scene.movePlayer( UP );
-    } else if ( evt.keyCode == 39 || evt.keyCode == 68 ) { // Right + D
-        scene.movePlayer( RIGHT );
-    } else if ( evt.keyCode == 40 || evt.keyCode == 83 ) { // Down + S
-        scene.movePlayer( DOWN );
-    } else if ( evt.keyCode == 13 ) { // Action
-        doAction();
-    } else if ( evt.keyCode == 82 ) { // Projectile
-        createProjectile();
+    if ( !gameLocked || evt.keyCode == 13  ) { // If the game is locked, only the action button should be enabled
+        if ( evt.keyCode == 37 || evt.keyCode == 65 ) { // Left + A
+            scene.movePlayer( LEFT );
+        } else if ( evt.keyCode == 38 || evt.keyCode == 87 ) { // Up + W
+            scene.movePlayer( UP );
+        } else if ( evt.keyCode == 39 || evt.keyCode == 68 ) { // Right + D
+            scene.movePlayer( RIGHT );
+        } else if ( evt.keyCode == 40 || evt.keyCode == 83 ) { // Down + S
+            scene.movePlayer( DOWN );
+        } else if ( evt.keyCode == 13 ) { // Action
+            doAction();
+        } else if ( evt.keyCode == 82 ) { // Projectile
+            createProjectile();
+        }
     }
 }
