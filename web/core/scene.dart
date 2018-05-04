@@ -3,6 +3,8 @@ library scene;
 import 'dart:html';
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math' as Math;
+
 import 'globals.dart';
 import '../helpers/coordinate.dart';
 import '../lib/message.dart';
@@ -14,20 +16,30 @@ import 'action.dart';
 import 'projectile.dart';
 import 'effects/mapAnimation.dart';
 import 'effects/particle.dart';
-import 'dart:math' as Math;
+import 'windowset.dart';
 import 'modules/battle_module.dart';
+import 'modules/input_module.dart';
 
 class Scene {
     //Graphic vars
     HtmlDocument document;
     CanvasRenderingContext2D context;
     CanvasElement canvas;
+
+    // Input module to control the game
+    InputModule inputModule;
+
+    // Battle module that controls the battle actions
+    BattleModule battleModule;
     
     // The current visible map
     MapSet gameMap;
 
     // The current character playing
     Actor player;
+
+    // The game dialog
+    WindowSet gameDialog;
 
     // List of current characters
     List<Actor> actors;
@@ -63,6 +75,9 @@ class Scene {
         this.document = document;
         this.context = context;
         this.canvas = canvas;
+
+        inputModule = new InputModule( this );
+        battleModule = new BattleModule( this );
         
         gameMap = new MapSet( this, MAP_WIDTH_TILES, MAP_HEIGHT_TILES );
         Coordinate initCoor = new Coordinate( 15, 10 );
@@ -87,7 +102,15 @@ class Scene {
         displayPxY = 0 * TILE_SIZE;
         events = new List<Action>();
         projectiles = new List<Projectile>();
-        loadProperties();
+        loadProperties();   
+    }
+
+    void createDialog( window ) {
+        String text = "Hi, welcome to this demo of Crystal Rift! \n Use enter key to interact with characters and close this window. \n Use the A/S/D/W keys to move around. \n Enjoy! ";
+        gameDialog = new WindowSet( document, context, canvas, 
+            ( ( canvas.width ) / 2 ).floor() - ( ( WINDOW_WIDTH / 2 ).floor() + ( width == window.innerWidth ? 0 : width ) ), 
+            height - WINDOW_HEIGHT - 50, 
+            WINDOW_WIDTH, WINDOW_HEIGHT, text );
     }
     
     void update() async {
@@ -97,6 +120,7 @@ class Scene {
         } else {
             stopCameraMovement();
         }
+
         gameMap.update();
         player.update();
 
@@ -106,6 +130,13 @@ class Scene {
         updateAnimations();
         updateProjectiles();
         updateEvents();
+
+        if ( gameDialog != null && !gameDialog.endOfLine ) {
+            gameDialog.update();
+        } else if ( gameDialog != null && inputModule.inputLocked ) {
+            inputModule.inputLocked = false;
+            gameDialog = null;
+        }
     }
 
     Future updateEntities() async {

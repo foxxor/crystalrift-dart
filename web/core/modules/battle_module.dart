@@ -1,29 +1,34 @@
-
 import 'dart:html';
 import 'dart:async';
+import 'dart:math' as Math;
+
 import '../globals.dart';
 import '../scene.dart';
-import '../graphic.dart';
+import '../actor.dart';
 import '../../helpers/coordinate.dart';
-import '../../helpers/matrix.dart';
-import 'dart:math' as Math;
+import '../projectile.dart';
+
 
 class BattleModule {
 
-  //Graphic vars
-  HtmlDocument htmlDocument;
-  CanvasRenderingContext2D context2d;
-  CanvasElement canvas;
-  ImageElement characterImage;
+    // Scene calling this class
+    Scene scene;
 
-  // Scene calling this class
-  Scene scene;
+    BattleModule( Scene this.scene ) {
 
-  BattleModule(HtmlDocument this.htmlDocument, CanvasRenderingContext2D this.context2d, CanvasElement this.canvas, Scene this.scene){
+    }
 
-  }
+    static num calculateDamage() {
 
-  static num calculateDamage(){
+    }
 
-  }
+    void doDamage( Actor enemy ) {
+        enemy.doDamage( 30 );
+    }
+
+    void createProjectile() {
+        Coordinate curPos = new Coordinate( scene.player.curPos.x, scene.player.curPos.y );
+        Projectile projectile = new Projectile( curPos, scene.player.faceDir, scene, 'energy_ball.png', 5, 2 );
+        scene.projectiles.add( projectile );
+    }
 }

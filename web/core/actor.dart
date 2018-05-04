@@ -65,17 +65,14 @@ class Actor extends Character {
         barMpImage = document.createElement( 'img' ); 
         barMpImage.src = "assets/particles/extra/" + srcBarMp;
     }
-    
-    void damage( int numAttack ) {
-        this.life = this.life - ( numAttack - ( this.defense * 0.1 ).floor() );
-        if ( this.life <= 0 ) {
-            this.dead = true;
-        }     
-    }
 
-    void doDamage() {
+    void doDamage( int damage ) {
         if ( !this.dead ) {
-            damage( 30 );
+            this.life = this.life - ( damage - ( this.defense * 0.1 ).floor() );
+            if ( this.life <= 0 ) {
+                this.dead = true;
+            }   
+
             scene.createAnimation( this );
             chaseCharacter( scene.player );
         }

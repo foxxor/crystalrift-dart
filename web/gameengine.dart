@@ -1,10 +1,7 @@
 import 'dart:html';
 
 import 'core/globals.dart';
-import 'core/actor.dart';
-import 'core/projectile.dart';
 import 'core/scene.dart';
-import 'core/windowset.dart';
 import 'helpers/coordinate.dart';
 
 //System vars
@@ -14,15 +11,14 @@ CanvasElement canvas;
 Scene scene;
 WindowSet gameDialog;
 Element titleElement;
-bool gameLocked;
 
 void main() {
-    gameLocked = true; // By default lock the game movements, since I'm showing a game Dialog.
     document = window.document;
     titleElement = document.querySelector( ".navbar" );
     setupCanvas();
     scene = new Scene( document, context, canvas );
     resizeViewport();
+    scene.createDialog( window );
 
     window.onResize.listen((e) {
         titleElement = document.querySelector( ".navbar" );
@@ -30,13 +26,6 @@ void main() {
         resizeViewport();
         scene.centerCamera( CENTER_TYPE_HORIZONTAL );
     });
-  
-    setupKeys();
-    String text = "Hi, welcome to this demo of Crystal Rift! \n Use enter key to interact with characters and close this window. \n Use the A/S/D/W keys to move around. \n Enjoy! ";
-    gameDialog = new WindowSet( document, context, canvas, 
-        ( ( canvas.width ) / 2 ).floor() - ( ( WINDOW_WIDTH / 2 ).floor() + ( scene.width == window.innerWidth ? 0 : scene.width ) ), 
-        scene.height - WINDOW_HEIGHT - 50, 
-        WINDOW_WIDTH, WINDOW_HEIGHT, text );
 
     window.animationFrame.then( update );
 }
@@ -79,66 +68,8 @@ void resizeViewport() {
 // Global refresh method
 update( num delta ) async {
     context.clearRect( 0, 0, canvas.width, canvas.height );
-    await scene.update();
-
-    if ( !gameDialog.endOfLine ) {
-        gameDialog.update();
-    } else if ( gameLocked ) {
-        gameLocked = false;
-    }
+    scene.update();
     
     // Callback this same function, to create a loop
     window.animationFrame.then( update );
-}
-
-// Function that generate the actions based in the context of the game.
-void doAction() {
-    gameDialog.moveLines();
-
-    // Trigger action for the character in front, if any.
-    Actor character = scene.getCharacterInFront();
-    if ( character != null ) {
-        if ( character.combatable ) {
-            character.doDamage();
-        } else if ( !character.trigger ) {
-            character.trigger = true;
-            if ( character.message.isNotEmpty ) {
-                scene.createMessage( character );
-            }
-        }
-    }
-}
-
-void createProjectile() {
-    Coordinate curPos = new Coordinate( scene.player.curPos.x, scene.player.curPos.y );
-    Projectile projectile = new Projectile( curPos, scene.player.faceDir, scene, 'energy_ball.png', 5, 2 );
-    scene.projectiles.add(projectile);
-}
-
-// Keyboard and keybinding
-void setupKeys() {
-    canvas.onKeyDown.listen((e) {
-        reactKey(e);
-    });
-    canvas.onKeyUp.listen((e) {
-        scene.player.stopMove();
-    });
-}
-
-void reactKey( var evt ) {
-    if ( !gameLocked || evt.keyCode == 13  ) { // If the game is locked, only the action button should be enabled
-        if ( evt.keyCode == 37 || evt.keyCode == 65 ) { // Left + A
-            scene.movePlayer( LEFT );
-        } else if ( evt.keyCode == 38 || evt.keyCode == 87 ) { // Up + W
-            scene.movePlayer( UP );
-        } else if ( evt.keyCode == 39 || evt.keyCode == 68 ) { // Right + D
-            scene.movePlayer( RIGHT );
-        } else if ( evt.keyCode == 40 || evt.keyCode == 83 ) { // Down + S
-            scene.movePlayer( DOWN );
-        } else if ( evt.keyCode == 13 ) { // Action
-            doAction();
-        } else if ( evt.keyCode == 82 ) { // Projectile
-            createProjectile();
-        }
-    }
 }
