@@ -90,7 +90,7 @@ class Scene {
         loadProperties();
     }
     
-    void update() {
+    void update() async {
         //The order of rendering here controls the priority of visualization
         if ( isCameraMoving() && player.isMoving() ) {
             updateCameraMovement();
@@ -100,12 +100,12 @@ class Scene {
         gameMap.update();
         player.update();
 
-        updateCharacters() ;
+        await updateCharacters() ;
         updateEntities();
         updateParticles();
-        updateEvents();
         updateAnimations();
         updateProjectiles();
+        updateEvents();
     }
 
     Future updateEntities() async {

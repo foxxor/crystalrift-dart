@@ -17,7 +17,7 @@ Element titleElement;
 bool gameLocked;
 
 void main() {
-    gameLocked = true;
+    gameLocked = true; // By default lock the game movements, since I'm showing a game Dialog.
     document = window.document;
     titleElement = document.querySelector( ".navbar" );
     setupCanvas();
@@ -32,7 +32,7 @@ void main() {
     });
   
     setupKeys();
-    String text = "Hi, welcome to this demo of Crystal Rift! \n Please use the A/S/D/W keys to move around. \n Use enter key to interact with characters and close this window. ";
+    String text = "Hi, welcome to this demo of Crystal Rift! \n Use enter key to interact with characters and close this window. \n Use the A/S/D/W keys to move around. \n Enjoy! ";
     gameDialog = new WindowSet( document, context, canvas, 
         ( ( canvas.width ) / 2 ).floor() - ( ( WINDOW_WIDTH / 2 ).floor() + ( scene.width == window.innerWidth ? 0 : scene.width ) ), 
         scene.height - WINDOW_HEIGHT - 50, 
@@ -79,11 +79,11 @@ void resizeViewport() {
 // Global refresh method
 update( num delta ) async {
     context.clearRect( 0, 0, canvas.width, canvas.height );
-    scene.update();
+    await scene.update();
 
     if ( !gameDialog.endOfLine ) {
         gameDialog.update();
-    } else {
+    } else if ( gameLocked ) {
         gameLocked = false;
     }
     
