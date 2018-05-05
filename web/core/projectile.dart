@@ -150,7 +150,7 @@ class Projectile implements Graphic {
             curPosPx.x = Math.min( curPosPx.x + distance, curPos.x * TILE_SIZE );
         }
         if ( curPos.y * TILE_SIZE < curPosPx.y ) {
-            curPosPx.y = Math.max( urPosPx.y - distance, curPos.y * TILE_SIZE );
+            curPosPx.y = Math.max( curPosPx.y - distance, curPos.y * TILE_SIZE );
         }
         if ( curPos.x * TILE_SIZE < curPosPx.x ) {
             curPosPx.x = Math.max( curPosPx.x - distance, curPos.x * TILE_SIZE );
