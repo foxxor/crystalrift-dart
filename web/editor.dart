@@ -9,9 +9,10 @@ import 'editor/mapEvent.dart';
 import 'editor/eventCharacter.dart';
 import 'editor/eventObject.dart';
 import 'editor/filescan.dart';
-import 'helpers/matrix.dart';
+
 import 'core/globals.dart';
 import 'core/tile.dart';
+import 'helpers/matrix.dart';
 
 //System vars
 HtmlDocument document;
@@ -173,26 +174,26 @@ void navigationHideAll() {
 
 // Draw the editor map
 void loadMap() {
-    mapCanvas = document.querySelector( "#map" );
+    mapCanvas = document.querySelector( "#mapCanvas" );
     map2DContext = mapCanvas.getContext( "2d" );
     mapElement = document.querySelector( '#mapContainer' );
     
-    mapCanvas.width = EDITOR_MAP_TILES_SIZE_WIDTH * TILE_SIZE;
-    mapCanvas.height = EDITOR_MAP_TILES_SIZE_HEIGHT * TILE_SIZE;
+    mapCanvas.width = EDITOR_MAP_DEFAULT_TILES_WIDTH * TILE_SIZE;
+    mapCanvas.height = EDITOR_MAP_DEFAULT_TILES_HEIGHT * TILE_SIZE;
     maps = new List<EditorMap>();
-    EditorMap initialMap = new EditorMap( "Map 001", EDITOR_MAP_TILES_SIZE_WIDTH, EDITOR_MAP_TILES_SIZE_HEIGHT );
+    EditorMap initialMap = new EditorMap( "Map 001", EDITOR_MAP_DEFAULT_TILES_WIDTH, EDITOR_MAP_DEFAULT_TILES_HEIGHT );
     initialMap.initContext( document, map2DContext, mapCanvas );
     initialMap.selectionMode = SINGLE_TILE_SELECTION;
     initialMap.active = true;
     maps.add( initialMap );
-    currentMap = maps.elementAt(0);
+    currentMap = maps.elementAt( 0 );
     currentMap.canvasReDraw();
     drawMapsList();
     drawEventsList();
     loadMapSelection();
 }
 
-//Listener for the map 
+// Listener for the map 
 void loadMapSelection() {
     int dragX, dragY;
     mapCanvas.onMouseUp.listen(( MouseEvent e ) {
@@ -234,7 +235,7 @@ void loadMapSelection() {
                 }
                 currentMap.stopSelection();
                 currentMap.update();
-            }else if( currentMap.selectionMode == MULTI_TILE_SELECTION && currentTool == "pencil" ) {
+            } else if ( currentMap.selectionMode == MULTI_TILE_SELECTION && currentTool == "pencil" ) {
                 for ( var i = 0; i < tileSelector.selection.rows; i++ ) {
                     for ( var e = 0; e < tileSelector.selection.cols; e++ ) {
                         currentMap.setTile( x+e-1, y+i-1, tileSelector.selection.get( e, i ).x,
@@ -274,8 +275,8 @@ void loadMapSelection() {
     
     //Update the selector position
     mapCanvas.onMouseMove.listen(( MouseEvent e ) {
-        int x = ( ( e.client.x - mapElement.offsetLeft + mapElement.scrollLeft ) / TILE_SIZE ).ceil() - 1;
-        int y = ( ( e.client.y - mapElement.offsetTop + mapElement.scrollTop ) / TILE_SIZE ).ceil() - 1;
+        int x = ( ( e.client.x - mapElement.parent.offsetLeft + mapElement.scrollLeft ) / TILE_SIZE ).ceil() - 1;
+        int y = ( ( e.client.y - mapElement.parent.offsetTop + mapElement.scrollTop ) / TILE_SIZE ).ceil() - 1;
         currentMap.updateSelector( x, y );
         currentMap.update( true );
     });
@@ -283,9 +284,9 @@ void loadMapSelection() {
 
 // Initialization for the tileset menu
 void loadTileSet() {
-    tilesetCanvas = document.querySelector( "#tileset" );
+    tilesetCanvas = document.querySelector( "#tilesetCanvas" );
     main2DContext = tilesetCanvas.getContext( "2d" );
-    tileElement = document.querySelector( "#tilesetCont" );
+    tileElement = document.querySelector( "#tilesetContainer" );
     menuTileset = new MenuTileset( document, main2DContext, tilesetCanvas, tileElement );
 }
 
@@ -311,7 +312,7 @@ void tileSelectorBinds() {
         menuTileset.update();
     });
     
-    //This is to multiple select tiles in the tileset container
+    // This is to select multiple tiles in the tileset container
     tilesetCanvas.onMouseUp.listen(( MouseEvent e ) {
         int x = (( e.client.x + tileElement.scrollLeft ) / TILE_SIZE ).ceil();
         int y = (( e.client.y + tileElement.scrollTop ) / TILE_SIZE ).ceil();
@@ -352,7 +353,7 @@ void tileSelectorBinds() {
         }
     });
         
-    //Update the selector position
+    // Update the selector position
     tilesetCanvas.onMouseMove.listen(( MouseEvent e ) {
         int x = ( ( e.client.x + tileElement.scrollLeft ) / TILE_SIZE ).ceil() - 1;
         int y = ( ( e.client.y + tileElement.scrollTop ) / TILE_SIZE ).ceil() - 1;
@@ -367,7 +368,7 @@ void drawMapsList() {
     int index = 0;
     for ( var m in maps ) {
         String active = "";
-        if( currentMap == m ) {
+        if ( currentMap == m ) {
             active = "active";
         }
         var li = new Element.html( '<a class="list-group-item map-item ' + active + '"><span class="badge">' + m.widthTiles.toString()
@@ -378,7 +379,7 @@ void drawMapsList() {
     }
 }
 
-void drawEventsList(){
+void drawEventsList() {
     var ul = document.querySelector( '#eventWindow ul.list-group' );
     ul.innerHtml = "";
     int index = 0;
@@ -398,23 +399,23 @@ void drawEventsList(){
     }
 }
 
-void bindMapItems(){
+void bindMapItems() {
     var mapList = document.querySelector( '#mapList' );
     mapList.onClick.listen(( MouseEvent e ) {
-            e.preventDefault();
-            Element elem = e.target;
-            if ( elem.dataset[ 'id' ] != null ) {
-                    for ( var mapItems in mapList.children ) {
-                        mapItems.classes.remove( 'active' );
-                    }
-                    elem.classes.add( 'active' );
-                    int mapId = int.parse( elem.dataset[ 'id' ] );
-                    currentMap.active = false;
-                    currentMap = maps.elementAt( mapId );
-                    currentMap.active = true;
-                    currentMap.canvasReDraw();
-                    currentMap.update();
+        e.preventDefault();
+        Element elem = e.target;
+        if ( elem.dataset[ 'id' ] != null ) {
+            for ( var mapItems in mapList.children ) {
+                mapItems.classes.remove( 'active' );
             }
+            elem.classes.add( 'active' );
+            int mapId = int.parse( elem.dataset[ 'id' ] );
+            currentMap.active = false;
+            currentMap = maps.elementAt( mapId );
+            currentMap.active = true;
+            currentMap.canvasReDraw();
+            currentMap.update();
+        }
     });
 }
 
@@ -473,7 +474,6 @@ void bindEventOptions() {
         context.callMethod( 'jQuery', [ '#addEventModal' ] ).callMethod( 'modal', [ 'hide' ] );
     });
     
-    
     var cancelEventButton = document.querySelector( '#cancelEventButton' );
     cancelEventButton.onMouseDown.listen(( MouseEvent e ) {
         e.preventDefault();
@@ -483,7 +483,7 @@ void bindEventOptions() {
         // Deletes the last event added since is discarded
         currentMap.events.removeLast();
         drawEventsList();
-        context.callMethod( 'jQuery', [ '#addEventModal' ]).callMethod( 'modal', [ 'hide' ] );
+        context.callMethod( 'jQuery', [ '#addEventModal' ] ).callMethod( 'modal', [ 'hide' ] );
     });
     
 }

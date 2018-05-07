@@ -10,7 +10,7 @@ import '../helpers/coordinate.dart';
 import '../core/globals.dart';
 import 'mapEvent.dart';
 
-class EditorMap{
+class EditorMap {
   HtmlDocument _doc;
   CanvasRenderingContext2D _ctx;
   CanvasElement canvas;
@@ -61,16 +61,16 @@ class EditorMap{
     loadGraphic('assets/tileset/tileset.png');
   }
   
-  void canvasReDraw(){
-    this.canvas.width = widthTiles* TILE_SIZE;
-    this.canvas.height = heightTiles* TILE_SIZE;
+  void canvasReDraw() {
+    this.canvas.width = widthTiles * TILE_SIZE;
+    this.canvas.height = heightTiles * TILE_SIZE;
   }
   
-  void loadGraphic(String src){
+  void loadGraphic( String src ) {
     this.mapImage = new Element.tag('img'); 
     this.mapImage = _doc.createElement('img'); 
     this.mapImage.src = src;
-    this.mapImage.onLoad.listen((value) => update());
+    this.mapImage.onLoad.listen( ( value ) => update() );
   }
   
   void initLayers(){
