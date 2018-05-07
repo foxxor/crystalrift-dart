@@ -1,8 +1,12 @@
-.hidden{
-  visible:none;
+body {
+	width: 99%;
 }
 
-.float-right{
+.hidden {
+  visible: none;
+}
+
+.float-right {
   float:right;
   padding: 3px 12px;
 }
