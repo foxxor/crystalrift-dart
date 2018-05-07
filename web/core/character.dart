@@ -41,6 +41,9 @@ class Character implements Graphic {
     // Make this character move randomly
     bool randomMovement;
 
+    // Current random timer
+    Timer currentRandomTimer;
+
     // Is this object phasable?
     bool phasable;
 
@@ -49,6 +52,9 @@ class Character implements Graphic {
 
     // Character is chasing?
     bool chasing;
+
+    // Max. chasing range
+    int chasingRange;
 
     // Who is this chasing?
     Character chased;
@@ -64,12 +70,10 @@ class Character implements Graphic {
     int offsetY;
     
     Character ( Coordinate this.curPos, int selectedChar, int characterRow, Scene this.scene, String imageSource, 
-            [ num this.speed = 1 ] ) {
+            [ num this.speed = 1, bool this.randomMovement = false ] ) {
         this.document = scene.document;
         this.context = scene.context;
         this.canvas = scene.canvas;
-        
-        this.randomMovement = false;
         this.phasable = false;
         this.curPosPx = new Coordinate( curPos.x * TILE_SIZE, curPos.y * TILE_SIZE );
         this.screenPosPx = new Coordinate( 0, 0 );
@@ -77,6 +81,7 @@ class Character implements Graphic {
         this.faceDir = INITIAL_FACE;
         this.trigger = false;
         this.chasing = false;
+        this.chasingRange = 5;
         offsetX = 0;
         offsetY = 0;
         this.selectedChar = selectedChar * 3; // This calculation is cached for performance 
@@ -85,11 +90,16 @@ class Character implements Graphic {
     }
 
     Future moveRandom() async {
-        const ms = const Duration( milliseconds: 2000 );
-        new Timer( ms, randomMove );
+        const ms = const Duration( milliseconds: 2500 );
+        currentRandomTimer = new Timer( ms, randomMove );
     }
 
     void randomMove() {
+        if ( chasing ) {
+            return;
+        }
+
+        currentRandomTimer = null;
         var random = new Math.Random();
         var number = random.nextInt( 4 );
         move( number );
@@ -104,6 +114,7 @@ class Character implements Graphic {
     void stopChasing() {
         chasing = false;
         chased = null;
+        currentRandomTimer == null;
     }
     
     void moveTo( int x, int y ) {
@@ -365,14 +376,18 @@ class Character implements Graphic {
 
         screenPosPx.x = curPosPx.x - scene.displayPxX;
         screenPosPx.y = curPosPx.y - scene.displayPxY;
-        if ( !scene.inCamera( this.curPosPx ) ) {
+        if ( !scene.inCamera( this.curPosPx ) && !chasing ) {
             return;
         }
         if ( chasing ) {
-            if ( !curPos.nextToThis(faceDir, chased.curPos ) ) {
+            if ( curPos.distanceToThis( chased.curPos ) > chasingRange ) {
+                stopChasing();
+            } else if ( !curPos.nextToThis(faceDir, chased.curPos ) ) {
                 moveTo( chased.curPos.x, chased.curPos.y );
                 faceDirection( curPos.facingThis( faceDir, chased.curPos ) );
             }
+        } else if ( randomMovement && currentRandomTimer == null ) {
+            moveRandom();
         }
 
         context.drawImageToRect( this.characterImage , new Rectangle( screenPosPx.x, screenPosPx.y,

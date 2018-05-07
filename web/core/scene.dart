@@ -307,11 +307,8 @@ class Scene {
         while( characters.moveNext() ){
             Map m = characters.current;
             Coordinate coords = new Coordinate( m['x'], m['y'] );
-            Actor character = new Actor( coords, m['characterId'], m['characterRow'], this, m['imageSource'], m['speed'] );
+            Actor character = new Actor( coords, m['characterId'], m['characterRow'], this, m['imageSource'], m['speed'], m['moveRandom'] );
             character.initializeActor( m['combatable'], m['behaviour'], m['life'], m['energy'], m['message'], m['attack'], m['defense'] );
-            if(m['moveRandom']){
-                character.moveRandom();
-            }
             actors.add(character);
             gameMap.occupyTile( m['x'], m['y'], character );
         }

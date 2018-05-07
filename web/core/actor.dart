@@ -13,25 +13,35 @@ class Actor extends Character {
     
     // Max life
     int maxLife;
+
     // Current life
     int life;
+
     // Type of the actor behaviour
     int behaviour;
+
     // Max energy
     int maxEnergy;
+
     // Current energy
     int energy;
+
     //Message of the character
     String message;
+
     // If the actor can combat
-    bool combatable; 
+    bool combatable;
+
     // How much damage this actor can make
     int attack;
+
     // Defense modifier against damage
     int defense;
+
     // If the actor is dead
     bool dead;
     
+    // HP and MP life bars
     ImageElement barHpImage;
     ImageElement emptyBarHpImage;
     ImageElement barMpImage;
@@ -40,8 +50,8 @@ class Actor extends Character {
     String srcEmptyBarHp = "empty_hp_pixel.png";
     String srcBarMp = "mp_pixel.png";
     
-    Actor( Coordinate curPos, int charSprite, int charRow, Scene scene, String imageSource, [ num speed = 1 ] ) : 
-        super( curPos, charSprite, charRow, scene, imageSource, speed );
+    Actor( Coordinate curPos, int charSprite, int charRow, Scene scene, String imageSource, [ num speed = 1, bool randomMovement = false ] ) : 
+        super( curPos, charSprite, charRow, scene, imageSource, speed, randomMovement );
     
     void initializeActor( bool combatable, int behaviour, 
         [ int maxLife = 0, int maxEnergy = 0, String message = "", int attack = 0, int defense = 0, bool dead = false, int speed = 1 ] ) {
@@ -100,7 +110,8 @@ class Actor extends Character {
         }
 
         if ( this.dead ) {
-            this.chasing = false;
+            stopChasing();
+            randomMovement = false;
         }
     }
 }
