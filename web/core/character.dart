@@ -308,7 +308,7 @@ class Character implements Graphic {
         return -1;
     }
     
-    void loadGraphic( tring src ) {
+    void loadGraphic( String src ) {
         this.characterImage = new Element.tag( 'img' ); 
         this.characterImage = document.createElement( 'img' ); 
         this.characterImage.src = src;

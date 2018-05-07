@@ -10,9 +10,9 @@
  
   <body>
   	<div class="row">
-      <div class="col-md-3" id="sideMenu">
-        <div style="width: 100%; height: 334px; overflow: auto;" id="tilesetCont">
-          <canvas id="tileset"></canvas>
+      <div class="col-md-3" id="sideMenu" style="padding-right:0;">
+        <div style="width: 100%; height: 334px; overflow: auto;" id="tilesetContainer">
+          <canvas id="tilesetCanvas"></canvas>
         </div>
         <ul class="nav nav-tabs" id="navigation">
           <li class="active"><a href="#" data-option="draw">Draw</a></li>
@@ -140,9 +140,9 @@
           </div>
         </div>
       </div>
-      <div class="col-md-9" id="mapContainer">
-        <div style="width: 100%; height: 100%; overflow: auto; margin-top:10px;" >
-          <canvas id="map"></canvas>
+      <div class="col-md-9" style="padding-right:0;">
+        <div id="mapContainer" style="width: 100%; height: 100vh; overflow: auto;">
+          <canvas id="mapCanvas"></canvas>
         </div>
   	  </div>
   	</div>
