@@ -49,16 +49,16 @@ const int CENTER_TYPE_HORIZONTAL = 2;
 
 /* ----- Battle and input ----- */
 
-const bool GAME_PAUSED_DEFAULT = true;
+const bool GAME_START_LOCKED = true;
 
-// Types of actors
-const int ACTOR_BEHAVIOUR_GOOD = 1;
-const int ACTOR_BEHAVIOUR_NEUTRAL = 2;
-const int ACTOR_BEHAVIOUR_FOE = 3;
+// Actor behaviours
+const int ACTOR_BEHAVIOUR_GOOD = 1; // Not combatable
+const int ACTOR_BEHAVIOUR_NEUTRAL = 2; // Combat only if attacked
+const int ACTOR_BEHAVIOUR_FOE = 3; // Combat if close enough
 
 const int MAX_PATHFINDING_ITERATIONS = 100;
 
-// Types of actors
+// Actor combat behaviour
 const int ACTOR_COMBAT_FLEE = 1;
 const int ACTOR_COMBAR_AGGRESIVE = 2;
 const int ACTOR_COMBAT_DEFENSIVE = 3;

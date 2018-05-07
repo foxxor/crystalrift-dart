@@ -16,7 +16,7 @@ class InputModule {
         setupKeys();
 
 
-        inputLocked = GAME_PAUSED_DEFAULT;
+        inputLocked = GAME_START_LOCKED;
     }
 
     // Keyboard and keybinding

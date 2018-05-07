@@ -387,7 +387,7 @@ class Scene {
         }
       
         if ( character != player ) {
-            bool nextTo = player.curPos.nextToThis2( facingCoords );
+            bool nextTo = player.curPos.equals( facingCoords );
             if ( !player.phasable && nextTo ) {
                 return false;
             }

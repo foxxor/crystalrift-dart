@@ -63,8 +63,8 @@ class Character implements Graphic {
     int offsetX;
     int offsetY;
     
-    Character( Coordinate this.curPos, int selectedChar, int characterRow, Scene this.scene, String imageSource, 
-            [num this.speed = 1] ) {
+    Character ( Coordinate this.curPos, int selectedChar, int characterRow, Scene this.scene, String imageSource, 
+            [ num this.speed = 1 ] ) {
         this.document = scene.document;
         this.context = scene.context;
         this.canvas = scene.canvas;
@@ -79,14 +79,14 @@ class Character implements Graphic {
         this.chasing = false;
         offsetX = 0;
         offsetY = 0;
-        this.selectedChar = selectedChar * 3; //This calculation is cached for performance 
-        this.characterRow = ( characterRow - 1 ) * ( TILE_SIZE * 4 ); //This calculation is cached for performance 
-        loadGraphic("assets/character/" + imageSource);
+        this.selectedChar = selectedChar * 3; // This calculation is cached for performance 
+        this.characterRow = ( characterRow - 1 ) * ( TILE_SIZE * 4 ); // This calculation is cached for performance 
+        loadGraphic( "assets/character/" + imageSource );
     }
 
     Future moveRandom() async {
-        const ms = const Duration(milliseconds: 2000);
-        new Timer( ms, randomMove);
+        const ms = const Duration( milliseconds: 2000 );
+        new Timer( ms, randomMove );
     }
 
     void randomMove() {
@@ -96,9 +96,9 @@ class Character implements Graphic {
         moveRandom();
     }
     
-    void chaseCharacter(Character chased) {
+    void chaseCharacter( Character chasedCharacter ) {
         chasing = true;
-        this.chased = chased;
+        this.chased = chasedCharacter;
     }
     
     void stopChasing() {
@@ -113,63 +113,63 @@ class Character implements Graphic {
         }
         List<Coordinate> closed = new List();
         List<Coordinate> open = new List();
-        Matrix openUsed = new Matrix(scene.gameMap.eventMapset.cols, scene.gameMap.eventMapset.rows);
-        Matrix closedUsed = new Matrix(scene.gameMap.eventMapset.cols, scene.gameMap.eventMapset.rows);
-        open.add(curPos);
-        openUsed.set(curPos.x, curPos.y, true);
+        Matrix openUsed = new Matrix( scene.gameMap.eventMapset.cols, scene.gameMap.eventMapset.rows );
+        Matrix closedUsed = new Matrix( scene.gameMap.eventMapset.cols, scene.gameMap.eventMapset.rows );
+        open.add( curPos );
+        openUsed.set( curPos.x, curPos.y, true );
         int iterations = 0;
         bool goalReached = false;
         
         
         while ( !goalReached ) {
             iterations++ ;
-            if(MAX_PATHFINDING_ITERATIONS == iterations){
+            if ( MAX_PATHFINDING_ITERATIONS == iterations ) {
                 return;
             }
             Coordinate current = open.last;
-            if(current == null){
+            if ( current == null ) {
                 return;
             }
-            List neighbours = getNeighbours(current, goal);
+            List neighbours = getNeighbours( current, goal );
             Iterator<Coordinate> neighboursIte = neighbours.iterator;
             Coordinate bestNode;
             num bestDistance = 100;
-            while(neighboursIte.moveNext()){
+            while ( neighboursIte.moveNext() ) {
                 Coordinate node = neighboursIte.current;
-                if(node.isTheSame(goal)){
-                    recreatePath(open);
+                if ( node.equals( goal ) ) {
+                    recreatePath( open );
                     return;
                 }
-                if(closedUsed.get(node.x, node.y) == true){
+                if ( closedUsed.get( node.x, node.y ) == true ) {
                     continue;
                 }
-                num nodeDistance = goal.distanceToThis(node);
-                if(bestDistance > nodeDistance){
+                num nodeDistance = goal.distanceToThis( node );
+                if ( bestDistance > nodeDistance ) {
                     bestDistance = nodeDistance;
                     bestNode = node;
                 }
             }
-            if(openUsed.get(bestNode.x, bestNode.y) == null || openUsed.get(bestNode.x, bestNode.y) == false){
-                open.add(bestNode);
-                openUsed.set(bestNode.x, bestNode.y, true);
+            if ( openUsed.get( bestNode.x, bestNode.y ) == null || openUsed.get( bestNode.x, bestNode.y ) == false ) {
+                open.add( bestNode );
+                openUsed.set( bestNode.x, bestNode.y, true );
             }
-            closed.add(current);
-            closedUsed.set(current.x, current.y, true);
+            closed.add( current );
+            closedUsed.set( current.x, current.y, true );
         }
     }
     
-    void recreatePath(List<Coordinate> open){
+    void recreatePath( List<Coordinate> open ) {
         Iterator<Coordinate> openIte = open.iterator;
-        while(openIte.moveNext()){
+        while ( openIte.moveNext() ) {
             Coordinate node = openIte.current;
-            if(node.x > curPos.x){
-                move(RIGHT);
-            }else if(node.x < curPos.x){
-                move(LEFT);
-            }else if(node.y > curPos.y){
-                move(DOWN);
-            }else if(node.y < curPos.y){
-                move(UP);
+            if ( node.x > curPos.x ) {
+                move( RIGHT );
+            } else if ( node.x < curPos.x ) {
+                move( LEFT );
+            } else if ( node.y > curPos.y ) {
+                move( DOWN );
+            } else if ( node.y < curPos.y ) {
+                move( UP );
             }
         }
     }
@@ -178,25 +178,25 @@ class Character implements Graphic {
         List neighbours = new List();
         if ( node.y - 1 >= 0 ) {
             Coordinate neighbour1 = new Coordinate( node.x, node.y - 1 );
-            if ( scene.objectIsPassable( this, neighbour1, UP ) || neighbour1.isTheSame( goal ) ){
+            if ( scene.objectIsPassable( this, neighbour1, UP ) || neighbour1.equals( goal ) ){
                 neighbours.add( neighbour1 );
             }
         }
         if ( node.y + 1 < scene.gameMap.eventMapset.rows ) {
             Coordinate neighbour2 = new Coordinate( node.x, node.y + 1 );
-            if ( scene.objectIsPassable( this, neighbour2, DOWN ) || neighbour2.isTheSame( goal ) ) {
+            if ( scene.objectIsPassable( this, neighbour2, DOWN ) || neighbour2.equals( goal ) ) {
                 neighbours.add( neighbour2 );
             }
         }
         if( node.x - 1 >= 0 ){
             Coordinate neighbour3 = new Coordinate(node.x - 1, node.y);
-            if ( scene.objectIsPassable( this, neighbour3, LEFT ) || neighbour3.isTheSame( goal ) ) {
+            if ( scene.objectIsPassable( this, neighbour3, LEFT ) || neighbour3.equals( goal ) ) {
                     neighbours.add( neighbour3 );
                 }
         }
         if( node.x + 1 < scene.gameMap.eventMapset.cols ) {
              Coordinate neighbour4 = new Coordinate( node.x +1, node.y );
-             if ( scene.objectIsPassable( this, neighbour4, RIGHT ) || neighbour4.isTheSame( goal ) ) {
+             if ( scene.objectIsPassable( this, neighbour4, RIGHT ) || neighbour4.equals( goal ) ) {
                  neighbours.add( neighbour4 );
              }
         }
@@ -267,16 +267,16 @@ class Character implements Graphic {
     
     void faceDirection( int direction ) {
         switch ( direction ) {
-            case DOWN: //down
+            case DOWN:
                 faceDir = 0;
                 break;
-            case LEFT: //left
+            case LEFT:
                 faceDir = 1;
                 break;
-            case RIGHT: //right
+            case RIGHT:
                 faceDir = 2;
                 break;
-            case UP: //up
+            case UP:
                 faceDir = 3;
                 break;
         }
@@ -284,13 +284,13 @@ class Character implements Graphic {
     
     int getCurrentDirection() {
         switch ( faceDir ) {
-            case 0: //down
+            case 0:
                 return DOWN;
-            case 1: //left
+            case 1:
                 return LEFT;
-            case 2: //right
+            case 2:
                 return RIGHT;
-            case 3: //up
+            case 3:
                 return UP;
         }
 
