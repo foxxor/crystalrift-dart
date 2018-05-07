@@ -47,6 +47,10 @@ const int WINDOWSET_TEXT_PADDING = 20;
 const int CENTER_TYPE_VERTICAL = 1;
 const int CENTER_TYPE_HORIZONTAL = 2;
 
+/* ----- Battle and input ----- */
+
+const bool GAME_PAUSED_DEFAULT = true;
+
 // Types of actors
 const int ACTOR_BEHAVIOUR_GOOD = 1;
 const int ACTOR_BEHAVIOUR_NEUTRAL = 2;
@@ -58,6 +62,8 @@ const int MAX_PATHFINDING_ITERATIONS = 100;
 const int ACTOR_COMBAT_FLEE = 1;
 const int ACTOR_COMBAR_AGGRESIVE = 2;
 const int ACTOR_COMBAT_DEFENSIVE = 3;
+
+/* ----- Editor ----- */
 
 // Selection modes for the editor
 const int SINGLE_TILE_SELECTION = 1;

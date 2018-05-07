@@ -12,10 +12,11 @@ class InputModule {
     // Determines if the game input is locked
     bool inputLocked;
 
-    InputModule( Scene this.scene ) {
+    InputModule ( Scene this.scene ) {
         setupKeys();
 
-        inputLocked = true;
+
+        inputLocked = GAME_PAUSED_DEFAULT;
     }
 
     // Keyboard and keybinding
@@ -39,9 +40,9 @@ class InputModule {
                 scene.movePlayer( RIGHT );
             } else if ( evt.keyCode == 40 || evt.keyCode == 83 ) { // Down + S
                 scene.movePlayer( DOWN );
-            } else if ( evt.keyCode == 13 ) { // Action
+            } else if ( evt.keyCode == 13 ) { // Action button + Enter
                 doAction();
-            } else if ( evt.keyCode == 82 ) { // Projectile
+            } else if ( evt.keyCode == 82 ) { // Projectile + R
                 scene.battleModule.createProjectile();
             }
         }
@@ -65,5 +66,11 @@ class InputModule {
                 }
             }
         }
+    }
+
+    void setPauseGame( bool pause ) {
+        inputLocked = pause;
+
+        // TO-DO: Implement some kind of dark rect layover with the pause message
     }
 }

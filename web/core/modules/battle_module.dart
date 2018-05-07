@@ -14,7 +14,7 @@ class BattleModule {
     // Scene calling this class
     Scene scene;
 
-    BattleModule( Scene this.scene ) {
+    BattleModule ( Scene this.scene ) {
 
     }
 

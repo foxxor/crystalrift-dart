@@ -33,9 +33,11 @@ class Actor extends Character {
     bool dead;
     
     ImageElement barHpImage;
+    ImageElement emptyBarHpImage;
     ImageElement barMpImage;
     
     String srcBarHp = "hp_pixel.png";
+    String srcEmptyBarHp = "empty_hp_pixel.png";
     String srcBarMp = "mp_pixel.png";
     
     Actor( Coordinate curPos, int charSprite, int charRow, Scene scene, String imageSource, [ num speed = 1 ] ) : 
@@ -61,6 +63,11 @@ class Actor extends Character {
         barHpImage = new Element.tag( 'img' ); 
         barHpImage = document.createElement( 'img' ); 
         barHpImage.src = "assets/particles/extra/" + srcBarHp;
+
+        emptyBarHpImage = new Element.tag( 'img' ); 
+        emptyBarHpImage = document.createElement( 'img' ); 
+        emptyBarHpImage.src = "assets/particles/extra/" + srcEmptyBarHp;
+
         barMpImage = new Element.tag( 'img' ); 
         barMpImage = document.createElement( 'img' ); 
         barMpImage.src = "assets/particles/extra/" + srcBarMp;
@@ -81,9 +88,15 @@ class Actor extends Character {
     Future update() async {
         super.update();
         if ( combatable && !this.dead ) {
-            int barWeight = ( TILE_SIZE * ( life / maxLife ) ).floor();
-            context.drawImageScaled( barHpImage, screenPosPx.x, screenPosPx.y + TILE_SIZE + 3,
-                barWeight, 3 );
+            // If the life of the enemy is low, force to render the bar to 10% of the max width
+            var renderedLife = ( life < ( maxLife * 0.1 ) ? ( maxLife * 0.1 ) : life );
+
+            context.drawImageScaled( emptyBarHpImage, screenPosPx.x + 2, screenPosPx.y + TILE_SIZE + 5,
+                TILE_SIZE - 4, 3 );
+
+            int lifeBarWeight = ( TILE_SIZE * ( renderedLife / maxLife ) ).floor();
+            context.drawImageScaled( barHpImage, screenPosPx.x + 2, screenPosPx.y + TILE_SIZE + 5,
+                lifeBarWeight - 4, 3 );
         }
 
         if ( this.dead ) {
