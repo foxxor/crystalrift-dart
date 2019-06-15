@@ -34,7 +34,7 @@ class Scene
     BattleModule battleModule;
     
     // The current visible map
-    MapSet gameMap;
+    MapSet mapSet;
 
     // The current character playing
     Actor player;
@@ -81,7 +81,7 @@ class Scene
         inputModule  = new InputModule( this );
         battleModule = new BattleModule( this );
         
-        gameMap = new MapSet( this, MAP_WIDTH_TILES, MAP_HEIGHT_TILES );
+        mapSet = new MapSet( this, MAP_WIDTH_TILES, MAP_HEIGHT_TILES );
         Coordinate initCoor = new Coordinate( 15, 10 );
         Coordinate initCoor2 = new Coordinate( 12 * TILE_SIZE, 4 * TILE_SIZE );
         MapAnimation animation = new MapAnimation( this, initCoor2, 'fire_001' );
@@ -104,7 +104,9 @@ class Scene
         displayPxY = 0 * TILE_SIZE;
         events = new List<Action>();
         projectiles = new List<Projectile>();
-        loadProperties();   
+        loadProperties();
+
+        scheduleRepaint();
     }
 
     void createDialog( window )
@@ -128,10 +130,10 @@ class Scene
             stopCameraMovement();
         }
 
-        gameMap.update();
+        mapSet.update();
         player.update();
 
-        await updateCharacters() ;
+        await updateCharacters();
         updateEntities();
         updateParticles();
         updateAnimations();
@@ -279,30 +281,30 @@ class Scene
         {
             case UP:
                 if ( player.curPos.y > ( canvas.height / ( 2 * TILE_SIZE ) ).floor()
-                    && player.curPos.y < ( gameMap.height - displayY )
-                    && player.curPos.y < gameMap.height - ( canvas.height / ( 2 * TILE_SIZE ) ).floor()) 
+                    && player.curPos.y < ( mapSet.height - displayY )
+                    && player.curPos.y < mapSet.height - ( canvas.height / ( 2 * TILE_SIZE ) ).floor() ) 
                 {
                     centerCamera( CENTER_TYPE_VERTICAL );
                 }
             break;
             case DOWN:
-                if (player.curPos.y > ( canvas.height / ( 2 * TILE_SIZE ) ).floor()
-                    && player.curPos.y < ( gameMap.height - displayY )
-                    && player.curPos.y < gameMap.height - ( canvas.height / ( 2 * TILE_SIZE ) ).floor())
+                if ( player.curPos.y > ( canvas.height / ( 2 * TILE_SIZE ) ).floor()
+                    && player.curPos.y < ( mapSet.height - displayY )
+                    && player.curPos.y < mapSet.height - ( canvas.height / ( 2 * TILE_SIZE ) ).floor() )
                 {
                     centerCamera( CENTER_TYPE_VERTICAL );
                 }
             break;
             case LEFT:
-                if (player.curPos.x < ( canvas.width - displayX )
-                    && player.curPos.x < gameMap.width - ( canvas.width / ( 2 * TILE_SIZE ) ).floor())
+                if ( player.curPos.x < ( canvas.width - displayX )
+                    && player.curPos.x < mapSet.width - ( canvas.width / ( 2 * TILE_SIZE ) ).floor() )
                 {
                     centerCamera( CENTER_TYPE_HORIZONTAL );
                 }
             break;
             case RIGHT:
-                if (player.curPos.x < ( canvas.width - displayX )
-                    && player.curPos.x < gameMap.width - ( canvas.width / ( 2 * TILE_SIZE ) ).floor())
+                if ( player.curPos.x < ( canvas.width - displayX )
+                    && player.curPos.x < mapSet.width - ( canvas.width / ( 2 * TILE_SIZE ) ).floor() )
                 {
                     centerCamera( CENTER_TYPE_HORIZONTAL );
                 }
@@ -336,15 +338,16 @@ class Scene
     
     void loadEntities( String responseText )
     {
-        Map entitiesData = json.decode(responseText);
+        Map entitiesData = json.decode( responseText );
         var iteEntities = entitiesData['entities'].iterator;
-        while( iteEntities.moveNext() ){
+        while( iteEntities.moveNext() )
+        {
             Map i = iteEntities.current;
             Coordinate coords = new Coordinate( i['x'], i['y'] );
             Tile tile = new Tile( i['xTile'], i['yTile'] );
             Entity item = new Entity( document, context, canvas, coords, tile, this, i['pushable'] );
             entities.add(item);
-            gameMap.occupyTile( i['x'], i['y'], item );
+            mapSet.occupyTile( i['x'], i['y'], item );
         }
     }
     
@@ -352,21 +355,22 @@ class Scene
     {
         Map charactersData = json.decode(responseText);
         var characters = charactersData['characters'].iterator;
-        while( characters.moveNext() ){
+        while( characters.moveNext() )
+        {
             Map m = characters.current;
             Coordinate coords = new Coordinate( m['x'], m['y'] );
             Actor character = new Actor( coords, m['characterId'], m['characterRow'], this, m['imageSource'], m['speed'], m['moveRandom'] );
             character.initializeActor( m['combatable'], m['behaviour'], m['life'], m['energy'], m['message'], m['attack'], m['defense'] );
             actors.add(character);
-            gameMap.occupyTile( m['x'], m['y'], character );
+            mapSet.occupyTile( m['x'], m['y'], character );
         }
     }
     
     void loadBuildings( String responseText )
     {
-        gameMap.structuresData = json.decode( responseText );
-        gameMap.addBuilding(0, 6,5);
-        gameMap.addRandomDetails();
+        mapSet.structuresData = json.decode( responseText );
+        mapSet.addBuilding(0, 6,5);
+        mapSet.addRandomDetails();
     }
     
     Future createMessage( Actor char ) async
@@ -376,6 +380,18 @@ class Scene
         new Timer( ms, removeEvent );
         Action event = new Action( char, msg, EVENT_TYPE_MESSAGE );
         events.add( event );
+    }
+
+    void scheduleRepaint()
+    {
+        const ms = const Duration( milliseconds: 1000 );
+        new Timer( ms, repaintCanvas );
+    }
+
+    Future repaintCanvas() async
+    {
+        context.clearRect( 0,0, width, height );
+        scheduleRepaint();
     }
     
     Future createAnimation(Actor char) async
@@ -388,7 +404,8 @@ class Scene
         new Timer( const Duration(milliseconds: 500), removeEvent );
     }
     
-    Future removeEvent() async {
+    Future removeEvent() async 
+    {
         Action event = events.elementAt( 0 );
         if ( event.type == EVENT_TYPE_MESSAGE ) {
             Actor char = event.object;
@@ -399,10 +416,11 @@ class Scene
 
     Future removeProjectile( Projectile projectile ) async
     {
-        //projectiles.remove( projectile );
-        projectiles.removeWhere( ( value ) => value == projectile );
+        List<Projectile> newProjectilesList = new List<Projectile>.from( projectiles );
+        newProjectilesList.removeWhere( ( value ) => value == projectile );
 
-        //Map.removeWhere((key, value) => toRemove.contains(key));
+        // Replaces the projectiles with the new list to avoid errors with the iterator
+        projectiles = newProjectilesList;
     }
     
     bool shallPass( int face, var character )
@@ -412,14 +430,14 @@ class Scene
         {
             facingCoords = new Coordinate( character.curPos.x, character.curPos.y - 1 );
         } 
-        else if ( face == DOWN && character.curPos.y < gameMap.eventMapset.rows - 1 ) 
+        else if ( face == DOWN && character.curPos.y < mapSet.eventMapset.rows - 1 ) 
         {
             facingCoords = new Coordinate( character.curPos.x, character.curPos.y + 1 );
         } 
         else if ( face == LEFT && character.curPos.x >= 1 ) {
             facingCoords = new Coordinate( character.curPos.x - 1, character.curPos.y );
         } 
-        else if ( face == RIGHT && character.curPos.x < gameMap.eventMapset.cols - 1 ) 
+        else if ( face == RIGHT && character.curPos.x < mapSet.eventMapset.cols - 1 ) 
         {
             facingCoords = new Coordinate( character.curPos.x + 1, character.curPos.y );
         } 
@@ -433,7 +451,7 @@ class Scene
     
     bool objectIsPassable( var character, Coordinate facingCoords, int face )
     {
-        var tileObject = gameMap.eventMapset.get( facingCoords.x, facingCoords.y );
+        var tileObject = mapSet.eventMapset.get( facingCoords.x, facingCoords.y );
         if ( !identical( tileObject, character ) && tileObject != null ) {
             if ( tileObject is Actor && !tileObject.phasable ){
                 return false;

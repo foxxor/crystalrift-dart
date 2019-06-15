@@ -127,7 +127,7 @@ class Projectile implements Graphic {
     }
 
     bool shallPass(){
-        var tileObject = scene.gameMap.eventMapset.get( curPos.x, curPos.y );
+        var tileObject = scene.mapSet.eventMapset.get( curPos.x, curPos.y );
 
         if ( tileObject != null ) {
             if ( tileObject is Actor && !tileObject.phasable && !identical( tileObject, scene.player ) ) {

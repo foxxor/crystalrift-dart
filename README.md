@@ -5,7 +5,6 @@
 An HTML5 2D game engine using dart and canvas. Movements and interactions are like Zelda.
 
 [Game live demo here](http://foxxor.github.io/crystalrift-dart/web/gameengine.html)
-
 [Editor live demo here](http://foxxor.github.io/crystalrift-dart/web/editor.html)
 
 ## What is working?
@@ -29,30 +28,24 @@ An HTML5 2D game engine using dart and canvas. Movements and interactions are li
 * Tile selector utility, click on any tile of the tileset to retrieve the x,y coordinates.
 * Map editor.
 
-## How to test
+## Working locally
 
-#### Dev (runs only on dartium)
+This requires the dart tools installed in the machine and (webdev enabled)[https://dart.dev/tools/webdev#build].
 
-To run the dart version of the project (which requires a browser with the Dart VM, such as Dartium), start the web server.
+### Debug in Chrome
 
 ```
-node ./server/serve-dev
+webdev serve web
 ```
 
 And open the URL, using the absolute path to the file you want to test, such as `http://localhost:8080/gameengine.html`.
 
-#### Build (any browser)
+#### Build
 
-First compile the project to Javascript inside the docs folder.
-
-```
-pub build web --output=./docs
-```
-
-Then start the node server.
+To compile to javascript and run in any browser:
 
 ```
-node ./server/serve-build
+webdev build --output web:build
 ```
 
 And open the URL, using the absolute path to the file you want to test, such as `http://localhost:9099/gameengine.html`.

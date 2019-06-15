@@ -81,7 +81,7 @@ class Entity implements Graphic {
     }
     
     if(moved){
-      scene.gameMap.moveToTile(initX, initY, curPos.x, curPos.y, this);
+      scene.mapSet.moveToTile(initX, initY, curPos.x, curPos.y, this);
       return true;
     }
     return false;

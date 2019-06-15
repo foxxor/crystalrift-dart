@@ -124,8 +124,8 @@ class Character implements Graphic {
         }
         List<Coordinate> closed = new List();
         List<Coordinate> open = new List();
-        Matrix openUsed = new Matrix( scene.gameMap.eventMapset.cols, scene.gameMap.eventMapset.rows );
-        Matrix closedUsed = new Matrix( scene.gameMap.eventMapset.cols, scene.gameMap.eventMapset.rows );
+        Matrix openUsed = new Matrix( scene.mapSet.eventMapset.cols, scene.mapSet.eventMapset.rows );
+        Matrix closedUsed = new Matrix( scene.mapSet.eventMapset.cols, scene.mapSet.eventMapset.rows );
         open.add( curPos );
         openUsed.set( curPos.x, curPos.y, true );
         int iterations = 0;
@@ -193,7 +193,7 @@ class Character implements Graphic {
                 neighbours.add( neighbour1 );
             }
         }
-        if ( node.y + 1 < scene.gameMap.eventMapset.rows ) {
+        if ( node.y + 1 < scene.mapSet.eventMapset.rows ) {
             Coordinate neighbour2 = new Coordinate( node.x, node.y + 1 );
             if ( scene.objectIsPassable( this, neighbour2, DOWN ) || neighbour2.equals( goal ) ) {
                 neighbours.add( neighbour2 );
@@ -205,7 +205,7 @@ class Character implements Graphic {
                     neighbours.add( neighbour3 );
                 }
         }
-        if( node.x + 1 < scene.gameMap.eventMapset.cols ) {
+        if( node.x + 1 < scene.mapSet.eventMapset.cols ) {
              Coordinate neighbour4 = new Coordinate( node.x +1, node.y );
              if ( scene.objectIsPassable( this, neighbour4, RIGHT ) || neighbour4.equals( goal ) ) {
                  neighbours.add( neighbour4 );
@@ -270,7 +270,7 @@ class Character implements Graphic {
         }
         
         if ( moved ) {
-            scene.gameMap.moveToTile( initX, initY, curPos.x, curPos.y, this );
+            scene.mapSet.moveToTile( initX, initY, curPos.x, curPos.y, this );
             return true;
         }
         return false;
