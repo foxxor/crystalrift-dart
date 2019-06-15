@@ -72,11 +72,11 @@ class MapSet implements Graphic{
   void addBuilding(int index, int x, int y){
     Map structure = structuresData['buildings'].elementAt(index);
     //Load the first layer
-    Iterator<Map> tilesMapset1 = structure['mapset1']['tiles'].iterator;
+    var tilesMapset1 = structure['mapset1']['tiles'].iterator;
     while(tilesMapset1.moveNext()){
       Map m = tilesMapset1.current;
       Tile t = new Tile(m['xTile'], m['yTile'], m['type']);
-      Iterator<Map> blocks = m['blocks'].iterator;
+      var blocks = m['blocks'].iterator;
       while(blocks.moveNext()){
         Map block = blocks.current;
         mapset.set(x +block['x'].toInt() , y + block['y'].toInt(), t);
@@ -87,11 +87,11 @@ class MapSet implements Graphic{
     }
     
     //Load the second layer
-    Iterator<Map> tilesMapset2 = structure['mapset2']['tiles'].iterator;
+    var tilesMapset2 = structure['mapset2']['tiles'].iterator;
     while(tilesMapset2.moveNext()){
       Map m = tilesMapset2.current;
       Tile t = new Tile(m['xTile'], m['yTile'], m['type']);
-      Iterator<Map> blocks = m['blocks'].iterator;
+      var blocks = m['blocks'].iterator;
       while(blocks.moveNext()){
         Map block = blocks.current;
         mapset2.set(x +block['x'].toInt() , y + block['y'].toInt(), t);

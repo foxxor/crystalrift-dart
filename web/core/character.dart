@@ -142,7 +142,7 @@ class Character implements Graphic {
                 return;
             }
             List neighbours = getNeighbours( current, goal );
-            Iterator<Coordinate> neighboursIte = neighbours.iterator;
+            var neighboursIte = neighbours.iterator;
             Coordinate bestNode;
             num bestDistance = 100;
             while ( neighboursIte.moveNext() ) {
@@ -170,7 +170,7 @@ class Character implements Graphic {
     }
     
     void recreatePath( List<Coordinate> open ) {
-        Iterator<Coordinate> openIte = open.iterator;
+        var openIte = open.iterator;
         while ( openIte.moveNext() ) {
             Coordinate node = openIte.current;
             if ( node.x > curPos.x ) {

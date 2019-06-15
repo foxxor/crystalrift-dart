@@ -3,11 +3,10 @@ author: Foxxor
 description: An HTML5 2D game engine using dart and canvas.
 homepage: https://github.com/foxxor/crystalrift-dart
 documentation: https://github.com/foxxor/crystalrift-dart
-dependencies:
-  browser: any
 publish_to: none
 environment:
-  sdk: ">=1.23.0 <2.0.0"
-transformers:
-- $dart2js:
-    csp: true
+  sdk: '>=2.0.0 <3.0.0'
+dev_dependencies:
+  build_runner: ^1.5.0
+  build_test: ^0.10.2
+  build_web_compilers: ^1.2.0

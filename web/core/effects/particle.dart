@@ -82,7 +82,7 @@ class Particle implements Graphic {
   
   Future updateAnimation() async {
     var random = new Math.Random();
-    Iterator<Coordinate> coordIte = particlesCoords.iterator;
+    var coordIte = particlesCoords.iterator;
     frame ++;
     num i = 0;
     while(coordIte.moveNext()){
@@ -127,9 +127,9 @@ class Particle implements Graphic {
   
   Future update() async {
     if(scene.inCamera(this.curPosPx)){
-      Iterator<ImageElement> partIte = particles.iterator;
-      Iterator<Coordinate> coord = particlesCoords.iterator;
-      Iterator<num> alphaIte = particlesAlpha.iterator;
+      var partIte = particles.iterator;
+      var coord = particlesCoords.iterator;
+      var alphaIte = particlesAlpha.iterator;
       while(partIte.moveNext()){
         ImageElement p = partIte.current;
         alphaIte.moveNext();
@@ -152,7 +152,7 @@ class Particle implements Graphic {
   void drawParticle(num x, num y){
     var radius = 2;
     context.arc(x, y, radius, 0, 
-        2 * Math.PI, false);
+        2 * Math.pi, false);
     context.fillStyle = 'orange';
     context.fill();
   }

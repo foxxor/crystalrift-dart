@@ -20,7 +20,8 @@ import 'windowset.dart';
 import 'modules/battle_module.dart';
 import 'modules/input_module.dart';
 
-class Scene {
+class Scene 
+{
     //Graphic vars
     HtmlDocument document;
     CanvasRenderingContext2D context;
@@ -71,12 +72,13 @@ class Scene {
     int displayPxX;
     int displayPxY;
     
-    Scene( HtmlDocument document, CanvasRenderingContext2D context, CanvasElement canvas ) {
+    Scene( HtmlDocument document, CanvasRenderingContext2D context, CanvasElement canvas ) 
+    {
         this.document = document;
-        this.context = context;
-        this.canvas = canvas;
+        this.context  = context;
+        this.canvas   = canvas;
 
-        inputModule = new InputModule( this );
+        inputModule  = new InputModule( this );
         battleModule = new BattleModule( this );
         
         gameMap = new MapSet( this, MAP_WIDTH_TILES, MAP_HEIGHT_TILES );
@@ -105,7 +107,8 @@ class Scene {
         loadProperties();   
     }
 
-    void createDialog( window ) {
+    void createDialog( window )
+    {
         String text = "Hi, welcome to this demo of Crystal Rift! \n Use enter key to interact with characters and close this window. \n Use the A/S/D/W keys to move around. \n Enjoy! ";
         gameDialog = new WindowSet( document, context, canvas, 
             ( ( canvas.width ) / 2 ).floor() - ( ( WINDOW_WIDTH / 2 ).floor() + ( width == window.innerWidth ? 0 : width ) ), 
@@ -113,11 +116,15 @@ class Scene {
             WINDOW_WIDTH, WINDOW_HEIGHT, text );
     }
     
-    void update() async {
+    void update() async
+    {
         //The order of rendering here controls the priority of visualization
-        if ( isCameraMoving() && player.isMoving() ) {
+        if ( isCameraMoving() && player.isMoving() )
+        {
             updateCameraMovement();
-        } else {
+        } 
+        else
+        {
             stopCameraMovement();
         }
 
@@ -131,138 +138,172 @@ class Scene {
         updateProjectiles();
         updateEvents();
 
-        if ( gameDialog != null && !gameDialog.endOfLine ) {
+        if ( gameDialog != null && !gameDialog.endOfLine )
+        {
             gameDialog.update();
-        } else if ( gameDialog != null && inputModule.inputLocked ) {
+        } 
+        else if ( gameDialog != null && inputModule.inputLocked )
+        {
             inputModule.inputLocked = false;
             gameDialog = null;
         }
     }
 
-    Future updateEntities() async {
-        Iterator<Entity> entitiesIterator = entities.iterator;
-        while( entitiesIterator.moveNext() ){
+    Future updateEntities() async
+    {
+        var entitiesIterator = entities.iterator;
+        while( entitiesIterator.moveNext() )
+        {
             Entity entity = entitiesIterator.current;
             entity.update();
         }
     }
 
-    Future updateEvents() async {
-        Iterator<Action> eventIterator = events.iterator;
-        while( eventIterator.moveNext() ){
+    Future updateEvents() async
+    {
+        var eventIterator = events.iterator;
+        while( eventIterator.moveNext() )
+        {
             Action event = eventIterator.current;
             event.update();
         }
     }
 
-    Future updateCharacters() async {
-        Iterator<Actor> characters = actors.iterator;
-        while( characters.moveNext() ){
+    Future updateCharacters() async
+    {
+       var characters = actors.iterator;
+        while( characters.moveNext() )
+        {
             Actor character = characters.current;
             character.update();
         }
     }
 
-    Future updateParticles() async {
-        Iterator<Particle> particlesIterator = particles.iterator;
-        while(  particlesIterator.moveNext() ){
+    Future updateParticles() async
+    {
+        var particlesIterator = particles.iterator;
+        while(  particlesIterator.moveNext() )
+        {
             Particle particle = particlesIterator.current;
             particle.update();
         }
     }
 
-    Future updateAnimations() async {
-        Iterator<MapAnimation> animationsIterator = activeAnimations.iterator;
-        while( animationsIterator.moveNext() ){
+    Future updateAnimations() async
+    {
+        var animationsIterator = activeAnimations.iterator;
+        while( animationsIterator.moveNext() )
+        {
             MapAnimation animation = animationsIterator.current;
             animation.update();
         }
     }
 
-    Future updateProjectiles() async {
-        Iterator<Projectile> projectileIterator = projectiles.iterator;
-        while( projectileIterator.moveNext() ){
+    Future updateProjectiles() async
+    {
+        var projectileIterator = projectiles.iterator;
+        while( projectileIterator.moveNext() )
+        {
             Projectile projectile = projectileIterator.current;
             projectile.update();
         }
     }
 
     // Verifies if a coordinate is displayed by the camera
-    bool inCamera( Coordinate coord ) {
+    bool inCamera( Coordinate coord )
+    {
         if ( coord.x >= ( displayPxX - TILE_SIZE ) && coord.y >= ( displayPxY - TILE_SIZE ) &&
-            coord.x < ( displayPxX + canvas.width + TILE_SIZE ) && coord.y < ( displayPxY + canvas.height + TILE_SIZE ) ){
+            coord.x < ( displayPxX + canvas.width + TILE_SIZE ) && coord.y < ( displayPxY + canvas.height + TILE_SIZE ) )
+        {
             return true;
         }
 
         return false;
     } 
     
-    Future updateCameraMovement() async {
+    Future updateCameraMovement() async
+    {
         var distance = 2 * player.speed;
-        if (displayY * TILE_SIZE > displayPxY ) {
+        if (displayY * TILE_SIZE > displayPxY )
+        {
             displayPxY = Math.min( displayPxY + distance, displayY * TILE_SIZE );
         }
-        if ( displayX * TILE_SIZE > displayPxX ) {
+        if ( displayX * TILE_SIZE > displayPxX )
+        {
             displayPxX = Math.min( displayPxX + distance, displayX * TILE_SIZE );
         }
-        if ( displayY * TILE_SIZE < displayPxY ) {
+        if ( displayY * TILE_SIZE < displayPxY )
+        {
             displayPxY = Math.max( displayPxY - distance, displayY * TILE_SIZE );
         }
-        if ( displayX * TILE_SIZE < displayPxX ) {
+        if ( displayX * TILE_SIZE < displayPxX )
+        {
             displayPxX = Math.max( displayPxX - distance, displayX * TILE_SIZE );
         }
     }
     
-    bool isCameraMoving() {
+    bool isCameraMoving()
+    {
         return ( displayPxX != displayX * TILE_SIZE || displayPxY != displayY * TILE_SIZE );
     }
     
-    void stopCameraMovement() {
-          if ( displayY * TILE_SIZE > displayPxY ) {
+    void stopCameraMovement()
+    {
+          if ( displayY * TILE_SIZE > displayPxY )
+          {
             num dy = ( displayY + ( TILE_SIZE - ( displayPxY % TILE_SIZE ) ) ) / TILE_SIZE;
             displayY = Math.min( dy.floor(), displayY );
           }
-          if ( displayX * TILE_SIZE > displayPxX ) {
+          if ( displayX * TILE_SIZE > displayPxX )
+          {
             num dx = ( displayX + ( TILE_SIZE - ( displayPxX % TILE_SIZE ) ) ) / TILE_SIZE;
             displayX = Math.min( dx.floor(), displayX );
           }
-          if ( displayY * TILE_SIZE < displayPxY ) {
+          if ( displayY * TILE_SIZE < displayPxY )
+          {
             num dy = ( displayPxY + ( TILE_SIZE - ( displayPxY % TILE_SIZE ) ) ) / TILE_SIZE;
             displayY = Math.max( dy.floor(), displayY ) -1;
           }
-          if ( displayX * TILE_SIZE < displayPxY ) {
+          if ( displayX * TILE_SIZE < displayPxY )
+          {
             num dx = ( displayPxX + ( TILE_SIZE - ( displayPxX % TILE_SIZE ) ) ) / TILE_SIZE;
             displayX = Math.max( dx.floor(), displayX ) -1;
           }
     }
     
-    void movePlayer(int direction) {
+    void movePlayer(int direction)
+    {
         player.move( direction );
 
-        switch ( direction ){
+        switch ( direction )
+        {
             case UP:
-                if( player.curPos.y > ( canvas.height / ( 2 * TILE_SIZE ) ).floor()
+                if ( player.curPos.y > ( canvas.height / ( 2 * TILE_SIZE ) ).floor()
                     && player.curPos.y < ( gameMap.height - displayY )
-                    && player.curPos.y < gameMap.height - ( canvas.height / ( 2 * TILE_SIZE ) ).floor()) {
+                    && player.curPos.y < gameMap.height - ( canvas.height / ( 2 * TILE_SIZE ) ).floor()) 
+                {
                     centerCamera( CENTER_TYPE_VERTICAL );
                 }
             break;
             case DOWN:
-                if(player.curPos.y > ( canvas.height / ( 2 * TILE_SIZE ) ).floor()
+                if (player.curPos.y > ( canvas.height / ( 2 * TILE_SIZE ) ).floor()
                     && player.curPos.y < ( gameMap.height - displayY )
-                    && player.curPos.y < gameMap.height - ( canvas.height / ( 2 * TILE_SIZE ) ).floor()){
+                    && player.curPos.y < gameMap.height - ( canvas.height / ( 2 * TILE_SIZE ) ).floor())
+                {
                     centerCamera( CENTER_TYPE_VERTICAL );
                 }
             break;
             case LEFT:
-                if(player.curPos.x < ( canvas.width - displayX )
-                    && player.curPos.x < gameMap.width - ( canvas.width / ( 2 * TILE_SIZE ) ).floor()){
+                if (player.curPos.x < ( canvas.width - displayX )
+                    && player.curPos.x < gameMap.width - ( canvas.width / ( 2 * TILE_SIZE ) ).floor())
+                {
                     centerCamera( CENTER_TYPE_HORIZONTAL );
                 }
             break;
             case RIGHT:
-                if(player.curPos.x < ( canvas.width - displayX )
-                    && player.curPos.x < gameMap.width - ( canvas.width / ( 2 * TILE_SIZE ) ).floor()){
+                if (player.curPos.x < ( canvas.width - displayX )
+                    && player.curPos.x < gameMap.width - ( canvas.width / ( 2 * TILE_SIZE ) ).floor())
+                {
                     centerCamera( CENTER_TYPE_HORIZONTAL );
                 }
             break;  
@@ -270,27 +311,33 @@ class Scene {
     }
     
     // This have to be adjusted depending if the window size is odd or even
-    void centerCamera( int type ) {
-      if ( type == CENTER_TYPE_HORIZONTAL ) {
+    void centerCamera( int type )
+    {
+      if ( type == CENTER_TYPE_HORIZONTAL )
+      {
         displayX = Math.max(
             Math.min( player.curPos.x - ( canvas.width / ( 2 * TILE_SIZE ) ).floor(), MAP_WIDTH_TILES ),
             0);
-      } else {
+      } 
+      else 
+      {
         displayY = Math.max(
             Math.min( player.curPos.y - ( canvas.height / ( 2 * TILE_SIZE ) ).floor(), MAP_HEIGHT_TILES ),
             0);
       }
     }
     
-    void loadProperties() {
+    void loadProperties()
+    {
         HttpRequest.getString( "data/characters.json" ).then( loadCharacters );
         HttpRequest.getString( "data/structures.json" ).then( loadBuildings );
         HttpRequest.getString( "data/entities.json" ).then( loadEntities );
     }
     
-    void loadEntities( String responseText ) {
-        Map entitiesData = JSON.decode(responseText);
-        Iterator<Map> iteEntities = entitiesData['entities'].iterator;
+    void loadEntities( String responseText )
+    {
+        Map entitiesData = json.decode(responseText);
+        var iteEntities = entitiesData['entities'].iterator;
         while( iteEntities.moveNext() ){
             Map i = iteEntities.current;
             Coordinate coords = new Coordinate( i['x'], i['y'] );
@@ -301,9 +348,10 @@ class Scene {
         }
     }
     
-    void loadCharacters( String responseText ) {
-        Map charactersData = JSON.decode(responseText);
-        Iterator<Map> characters = charactersData['characters'].iterator;
+    void loadCharacters( String responseText )
+    {
+        Map charactersData = json.decode(responseText);
+        var characters = charactersData['characters'].iterator;
         while( characters.moveNext() ){
             Map m = characters.current;
             Coordinate coords = new Coordinate( m['x'], m['y'] );
@@ -314,13 +362,15 @@ class Scene {
         }
     }
     
-    void loadBuildings( String responseText ) {
-        gameMap.structuresData = JSON.decode( responseText );
+    void loadBuildings( String responseText )
+    {
+        gameMap.structuresData = json.decode( responseText );
         gameMap.addBuilding(0, 6,5);
         gameMap.addRandomDetails();
     }
     
-    Future createMessage( Actor char ) async {
+    Future createMessage( Actor char ) async
+    {
         Message msg = new Message( context, char.message, char.screenPosPx.x, char.screenPosPx.y, 100, 20 );
         const ms = const Duration( milliseconds: 5000 );
         new Timer( ms, removeEvent );
@@ -328,7 +378,8 @@ class Scene {
         events.add( event );
     }
     
-    Future createAnimation(Actor char) async {
+    Future createAnimation(Actor char) async
+    {
         Coordinate coords = new Coordinate( 0,0 );
         MapAnimation animation = new MapAnimation( this, coords, 'fire_001' );
         Action event = new Action( char, animation, EVENT_TYPE_ANIMATION );
@@ -346,28 +397,42 @@ class Scene {
         events.removeAt( 0 );
     }
 
-    Future removeProjectile( Projectile projectile ) async {
-        projectiles.remove( projectile );
+    Future removeProjectile( Projectile projectile ) async
+    {
+        //projectiles.remove( projectile );
+        projectiles.removeWhere( ( value ) => value == projectile );
+
+        //Map.removeWhere((key, value) => toRemove.contains(key));
     }
     
-    bool shallPass( int face, var character ) {
+    bool shallPass( int face, var character )
+    {
         Coordinate facingCoords;
-        if ( face == UP && character.curPos.y >= 1 ) {
+        if ( face == UP && character.curPos.y >= 1 )
+        {
             facingCoords = new Coordinate( character.curPos.x, character.curPos.y - 1 );
-        } else if ( face == DOWN && character.curPos.y < gameMap.eventMapset.rows - 1 ) {
+        } 
+        else if ( face == DOWN && character.curPos.y < gameMap.eventMapset.rows - 1 ) 
+        {
             facingCoords = new Coordinate( character.curPos.x, character.curPos.y + 1 );
-        } else if ( face == LEFT && character.curPos.x >= 1 ) {
+        } 
+        else if ( face == LEFT && character.curPos.x >= 1 ) {
             facingCoords = new Coordinate( character.curPos.x - 1, character.curPos.y );
-        } else if ( face == RIGHT && character.curPos.x < gameMap.eventMapset.cols - 1 ) {
+        } 
+        else if ( face == RIGHT && character.curPos.x < gameMap.eventMapset.cols - 1 ) 
+        {
             facingCoords = new Coordinate( character.curPos.x + 1, character.curPos.y );
-        } else {
+        } 
+        else 
+        {
             return false;
         }
       
       return objectIsPassable( character, facingCoords, face );
     }
     
-    bool objectIsPassable( var character, Coordinate facingCoords, int face ) {
+    bool objectIsPassable( var character, Coordinate facingCoords, int face )
+    {
         var tileObject = gameMap.eventMapset.get( facingCoords.x, facingCoords.y );
         if ( !identical( tileObject, character ) && tileObject != null ) {
             if ( tileObject is Actor && !tileObject.phasable ){
@@ -383,26 +448,33 @@ class Scene {
             }
         }
       
-        if ( character != player ) {
+        if ( character != player )
+        {
             bool nextTo = player.curPos.equals( facingCoords );
-            if ( !player.phasable && nextTo ) {
+            if ( !player.phasable && nextTo )
+            {
                 return false;
             }
         }
         return true;
     }
     
-    Actor getCharacterInFront( [ var entity = null ] ) {
-        Iterator<Actor> characters = actors.iterator;
-        while( characters.moveNext() ){
+    Actor getCharacterInFront( [ var entity = null ] )
+    {
+        var characters = actors.iterator;
+        while( characters.moveNext() )
+        {
             Actor char = characters.current;
 
-            if ( entity == null ){
+            if ( entity == null )
+            {
                 entity = player;
             }
             int charFace = char.curPosPx.facingThis( entity.getCurrentDirection(), entity.curPosPx );
-            if ( charFace >= 0 ) {
-                if ( identical( entity, player ) ) {
+            if ( charFace >= 0 )
+            {
+                if ( identical( entity, player ) )
+                {
                     char.faceDirection( charFace );
             }
             return char;

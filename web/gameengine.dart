@@ -2,6 +2,7 @@ import 'dart:html';
 
 import 'core/globals.dart';
 import 'core/scene.dart';
+import 'core/windowset.dart';
 import 'helpers/coordinate.dart';
 
 //System vars

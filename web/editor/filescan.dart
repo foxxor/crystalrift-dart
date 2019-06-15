@@ -22,18 +22,18 @@ class FileScan{
   }
   
   void generateTree(String responseText){
-    Map foldersData = JSON.decode(responseText);
-    Iterator<String> iteratorCharacters = foldersData['folders']['characters'].iterator;
+    Map foldersData = json.decode(responseText);
+    var iteratorCharacters = foldersData['folders']['characters'].iterator;
     while(iteratorCharacters.moveNext()){
       String fileName = iteratorCharacters.current;
       characters.add(fileName);
     }
-    Iterator<String> iteratorTilesets = foldersData['folders']['tilesets'].iterator;
+    var iteratorTilesets = foldersData['folders']['tilesets'].iterator;
     while(iteratorTilesets.moveNext()){
       String fileName = iteratorTilesets.current;
       tilesets.add(fileName);
     }
-    Iterator<String> iteratorIcons = foldersData['folders']['icons'].iterator;
+    var iteratorIcons = foldersData['folders']['icons'].iterator;
     while(iteratorIcons.moveNext()){
       String fileName = iteratorIcons.current;
       icons.add(fileName);

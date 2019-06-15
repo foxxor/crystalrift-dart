@@ -146,7 +146,7 @@ void toolSelection() {
     
     var genJsonButton = document.querySelector( "#generateMap" );
     genJsonButton.onClick.listen(( MouseEvent e ) {
-        String jsonData = JSON.encode( currentMap.toJson() );
+        String jsonData = json.encode( currentMap.toJson() );
         var jsonTextArea = document.querySelector( "#genJsonTextArea" );
         jsonTextArea.setInnerHtml( jsonData );
     });
@@ -154,9 +154,9 @@ void toolSelection() {
     var loadJsonButton = document.querySelector( "#loadJson" );
     loadJsonButton.onClick.listen(( MouseEvent e ) {
         var jsonTextArea = document.querySelector( "#genJsonTextArea" );
-        String jsonData = jsonTextArea.value;
+        String jsonData = jsonTextArea.text;
         if ( jsonData.trim() != "" ) {
-            Map parsedJson = JSON.decode( jsonData );
+            Map parsedJson = json.decode( jsonData );
             currentMap.loadMap( parsedJson );
             drawMapsList();
         }
@@ -267,7 +267,7 @@ void loadMapSelection() {
             MapEvent newEvent = new MapEvent( EVENT_TYPE_NOT_SPECIFIED, x, y, "Event " + currentMap.events.length.toString().padLeft( 3, '0' ) );
             currentMap.events.add( newEvent );
             InputElement eventNameInput = document.querySelector( '#eventNameInput' );
-            eventNameInput.value = newEvent.name;
+            eventNameInput.text = newEvent.name;
             context.callMethod( 'jQuery', [ '#addEventModal' ] ).callMethod( 'modal', [ 'show' ] );
             drawEventsList();
         }
@@ -423,9 +423,9 @@ void cleanInputs() {
     InputElement mapNameInput = document.querySelector( '#mapNameInput' );
     InputElement widthInput = document.querySelector( '#mapWidthInput' );
     InputElement heightInput = document.querySelector( '#mapHeightInput' );
-    mapNameInput.value = '';
-    widthInput.value = '';
-    heightInput.value = '';
+    mapNameInput.text = '';
+    widthInput.text = '';
+    heightInput.text = '';
 }
 
 void bindMapOptions() {
@@ -435,9 +435,9 @@ void bindMapOptions() {
         InputElement mapNameInput = document.querySelector( '#mapNameInput' );
         InputElement widthInput = document.querySelector( '#mapWidthInput' );
         InputElement heightInput = document.querySelector( '#mapHeightInput' );
-        String mapName = mapNameInput.value;
-        int width = int.parse( widthInput.value );
-        int height = int.parse( heightInput.value );
+        String mapName = mapNameInput.text;
+        int width = int.parse( widthInput.text );
+        int height = int.parse( heightInput.text );
         EditorMap map = new EditorMap( mapName, width, height );
         map.initContext( document, map2DContext, mapCanvas );
         map.selectionMode = SINGLE_TILE_SELECTION;
@@ -467,8 +467,8 @@ void bindEventOptions() {
         MapEvent event = currentMap.events.elementAt( currentMap.events.length - 1) ;
         InputElement nameInput = document.querySelector( '#eventNameInput' );
         SelectElement typeSelect = document.querySelector( '#eventTypeSelect' );
-        event.name = nameInput.value;
-        event.type = int.parse( typeSelect.value );
+        event.name = nameInput.text;
+        event.type = int.parse( typeSelect.text );
         currentMap.update();
         drawEventsList();
         context.callMethod( 'jQuery', [ '#addEventModal' ] ).callMethod( 'modal', [ 'hide' ] );
