@@ -1,4 +1,5 @@
 import 'dart:html';
+import 'dart:async';
 
 import 'core/globals.dart';
 import 'core/scene.dart';
@@ -12,8 +13,9 @@ CanvasElement canvas;
 Scene scene;
 WindowSet gameDialog;
 Element titleElement;
+num lastTimeStamp = 0;  
 
-void main()
+void main() async
 {
     document = window.document;
     titleElement = document.querySelector( ".navbar" );
@@ -31,7 +33,11 @@ void main()
         scene.centerCamera( CENTER_TYPE_HORIZONTAL );
     } );
 
-    window.animationFrame.then( update );
+    // Refresh the animation
+    while ( true )
+    {
+        update( await window.animationFrame );
+    }
 }
 
 // Calcuolate canvas size depending on the window size
@@ -79,11 +85,8 @@ void resizeViewport()
 }
 
 // Global refresh method
-update( num delta ) async 
+void update( num delta ) async
 {
     context.clearRect( 0, 0, canvas.width, canvas.height );
-    scene.update();
-    
-    // Callback this same function, to create a loop
-    window.animationFrame.then( update );
+    await scene.update();
 }

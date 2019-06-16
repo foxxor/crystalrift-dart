@@ -9,7 +9,8 @@ import '../helpers/coordinate.dart';
 import '../helpers/matrix.dart';
 import 'dart:math' as Math;
 
-class Character implements Graphic {
+class Character implements Graphic 
+{
     
     //Graphic vars
     HtmlDocument document;
@@ -89,13 +90,16 @@ class Character implements Graphic {
         loadGraphic( "assets/character/" + imageSource );
     }
 
-    Future moveRandom() async {
+    void moveRandom()
+    {
         const ms = const Duration( milliseconds: 2500 );
         currentRandomTimer = new Timer( ms, randomMove );
     }
 
-    void randomMove() {
-        if ( chasing ) {
+    void randomMove()
+    {
+        if ( chasing ) 
+        {
             return;
         }
 
@@ -106,22 +110,27 @@ class Character implements Graphic {
         moveRandom();
     }
     
-    void chaseCharacter( Character chasedCharacter ) {
+    void chaseCharacter( Character chasedCharacter )
+    {
         chasing = true;
         this.chased = chasedCharacter;
     }
     
-    void stopChasing() {
+    void stopChasing()
+    {
         chasing = false;
         chased = null;
         currentRandomTimer == null;
     }
     
-    void moveTo( int x, int y ) {
+    void moveTo( int x, int y )
+    {
         Coordinate goal = new Coordinate( x, y );
-        if ( identical( curPos, goal ) ) {
+        if ( identical( curPos, goal ) )
+        {
             return;
         }
+
         List<Coordinate> closed = new List();
         List<Coordinate> open = new List();
         Matrix openUsed = new Matrix( scene.mapSet.eventMapset.cols, scene.mapSet.eventMapset.rows );
@@ -132,35 +141,45 @@ class Character implements Graphic {
         bool goalReached = false;
         
         
-        while ( !goalReached ) {
+        while ( !goalReached )
+        {
             iterations++ ;
-            if ( MAX_PATHFINDING_ITERATIONS == iterations ) {
+            if ( MAX_PATHFINDING_ITERATIONS == iterations )
+            {
                 return;
             }
+
             Coordinate current = open.last;
-            if ( current == null ) {
+            if ( current == null )
+            {
                 return;
             }
             List neighbours = getNeighbours( current, goal );
             var neighboursIte = neighbours.iterator;
             Coordinate bestNode;
             num bestDistance = 100;
-            while ( neighboursIte.moveNext() ) {
+            while ( neighboursIte.moveNext() )
+            {
                 Coordinate node = neighboursIte.current;
-                if ( node.equals( goal ) ) {
+                if ( node.equals( goal ) )
+                {
                     recreatePath( open );
                     return;
                 }
-                if ( closedUsed.get( node.x, node.y ) == true ) {
+                if ( closedUsed.get( node.x, node.y ) == true )
+                {
                     continue;
                 }
+
                 num nodeDistance = goal.distanceToThis( node );
-                if ( bestDistance > nodeDistance ) {
+                if ( bestDistance > nodeDistance )
+                {
                     bestDistance = nodeDistance;
                     bestNode = node;
                 }
             }
-            if ( openUsed.get( bestNode.x, bestNode.y ) == null || openUsed.get( bestNode.x, bestNode.y ) == false ) {
+            if ( openUsed.get( bestNode.x, bestNode.y ) == null || openUsed.get( bestNode.x, bestNode.y ) == false )
+            {
                 open.add( bestNode );
                 openUsed.set( bestNode.x, bestNode.y, true );
             }
@@ -169,9 +188,11 @@ class Character implements Graphic {
         }
     }
     
-    void recreatePath( List<Coordinate> open ) {
+    void recreatePath( List<Coordinate> open )
+    {
         var openIte = open.iterator;
-        while ( openIte.moveNext() ) {
+        while ( openIte.moveNext() )
+        {
             Coordinate node = openIte.current;
             if ( node.x > curPos.x ) {
                 move( RIGHT );
@@ -185,29 +206,38 @@ class Character implements Graphic {
         }
     }
     
-    List getNeighbours( Coordinate node, Coordinate goal ){
+    List getNeighbours( Coordinate node, Coordinate goal )
+    {
         List neighbours = new List();
-        if ( node.y - 1 >= 0 ) {
+        if ( node.y - 1 >= 0 )
+        {
             Coordinate neighbour1 = new Coordinate( node.x, node.y - 1 );
-            if ( scene.objectIsPassable( this, neighbour1, UP ) || neighbour1.equals( goal ) ){
+            if ( scene.objectIsPassable( this, neighbour1, UP ) || neighbour1.equals( goal ) )
+            {
                 neighbours.add( neighbour1 );
             }
         }
-        if ( node.y + 1 < scene.mapSet.eventMapset.rows ) {
+        if ( node.y + 1 < scene.mapSet.eventMapset.rows )
+        {
             Coordinate neighbour2 = new Coordinate( node.x, node.y + 1 );
-            if ( scene.objectIsPassable( this, neighbour2, DOWN ) || neighbour2.equals( goal ) ) {
+            if ( scene.objectIsPassable( this, neighbour2, DOWN ) || neighbour2.equals( goal ) )
+            {
                 neighbours.add( neighbour2 );
             }
         }
-        if( node.x - 1 >= 0 ){
-            Coordinate neighbour3 = new Coordinate(node.x - 1, node.y);
-            if ( scene.objectIsPassable( this, neighbour3, LEFT ) || neighbour3.equals( goal ) ) {
+        if( node.x - 1 >= 0 )
+        {
+            Coordinate neighbour3 = new Coordinate( node.x - 1, node.y );
+            if ( scene.objectIsPassable( this, neighbour3, LEFT ) || neighbour3.equals( goal ) )
+            {
                     neighbours.add( neighbour3 );
                 }
         }
-        if( node.x + 1 < scene.mapSet.eventMapset.cols ) {
+        if( node.x + 1 < scene.mapSet.eventMapset.cols )
+        {
              Coordinate neighbour4 = new Coordinate( node.x +1, node.y );
-             if ( scene.objectIsPassable( this, neighbour4, RIGHT ) || neighbour4.equals( goal ) ) {
+             if ( scene.objectIsPassable( this, neighbour4, RIGHT ) || neighbour4.equals( goal ) )
+             {
                  neighbours.add( neighbour4 );
              }
         }
@@ -215,11 +245,13 @@ class Character implements Graphic {
         return neighbours;
     }
     
-    bool move( int face ) {
+    bool move( int face )
+    {
         bool moved = false;
         int initX = curPos.x;
         int initY = curPos.y;
-        if ( !scene.shallPass( face, this ) ) {
+        if ( !scene.shallPass( face, this ) )
+        {
             faceDirection( face );
             return false;
         }
@@ -256,16 +288,20 @@ class Character implements Graphic {
         }
 
         // Throttle the movement to avoid camera issues
-        if ( curPos.y * TILE_SIZE > ( curPosPx.y + ( 2 * TILE_SIZE ) ) ) {
+        if ( curPos.y * TILE_SIZE > ( curPosPx.y + ( 2 * TILE_SIZE ) ) )
+        {
             curPos.y = ( curPosPx.y / TILE_SIZE ).ceil();
         }
-        if ( curPos.x * TILE_SIZE > ( curPosPx.x + ( 2 * TILE_SIZE ) ) ) {
+        if ( curPos.x * TILE_SIZE > ( curPosPx.x + ( 2 * TILE_SIZE ) ) )
+        {
             curPos.x = ( curPosPx.x / TILE_SIZE ).ceil();
         }
-        if ( curPos.y * TILE_SIZE < ( curPosPx.y - ( 2 * TILE_SIZE ) ) ) {
+        if ( curPos.y * TILE_SIZE < ( curPosPx.y - ( 2 * TILE_SIZE ) ) )
+        {
             curPos.y = ( curPosPx.y / TILE_SIZE ).floor();
         }
-        if ( curPos.x * TILE_SIZE < ( curPosPx.x - ( 2 * TILE_SIZE ) ) ) {
+        if ( curPos.x * TILE_SIZE < ( curPosPx.x - ( 2 * TILE_SIZE ) ) )
+        {
             curPos.x = ( curPosPx.x / TILE_SIZE ).floor();
         }
         
@@ -276,8 +312,10 @@ class Character implements Graphic {
         return false;
     }
     
-    void faceDirection( int direction ) {
-        switch ( direction ) {
+    void faceDirection( int direction )
+    {
+        switch ( direction )
+        {
             case DOWN:
                 faceDir = 0;
                 break;
@@ -293,8 +331,10 @@ class Character implements Graphic {
         }
     }
     
-    int getCurrentDirection() {
-        switch ( faceDir ) {
+    int getCurrentDirection()
+    {
+        switch ( faceDir )
+        {
             case 0:
                 return DOWN;
             case 1:
@@ -308,34 +348,42 @@ class Character implements Graphic {
         return -1;
     }
     
-    void loadGraphic( String src ) {
+    void loadGraphic( String src )
+    {
         this.characterImage = new Element.tag( 'img' ); 
         this.characterImage = document.createElement( 'img' ); 
         this.characterImage.src = src;
     }
 
-    void animate() {
+    void animate()
+    {
         frame ++;
-        if ( frame > 2 * ANIMATION_SPEED ) {
+        if ( frame > 2 * ANIMATION_SPEED )
+        {
             frame = 0;
         }
     }
 
-    void updateMove() {
+    void updateMove()
+    {
         num distance = 2 * this.speed;
-        if ( curPos.y * TILE_SIZE > curPosPx.y ) {
+        if ( curPos.y * TILE_SIZE > curPosPx.y )
+        {
             faceDirection( DOWN );
             curPosPx.y = Math.min( curPosPx.y + distance, curPos.y * TILE_SIZE );
         }
-        if ( curPos.x * TILE_SIZE > curPosPx.x ) {
+        if ( curPos.x * TILE_SIZE > curPosPx.x )
+        {
             faceDirection( RIGHT );
             curPosPx.x = Math.min( curPosPx.x + distance, curPos.x * TILE_SIZE );
         }
-        if ( curPos.y * TILE_SIZE < curPosPx.y ) {
+        if ( curPos.y * TILE_SIZE < curPosPx.y )
+        {
             faceDirection( UP );
             curPosPx.y = Math.max( curPosPx.y - distance, curPos.y * TILE_SIZE );
         }
-        if ( curPos.x * TILE_SIZE < curPosPx.x ) {
+        if ( curPos.x * TILE_SIZE < curPosPx.x )
+        {
             faceDirection( LEFT );
             curPosPx.x = Math.max( curPosPx.x - distance, curPos.x * TILE_SIZE );
         }
@@ -343,32 +391,40 @@ class Character implements Graphic {
         animate();
     }
 
-    void stopMove() {
-        if ( curPos.y * TILE_SIZE > curPosPx.y ) {
+    void stopMove()
+    {
+        if ( curPos.y * TILE_SIZE > curPosPx.y )
+        {
             num dy = ( curPosPx.y + ( TILE_SIZE - ( curPosPx.y % TILE_SIZE ) ) ) / TILE_SIZE;
             curPos.y = Math.min( dy.floor(), curPos.y );
         }
-        if ( curPos.x * TILE_SIZE > curPosPx.x ) {
+        if ( curPos.x * TILE_SIZE > curPosPx.x )
+        {
             num dx = ( curPosPx.x + ( TILE_SIZE - ( curPosPx.x % TILE_SIZE))) / TILE_SIZE;
             curPos.x = Math.min( dx.floor(), curPos.x );
         }
-        if ( curPos.y * TILE_SIZE < curPosPx.y ) {
+        if ( curPos.y * TILE_SIZE < curPosPx.y )
+        {
             num dy = ( curPosPx.y + ( TILE_SIZE - ( curPosPx.y % TILE_SIZE ) ) ) / TILE_SIZE;
             curPos.y = Math.max( dy.floor(), curPos.y ) - 1;
         }
-        if ( curPos.x * TILE_SIZE < curPosPx.x ) {
+        if ( curPos.x * TILE_SIZE < curPosPx.x )
+        {
             num dx = ( curPosPx.x + ( TILE_SIZE - ( curPosPx.x % TILE_SIZE ) ) ) / TILE_SIZE;
             curPos.x = Math.max( dx.floor(), curPos.x ) - 1;
         }
         frame = 1 * ANIMATION_SPEED;
     }
 
-    bool isMoving() {
+    bool isMoving()
+    {
         return ( curPosPx.x != curPos.x * TILE_SIZE || curPosPx.y != curPos.y * TILE_SIZE );
     }
 
-    void update() {
-        if ( isMoving() ) {
+    void update()
+    {
+        if ( isMoving() )
+        {
             updateMove();
         } else {
             stopMove();
@@ -376,17 +432,23 @@ class Character implements Graphic {
 
         screenPosPx.x = curPosPx.x - scene.displayPxX;
         screenPosPx.y = curPosPx.y - scene.displayPxY;
-        if ( !scene.inCamera( this.curPosPx ) && !chasing ) {
+        if ( !scene.inCamera( this.curPosPx ) && !chasing )
+        {
             return;
         }
         if ( chasing ) {
-            if ( curPos.distanceToThis( chased.curPos ) > chasingRange ) {
+            if ( curPos.distanceToThis( chased.curPos ) > chasingRange )
+            {
                 stopChasing();
-            } else if ( !curPos.nextToThis(faceDir, chased.curPos ) ) {
+            } 
+            else if ( !curPos.nextToThis(faceDir, chased.curPos ) )
+            {
                 moveTo( chased.curPos.x, chased.curPos.y );
                 faceDirection( curPos.facingThis( faceDir, chased.curPos ) );
             }
-        } else if ( randomMovement && currentRandomTimer == null ) {
+        } 
+        else if ( randomMovement && currentRandomTimer == null )
+        {
             moveRandom();
         }
 

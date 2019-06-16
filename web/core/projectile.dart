@@ -10,8 +10,8 @@ import 'entity.dart';
 import 'tile.dart';
 import '../helpers/coordinate.dart';
 
-class Projectile implements Graphic {
-
+class Projectile implements Graphic 
+{
     // Graphic vars
     HtmlDocument document;
     CanvasRenderingContext2D context;
@@ -42,8 +42,9 @@ class Projectile implements Graphic {
     // Number of steps advanced
     num steps;
 
-    Projectile( Coordinate this.curPos, int this.faceDir, Scene this.scene, String imageSource, num this.range,
-            [ num this.speed = 1 ] ) {
+    Projectile ( Coordinate this.curPos, int this.faceDir, Scene this.scene, String imageSource, num this.range,
+            [ num this.speed = 1 ] ) 
+    {
         this.document = scene.document;
         this.context = scene.context;
         this.canvas = scene.canvas;
@@ -54,13 +55,15 @@ class Projectile implements Graphic {
         loadGraphic( "assets/particles/projectiles/" + imageSource );
     }
 
-    void loadGraphic( String src ) {
+    void loadGraphic( String src )
+    {
         this.image = new Element.tag( 'img' );
         this.image = document.createElement( 'img' );
         this.image.src = src;
     }
 
-    Future update() async {
+    Future update() async
+    {
         updatePosition();
         updateMove();
 
@@ -79,7 +82,8 @@ class Projectile implements Graphic {
                         TILE_SIZE, TILE_SIZE ) ); //Size of the image
     }
 
-    void updatePosition() {
+    void updatePosition()
+    {
         // Checks if there's something blocking the projectile to remove it
         if ( !shallPass() ) {
             Actor actor = scene.getCharacterInFront( this );
@@ -98,7 +102,8 @@ class Projectile implements Graphic {
             return;
         }
 
-        switch ( faceDir ) {
+        switch ( faceDir ) 
+        {
             case 0: //down
                 if ( curPosPx.y == ( curPos.y * TILE_SIZE ) ) {
                     curPos.y ++;
@@ -126,38 +131,58 @@ class Projectile implements Graphic {
         }
     }
 
-    bool shallPass(){
+    bool shallPass()
+    {
         var tileObject = scene.mapSet.eventMapset.get( curPos.x, curPos.y );
 
-        if ( tileObject != null ) {
-            if ( tileObject is Actor && !tileObject.phasable && !identical( tileObject, scene.player ) ) {
+        if ( curPos.x == 0 || curPos.y == 0 )
+        {
+            return false;
+        }
+
+        if ( tileObject != null )
+        {
+            if ( tileObject is Actor && !tileObject.phasable && !identical( tileObject, scene.player ) )
+            {
                 return false;
-            } else if ( tileObject is Tile ) {
+            } 
+            else if ( tileObject is Tile )
+            {
                 return false;
-            } else if ( tileObject is Entity ) {
+            } 
+            else if ( tileObject is Entity )
+            {
                 return false;
             }
         }
+
         return true;
     }
 
-    void updateMove() {
+    void updateMove()
+    {
         num distance = 2 * this.speed ;
-        if ( curPos.y * TILE_SIZE > curPosPx.y ) {
-            curPosPx.y = Math.min ( curPosPx.y + distance, curPos.y * TILE_SIZE );
+        if ( curPos.y * TILE_SIZE > curPosPx.y )
+        {
+            curPosPx.y = Math.min( curPosPx.y + distance, curPos.y * TILE_SIZE );
         }
-        if ( curPos.x * TILE_SIZE > curPosPx.x ) {
-            curPosPx.x = Math.min( curPosPx.x + distance, curPos.x * TILE_SIZE );
-        }
-        if ( curPos.y * TILE_SIZE < curPosPx.y ) {
+        else if ( curPos.y * TILE_SIZE < curPosPx.y )
+        {
             curPosPx.y = Math.max( curPosPx.y - distance, curPos.y * TILE_SIZE );
         }
-        if ( curPos.x * TILE_SIZE < curPosPx.x ) {
+
+        if ( curPos.x * TILE_SIZE < curPosPx.x )
+        {
             curPosPx.x = Math.max( curPosPx.x - distance, curPos.x * TILE_SIZE );
+        } 
+        else if ( curPos.x * TILE_SIZE > curPosPx.x )
+        {
+            curPosPx.x = Math.min( curPosPx.x + distance, curPos.x * TILE_SIZE );
         }
     }
 
-    int getCurrentDirection() {
+    int getCurrentDirection()
+    {
         switch ( faceDir ) {
             case 0: //down
                 return DOWN;

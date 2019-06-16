@@ -105,8 +105,6 @@ class Scene
         events = new List<Action>();
         projectiles = new List<Projectile>();
         loadProperties();
-
-        scheduleRepaint();
     }
 
     void createDialog( window )
@@ -118,7 +116,7 @@ class Scene
             WINDOW_WIDTH, WINDOW_HEIGHT, text );
     }
     
-    void update() async
+    Future update() async
     {
         //The order of rendering here controls the priority of visualization
         if ( isCameraMoving() && player.isMoving() )
@@ -130,10 +128,10 @@ class Scene
             stopCameraMovement();
         }
 
-        mapSet.update();
-        player.update();
+        await mapSet.update();
+        await player.update();
 
-        await updateCharacters();
+        updateCharacters();
         updateEntities();
         updateParticles();
         updateAnimations();
@@ -142,7 +140,7 @@ class Scene
 
         if ( gameDialog != null && !gameDialog.endOfLine )
         {
-            gameDialog.update();
+            await gameDialog.update();
         } 
         else if ( gameDialog != null && inputModule.inputLocked )
         {
@@ -151,63 +149,63 @@ class Scene
         }
     }
 
-    Future updateEntities() async
+    void updateEntities() async
     {
         var entitiesIterator = entities.iterator;
         while( entitiesIterator.moveNext() )
         {
             Entity entity = entitiesIterator.current;
-            entity.update();
+            await entity.update();
         }
     }
 
-    Future updateEvents() async
+    void updateEvents() async
     {
         var eventIterator = events.iterator;
         while( eventIterator.moveNext() )
         {
             Action event = eventIterator.current;
-            event.update();
+            await event.update();
         }
     }
 
-    Future updateCharacters() async
+    void updateCharacters() async
     {
        var characters = actors.iterator;
         while( characters.moveNext() )
         {
             Actor character = characters.current;
-            character.update();
+            await character.update();
         }
     }
 
-    Future updateParticles() async
+    void updateParticles() async
     {
         var particlesIterator = particles.iterator;
         while(  particlesIterator.moveNext() )
         {
             Particle particle = particlesIterator.current;
-            particle.update();
+            await particle.update();
         }
     }
 
-    Future updateAnimations() async
+    void updateAnimations() async
     {
         var animationsIterator = activeAnimations.iterator;
         while( animationsIterator.moveNext() )
         {
             MapAnimation animation = animationsIterator.current;
-            animation.update();
+            await animation.update();
         }
     }
 
-    Future updateProjectiles() async
+    void updateProjectiles() async
     {
         var projectileIterator = projectiles.iterator;
         while( projectileIterator.moveNext() )
         {
             Projectile projectile = projectileIterator.current;
-            projectile.update();
+            await projectile.update();
         }
     }
 
@@ -223,7 +221,7 @@ class Scene
         return false;
     } 
     
-    Future updateCameraMovement() async
+    void updateCameraMovement()
     {
         var distance = 2 * player.speed;
         if (displayY * TILE_SIZE > displayPxY )
@@ -353,7 +351,7 @@ class Scene
     
     void loadCharacters( String responseText )
     {
-        Map charactersData = json.decode(responseText);
+        Map charactersData = json.decode( responseText );
         var characters = charactersData['characters'].iterator;
         while( characters.moveNext() )
         {
@@ -373,7 +371,7 @@ class Scene
         mapSet.addRandomDetails();
     }
     
-    Future createMessage( Actor char ) async
+    void createMessage( Actor char )
     {
         Message msg = new Message( context, char.message, char.screenPosPx.x, char.screenPosPx.y, 100, 20 );
         const ms = const Duration( milliseconds: 5000 );
@@ -381,30 +379,18 @@ class Scene
         Action event = new Action( char, msg, EVENT_TYPE_MESSAGE );
         events.add( event );
     }
-
-    void scheduleRepaint()
-    {
-        const ms = const Duration( milliseconds: 1000 );
-        new Timer( ms, repaintCanvas );
-    }
-
-    Future repaintCanvas() async
-    {
-        context.clearRect( 0,0, width, height );
-        scheduleRepaint();
-    }
     
-    Future createAnimation(Actor char) async
+    void createAnimation( Actor char )
     {
         Coordinate coords = new Coordinate( 0,0 );
         MapAnimation animation = new MapAnimation( this, coords, 'fire_001' );
         Action event = new Action( char, animation, EVENT_TYPE_ANIMATION );
         events.add( event );
         animation.startAnimation();
-        new Timer( const Duration(milliseconds: 500), removeEvent );
+        new Timer( const Duration( milliseconds: 500 ), removeEvent );
     }
     
-    Future removeEvent() async 
+    void removeEvent() 
     {
         Action event = events.elementAt( 0 );
         if ( event.type == EVENT_TYPE_MESSAGE ) {
@@ -414,7 +400,7 @@ class Scene
         events.removeAt( 0 );
     }
 
-    Future removeProjectile( Projectile projectile ) async
+    void removeProjectile( Projectile projectile )
     {
         List<Projectile> newProjectilesList = new List<Projectile>.from( projectiles );
         newProjectilesList.removeWhere( ( value ) => value == projectile );
