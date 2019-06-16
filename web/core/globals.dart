@@ -1,7 +1,6 @@
 library globals;
 
 // Engine vars
-const int GAME_SPEED        = 50;
 const int INITIAL_FRAME     = 1;
 const int MS_PER_FRAME      = 240;
 // Tile X for main character

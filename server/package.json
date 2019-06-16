@@ -12,7 +12,8 @@
   },
   "private": false,
   "scripts": {
-    "start": "node ./serve-dev"
+    "start": "node ./serve-dev",
+    "start-docs": "node ./serve-build"
   },
   "dependencies": {
     "express": "^4.17.1",

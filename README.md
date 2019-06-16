@@ -32,7 +32,7 @@ An HTML5 2D game engine using dart and canvas. Movements and interactions are li
 
 This requires the dart tools installed in the machine and (webdev enabled)[https://dart.dev/tools/webdev#build].
 
-### Debug in Chrome
+### Debug in Chrome (Dart)
 
 ```
 webdev serve web
@@ -40,7 +40,7 @@ webdev serve web
 
 And open the URL, using the absolute path to the file you want to test, such as `http://localhost:8080/gameengine.html`.
 
-#### Build
+#### Build / Compile to JS
 
 To compile to javascript and run in any browser:
 
