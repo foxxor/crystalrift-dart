@@ -138,13 +138,13 @@ class Scene
 
         await mapSet.update();
         await player.update();
-        await updateCharacters();
-        await updateEntities();
+        await updateElements( actors );
+        await updateElements( entities );
 
-        updateParticles();
-        updateAnimations();
-        updateProjectiles();
-        updateEvents();
+        updateElements( particles );
+        updateElements( activeAnimations );
+        updateElements( projectiles );
+        updateElements( events );
         
         if ( gameDialog != null && !gameDialog.endOfLine )
         {
@@ -157,63 +157,13 @@ class Scene
         }
     }
 
-    void updateEntities() async
+    Future updateElements( List elements ) async
     {
-        var entitiesIterator = entities.iterator;
-        while( entitiesIterator.moveNext() )
+        var iterator = elements.iterator;
+        while( iterator.moveNext() )
         {
-            Entity entity = entitiesIterator.current;
-            await entity.update();
-        }
-    }
-
-    void updateEvents() async
-    {
-        var eventIterator = events.iterator;
-        while( eventIterator.moveNext() )
-        {
-            Action event = eventIterator.current;
-            await event.update();
-        }
-    }
-
-    void updateCharacters() async
-    {
-       var characters = actors.iterator;
-        while( characters.moveNext() )
-        {
-            Actor character = characters.current;
-            await character.update();
-        }
-    }
-
-    void updateParticles() async
-    {
-        var particlesIterator = particles.iterator;
-        while(  particlesIterator.moveNext() )
-        {
-            Particle particle = particlesIterator.current;
-            await particle.update();
-        }
-    }
-
-    void updateAnimations() async
-    {
-        var animationsIterator = activeAnimations.iterator;
-        while( animationsIterator.moveNext() )
-        {
-            MapAnimation animation = animationsIterator.current;
-            await animation.update();
-        }
-    }
-
-    void updateProjectiles() async
-    {
-        var projectileIterator = projectiles.iterator;
-        while( projectileIterator.moveNext() )
-        {
-            Projectile projectile = projectileIterator.current;
-            await projectile.update();
+            var element = iterator.current;
+            await element.update();
         }
     }
 
@@ -232,19 +182,20 @@ class Scene
     void updateCameraMovement()
     {
         var distance = 2 * player.speed;
-        if (displayY * TILE_SIZE > displayPxY )
+        if ( displayY * TILE_SIZE > displayPxY )
         {
             displayPxY = Math.min( displayPxY + distance, displayY * TILE_SIZE );
         }
+        else if ( displayY * TILE_SIZE < displayPxY )
+        {
+            displayPxY = Math.max( displayPxY - distance, displayY * TILE_SIZE );
+        }
+
         if ( displayX * TILE_SIZE > displayPxX )
         {
             displayPxX = Math.min( displayPxX + distance, displayX * TILE_SIZE );
         }
-        if ( displayY * TILE_SIZE < displayPxY )
-        {
-            displayPxY = Math.max( displayPxY - distance, displayY * TILE_SIZE );
-        }
-        if ( displayX * TILE_SIZE < displayPxX )
+        else if ( displayX * TILE_SIZE < displayPxX )
         {
             displayPxX = Math.max( displayPxX - distance, displayX * TILE_SIZE );
         }
@@ -262,24 +213,25 @@ class Scene
             num dy = ( displayY + ( TILE_SIZE - ( displayPxY % TILE_SIZE ) ) ) / TILE_SIZE;
             displayY = Math.min( dy.floor(), displayY );
           }
+          else if ( displayY * TILE_SIZE < displayPxY )
+          {
+            num dy = ( displayPxY + ( TILE_SIZE - ( displayPxY % TILE_SIZE ) ) ) / TILE_SIZE;
+            displayY = Math.max( dy.floor(), displayY ) -1;
+          }
+
           if ( displayX * TILE_SIZE > displayPxX )
           {
             num dx = ( displayX + ( TILE_SIZE - ( displayPxX % TILE_SIZE ) ) ) / TILE_SIZE;
             displayX = Math.min( dx.floor(), displayX );
           }
-          if ( displayY * TILE_SIZE < displayPxY )
-          {
-            num dy = ( displayPxY + ( TILE_SIZE - ( displayPxY % TILE_SIZE ) ) ) / TILE_SIZE;
-            displayY = Math.max( dy.floor(), displayY ) -1;
-          }
-          if ( displayX * TILE_SIZE < displayPxY )
+          else if ( displayX * TILE_SIZE < displayPxY )
           {
             num dx = ( displayPxX + ( TILE_SIZE - ( displayPxX % TILE_SIZE ) ) ) / TILE_SIZE;
             displayX = Math.max( dx.floor(), displayX ) -1;
           }
     }
     
-    void movePlayer(int direction)
+    void movePlayer( int direction )
     {
         player.move( direction );
 
@@ -401,7 +353,8 @@ class Scene
     void removeEvent() 
     {
         Action event = events.elementAt( 0 );
-        if ( event.type == EVENT_TYPE_MESSAGE ) {
+        if ( event.type == EVENT_TYPE_MESSAGE )
+        {
             Actor char = event.object;
             char.trigger = false;
         }
@@ -446,15 +399,23 @@ class Scene
     bool objectIsPassable( var character, Coordinate facingCoords, int face )
     {
         var tileObject = mapSet.eventMapset.get( facingCoords.x, facingCoords.y );
-        if ( !identical( tileObject, character ) && tileObject != null ) {
+        if ( !identical( tileObject, character ) && tileObject != null )
+        {
             if ( tileObject is Actor && !tileObject.phasable ){
                 return false;
-            } else if ( tileObject is Tile ) {
+            } 
+            else if ( tileObject is Tile )
+            {
                 return false;
-            } else if ( tileObject is Entity && !tileObject.pushable ) {
+            } 
+            else if ( tileObject is Entity && !tileObject.pushable )
+            {
                 return false;
-            } else if( tileObject is Entity && tileObject.pushable ) {
-                if ( !tileObject.move( face ) ) {
+            } 
+            else if ( tileObject is Entity && tileObject.pushable )
+            {
+                if ( !tileObject.move( face ) )
+                {
                     return false;
                 }
             }

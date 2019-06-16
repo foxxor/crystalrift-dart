@@ -7,7 +7,8 @@ import 'scene.dart';
 import 'graphic.dart';
 import '../helpers/coordinate.dart';
 
-class WindowSet implements Graphic {
+class WindowSet implements Graphic
+{
     HtmlDocument document;
     CanvasRenderingContext2D context;
     CanvasElement canvas;
@@ -25,14 +26,16 @@ class WindowSet implements Graphic {
     bool endOfLine;
   
     WindowSet( HtmlDocument this.document, CanvasRenderingContext2D this.context, CanvasElement this.canvas, 
-        int x, int y, int this.width, int this.height, String this.text ) {
+        int x, int y, int this.width, int this.height, String this.text )
+    {
         this.curPos = new Coordinate( x, y );
         this.startLine = 0;
         this.endOfLine = false;
         loadGraphic( 'assets/window/BlueGloss.png' );
     }
   
-    update() async {
+    Future update() async
+    {
         context.save();
         context.globalAlpha = 0.7;
 
@@ -43,11 +46,12 @@ class WindowSet implements Graphic {
 
         // Draw foreground
         int y = curPos.y;
-        for( int x = curPos.x; x <= width * 1.5; x = x + WINDOWSET_FG_TILE ){
-        context.drawImageToRect( windowImage , new Rectangle(x, y, WINDOWSET_FG_TILE, WINDOWSET_FG_TILE ), // Rect to paint the image
-            sourceRect: new Rectangle( 0, WINDOWSET_FG_TILE, WINDOWSET_FG_TILE, WINDOWSET_FG_TILE ) ); // Size of the image
-        context.drawImageToRect( windowImage , new Rectangle(x, y + WINDOWSET_FG_TILE , WINDOWSET_FG_TILE, WINDOWSET_FG_TILE ),
-            sourceRect: new Rectangle( 0, WINDOWSET_FG_TILE, WINDOWSET_FG_TILE, WINDOWSET_FG_TILE ) ); 
+        for ( int x = curPos.x; x <= width * 1.5; x = x + WINDOWSET_FG_TILE )
+        {
+            context.drawImageToRect( windowImage , new Rectangle(x, y, WINDOWSET_FG_TILE, WINDOWSET_FG_TILE ), // Rect to paint the image
+                sourceRect: new Rectangle( 0, WINDOWSET_FG_TILE, WINDOWSET_FG_TILE, WINDOWSET_FG_TILE ) ); // Size of the image
+            context.drawImageToRect( windowImage , new Rectangle(x, y + WINDOWSET_FG_TILE , WINDOWSET_FG_TILE, WINDOWSET_FG_TILE ),
+                sourceRect: new Rectangle( 0, WINDOWSET_FG_TILE, WINDOWSET_FG_TILE, WINDOWSET_FG_TILE ) ); 
         }
         context.restore();
 
@@ -78,7 +82,8 @@ class WindowSet implements Graphic {
         drawText();
     }
   
-    void drawText() {
+    void drawText()
+    {
         num x = curPos.x + WINDOWSET_TEXT_PADDING;
         num y = curPos.y + WINDOWSET_TEXT_PADDING + 15;
         context..save()
@@ -94,54 +99,67 @@ class WindowSet implements Graphic {
         var words = text.split(" ");
         var line = "";
         var numLines = 0;
-        for( var n = 0; n < words.length; n++ ) {
+        for ( var n = 0; n < words.length; n++ )
+        {
             var testLine = '${line}${words[n]} ';
             var metrics = context.measureText( testLine );
-            if( metrics.width > ( width - ( WINDOWSET_TEXT_PADDING * 2 ) ) || words[n] == '\n' ) {
-                if( numLines >= startLine ){
+            if ( metrics.width > ( width - ( WINDOWSET_TEXT_PADDING * 2 ) ) || words[n] == '\n' )
+            {
+                if ( numLines >= startLine ){
                     context.fillText( line, x, y );
                     y += 30;
                 }
-                if( words[n] == '\n' ){
+                if ( words[n] == '\n' ){
                     line = '';
-                }else{
+                }
+                else
+                {
                     line = '${words[n]} ';
                 }
                 numLines ++;
-            }else { 
+            }
+            else
+            { 
                 line = testLine;
             }
-            if( line != " " && n == words.length - 1 ){
+
+            if ( line != " " && n == words.length - 1 )
+            {
                 context.fillText( line, x, y );
             }
     
-            if( numLines >= ( startLine + 3 ) ){
+            if ( numLines >= ( startLine + 3 ) )
+            {
                 drawArrow();
                 break;
             }
         }
 
-        if( numLines < startLine ){
+        if ( numLines < startLine )
+        {
             endOfLine = true;
         }
     
         context.restore();
     }
   
-    void drawArrow() {
+    void drawArrow()
+    {
         context.drawImageScaledFromSource( windowImage, 96, 65, 17, 16,
             curPos.x + ( width / 2 ) - 25, curPos.y + height - 25, 
             20, 20 );
     }
   
-    void moveLines() {
+    void moveLines()
+    {
         startLine += 3;
     }
   
-    void loadGraphic( String src ) {
+    void loadGraphic( String src )
+    {
         this.windowImage = new Element.tag( 'img' ); 
         this.windowImage = document.createElement( 'img' ); 
         this.windowImage.src = src;
-        this.windowImage.onLoad.listen((value) => update() );
+        this.windowImage.onLoad.listen( (value) => update() );
     }
 }
