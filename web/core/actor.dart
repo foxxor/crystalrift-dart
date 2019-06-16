@@ -9,8 +9,8 @@ import '../helpers/coordinate.dart';
 import 'dart:math' as Math;
 import 'character.dart';
 
-class Actor extends Character {
-    
+class Actor extends Character 
+{
     // Max life
     int maxLife;
 
@@ -54,7 +54,8 @@ class Actor extends Character {
         super( curPos, charSprite, charRow, scene, imageSource, speed, randomMovement );
     
     void initializeActor( bool combatable, int behaviour, 
-        [ int maxLife = 0, int maxEnergy = 0, String message = "", int attack = 0, int defense = 0, bool dead = false, int speed = 1 ] ) {
+        [ int maxLife = 0, int maxEnergy = 0, String message = "", int attack = 0, int defense = 0, bool dead = false, int speed = 1 ] )
+    {
 
         this.combatable = combatable;
         this.behaviour = behaviour;
@@ -69,7 +70,8 @@ class Actor extends Character {
         loadBars();
     }
     
-    void loadBars() {
+    void loadBars()
+    {
         barHpImage = new Element.tag( 'img' ); 
         barHpImage = document.createElement( 'img' ); 
         barHpImage.src = "assets/particles/extra/" + srcBarHp;
@@ -83,7 +85,8 @@ class Actor extends Character {
         barMpImage.src = "assets/particles/extra/" + srcBarMp;
     }
 
-    void doDamage( int damage ) {
+    void doDamage( int damage )
+    {
         if ( !this.dead ) {
             this.life = this.life - ( damage - ( this.defense * 0.1 ).floor() );
             if ( this.life <= 0 ) {
@@ -95,9 +98,11 @@ class Actor extends Character {
         }
     }
     
-    Future update() async {
+    Future update() async
+    {
         super.update();
-        if ( combatable && !this.dead ) {
+        if ( combatable && !this.dead )
+        {
             // If the life of the enemy is low, force to render the bar to 10% of the max width
             var renderedLife = ( life < ( maxLife * 0.1 ) ? ( maxLife * 0.1 ) : life );
 
@@ -109,7 +114,8 @@ class Actor extends Character {
                 lifeBarWeight - 4, 3 );
         }
 
-        if ( this.dead ) {
+        if ( this.dead )
+        {
             stopChasing();
             randomMovement = false;
         }

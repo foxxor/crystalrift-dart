@@ -11,7 +11,6 @@ import 'dart:math' as Math;
 
 class Character implements Graphic 
 {
-    
     //Graphic vars
     HtmlDocument document;
     CanvasRenderingContext2D context;
@@ -71,7 +70,8 @@ class Character implements Graphic
     int offsetY;
     
     Character ( Coordinate this.curPos, int selectedChar, int characterRow, Scene this.scene, String imageSource, 
-            [ num this.speed = 1, bool this.randomMovement = false ] ) {
+            [ num this.speed = 1, bool this.randomMovement = false ] )
+    {
         this.document = scene.document;
         this.context = scene.context;
         this.canvas = scene.canvas;
@@ -421,7 +421,7 @@ class Character implements Graphic
         return ( curPosPx.x != curPos.x * TILE_SIZE || curPosPx.y != curPos.y * TILE_SIZE );
     }
 
-    void update()
+    Future update() async
     {
         if ( isMoving() )
         {

@@ -194,7 +194,7 @@ class MapSet implements Graphic
     freeTile( xi, yi );
   }
   
-  void update()
+  Future update() async
   {
     int offsetInitX = ( scene.displayPxX / TILE_SIZE ).floor();
     int offsetInitY = ( scene.displayPxY / TILE_SIZE ).floor();

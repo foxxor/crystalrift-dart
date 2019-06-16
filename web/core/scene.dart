@@ -82,26 +82,34 @@ class Scene
         battleModule = new BattleModule( this );
         
         mapSet = new MapSet( this, MAP_WIDTH_TILES, MAP_HEIGHT_TILES );
-        Coordinate initCoor = new Coordinate( 15, 10 );
-        Coordinate initCoor2 = new Coordinate( 12 * TILE_SIZE, 4 * TILE_SIZE );
-        MapAnimation animation = new MapAnimation( this, initCoor2, 'fire_001' );
-        animation.startAnimation();
-        Coordinate partCoor = new Coordinate( 12 * TILE_SIZE, 7 * TILE_SIZE );
-        Particle particle = new Particle( this, partCoor, "smoke" );
-        particle.start();
-        particles = new List<Particle>();
-        particles.add(particle);
-        activeAnimations = new List<MapAnimation>();
-        activeAnimations.add(animation);
-        player = new Actor( initCoor, 0, 1, this, "characters.png", 1 ); //Main Player
-        player.initializeActor( true, ACTOR_BEHAVIOUR_GOOD, 100, 100 );
-        //player.moveTo( 13, 4);
-        actors = new List<Actor>();
-        entities = new List<Entity>();
+
+        // Camera and disply variables
         displayX = 0;
         displayY = 0;
         displayPxX = 0 * TILE_SIZE;
         displayPxY = 0 * TILE_SIZE;
+
+        Coordinate initCoor    = new Coordinate( 15, 10 );
+        Coordinate initCoor2   = new Coordinate( 12 * TILE_SIZE, 4 * TILE_SIZE );
+        MapAnimation animation = new MapAnimation( this, initCoor2, 'fire_001' );
+        animation.startAnimation();
+
+        Coordinate partCoor = new Coordinate( 12 * TILE_SIZE, 7 * TILE_SIZE );
+        Particle particle   = new Particle( this, partCoor, "smoke" );
+        particle.start();
+        particles = new List<Particle>();
+        particles.add( particle );
+
+        activeAnimations = new List<MapAnimation>();
+        activeAnimations.add( animation );
+
+        player = new Actor( initCoor, 0, 1, this, "characters.png", 1 ); //Main Player
+        player.initializeActor( true, ACTOR_BEHAVIOUR_GOOD, 100, 100 );
+        //player.moveTo( 13, 4 );
+
+        actors = new List<Actor>();
+        entities = new List<Entity>();
+
         events = new List<Action>();
         projectiles = new List<Projectile>();
         loadProperties();
@@ -130,14 +138,14 @@ class Scene
 
         await mapSet.update();
         await player.update();
+        await updateCharacters();
+        await updateEntities();
 
-        updateCharacters();
-        updateEntities();
         updateParticles();
         updateAnimations();
         updateProjectiles();
         updateEvents();
-
+        
         if ( gameDialog != null && !gameDialog.endOfLine )
         {
             await gameDialog.update();
